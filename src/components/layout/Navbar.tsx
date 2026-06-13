@@ -209,7 +209,7 @@ function UserMenu({
         {!hasStaffAccess ? (
           <Link
             href="/user/ebook-loans"
-            className="mt-1 flex items-center justify-between rounded-xl px-3 py-3 text-sm font-semibold text-[#111827] transition hover:bg-black/[0.06] hover:text-black"
+            className="mt-1 flex items-center justify-between rounded-xl px-3 py-3 text-sm font-semibold text-[#111827] transition hover:bg-black hover:text-white"
           >
             My ebooks
             <span aria-hidden="true">&gt;</span>

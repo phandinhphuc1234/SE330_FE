@@ -28,7 +28,6 @@ export function EbookBorrowButton({ bookId, bookTitle, hasEbook }: Props) {
 
   async function handleBorrow() {
     if (!isAuthenticated) {
-      window.location.href = "/login";
       setShowLoginModal(true);
       return;
     }
@@ -52,10 +51,10 @@ export function EbookBorrowButton({ bookId, bookTitle, hasEbook }: Props) {
           href={loan.ebookReadUrl}
           target="_blank"
           rel="noopener noreferrer"
-          className="group inline-flex items-center justify-center gap-2 rounded-full bg-[#000054] px-5 py-3 text-sm font-bold text-white outline-none transition-all duration-200 hover:-translate-y-0.5 hover:bg-[#000080] hover:shadow-lg active:translate-y-0 active:scale-[0.98]"
+          className="inline-flex min-h-11 items-center justify-center gap-2 rounded-lg bg-[#111827] px-6 py-3 text-sm font-black text-white shadow-[0_14px_28px_rgba(17,24,39,0.22)] transition hover:-translate-y-0.5 hover:bg-black"
         >
-          Read ebook
-          <span aria-hidden="true" className="transition-transform duration-200 group-hover:translate-x-1">→</span>
+          Read online
+          <span aria-hidden="true">→</span>
         </a>
         <p className="text-xs text-gray-500 text-center">
           Expires {loan.expiresAt ? new Date(loan.expiresAt).toLocaleDateString("en-US") : "–"} ·{" "}
@@ -93,7 +92,7 @@ export function EbookBorrowButton({ bookId, bookTitle, hasEbook }: Props) {
                 Cancel
               </button>
             </div>
-          </div>Expand commentComment on lines R65 to R90
+          </div>
         </>
       )}
       {error && (
@@ -102,7 +101,7 @@ export function EbookBorrowButton({ bookId, bookTitle, hasEbook }: Props) {
       <button
         onClick={handleBorrow}
         disabled={loading}
-        className="group inline-flex items-center justify-center gap-2 rounded-full border border-[#D9DCE8] bg-white px-5 py-3 text-sm font-bold text-[#000054] outline-none transition-all duration-200 hover:-translate-y-0.5 hover:border-[#337AB7] hover:text-[#E60028] hover:shadow-lg hover:shadow-[#000054]/10 active:translate-y-0 active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-50"
+        className="inline-flex min-h-11 items-center justify-center gap-2 rounded-lg bg-[#111827] px-6 py-3 text-sm font-black text-white shadow-[0_14px_28px_rgba(17,24,39,0.22)] transition hover:-translate-y-0.5 hover:bg-black disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:translate-y-0"
       >
         {loading ? (
           <>
@@ -111,8 +110,8 @@ export function EbookBorrowButton({ bookId, bookTitle, hasEbook }: Props) {
           </>
         ) : (
           <>
-            Borrow ebook
-            <span aria-hidden="true" className="transition-transform duration-200 group-hover:translate-x-1">→</span>
+            Read online
+            <span aria-hidden="true">→</span>
           </>
         )}
       </button>

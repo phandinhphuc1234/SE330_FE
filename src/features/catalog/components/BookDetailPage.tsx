@@ -307,7 +307,7 @@ function BookDetailContent({
               <BookMetaPill label={text.editionLabel} value={book.edition || text.none} />
             </div>
 
-            <div className="mt-6">
+            <div className="mt-6 flex flex-wrap items-center gap-3">
               <button
                 type="button"
                 onClick={hasAvailableCopies ? undefined : onPlaceHold}
@@ -317,11 +317,24 @@ function BookDetailContent({
                 {isPlacingHold ? text.placingHold : actionLabel}
               </button>
               {!hasAvailableCopies && canPlaceHold ? (
-                <Link href="/user/holds" className="ml-3 inline-flex min-h-11 items-center justify-center rounded-lg border border-[#D9DCE8] px-5 py-3 text-sm font-bold text-[#111827] transition hover:border-black hover:bg-[#F8F9FA]">
+                <Link href="/user/holds" className="inline-flex min-h-11 items-center justify-center rounded-lg border border-[#D9DCE8] px-5 py-3 text-sm font-bold text-[#111827] transition hover:border-black hover:bg-[#F8F9FA]">
                   {text.myHolds}
                 </Link>
               ) : null}
+              {book.ebookUrl && (
+                <EbookBorrowButton
+                  bookId={bookIdOf(book) ?? 0}
+                  bookTitle={book.title}
+                  hasEbook={true}
+                />
+              )}
             </div>
+            {book.ebookUrl && (
+              <div className="mt-3 inline-flex items-center gap-2 rounded-full bg-blue-50 px-3 py-1.5 ring-1 ring-blue-200">
+                <span className="h-2 w-2 rounded-full bg-blue-500" />
+                <span className="text-xs font-bold text-blue-700">Available to read online</span>
+              </div>
+            )}
 
             <div className="mt-7 border-b border-[#EDEDF2]" role="tablist" aria-label="Book information tabs">
               <div className="flex flex-wrap gap-8 text-sm font-black">
