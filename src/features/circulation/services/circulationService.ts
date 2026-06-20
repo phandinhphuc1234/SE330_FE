@@ -22,6 +22,8 @@ import {
   StaffMemberSearchParams,
   StaffMemberSummary,
   StaffPageResult,
+  BorrowStatDay,           
+  BorrowStatisticsResult,
 } from "../types/circulation.type";
 
 const REQUEST_TIMEOUT_MS = 30000;
@@ -430,4 +432,17 @@ export function searchStaffHolds(
 
 export function getStaffDashboardSummary(accessToken: string | null, refreshAccessToken?: AccessTokenRefresher) {
   return apiFetchWithAuthRetry<StaffDashboardSummary>("/api/staff/dashboard/summary", undefined, accessToken, refreshAccessToken);
+}
+
+export function getStaffBorrowStatistics(
+  params: URLSearchParams,
+  accessToken: string | null,
+  refreshAccessToken?: AccessTokenRefresher,
+) {
+  return apiFetchWithAuthRetry<BorrowStatisticsResult>(
+    `/api/staff/statistics/borrows?${params.toString()}`,
+    undefined,
+    accessToken,
+    refreshAccessToken,
+  );
 }

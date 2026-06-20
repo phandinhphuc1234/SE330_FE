@@ -306,6 +306,13 @@ function UserMenu({
               Payment dashboard
               <span aria-hidden="true">&gt;</span>
             </Link>
+            <Link
+              href="/admin/statistics/borrows"
+              className="mt-1 flex items-center justify-between rounded-xl px-3 py-3 text-sm font-bold text-[#E60028] transition hover:bg-[#E60028] hover:text-white"
+            >
+              {t("menu.borrowStatistics")}
+              <span aria-hidden="true">&gt;</span>
+            </Link>
           </>
         ) : null}
         <button

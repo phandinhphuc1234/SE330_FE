@@ -265,3 +265,18 @@ export type StaffPageResult<T> = {
   totalElements?: number;
   totalPages?: number;
 };
+
+export type BorrowStatDay = {
+  date: string;        // "YYYY-MM-DD"
+  borrowed: number;
+  returned: number;
+};
+
+export type BorrowStatisticsResult = {
+  days: BorrowStatDay[];
+  totalBorrowed: number;
+  totalReturned: number;
+  netOnLoan: number;
+  peakBorrowDate: string | null;
+  peakBorrowCount: number;
+};
