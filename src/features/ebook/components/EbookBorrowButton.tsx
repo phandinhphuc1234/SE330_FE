@@ -105,7 +105,7 @@ export function EbookBorrowButton({ bookId, hasEbook }: Props) {
                 Cancel
               </button>
             </div>
-          </div>Expand commentComment on lines R65 to R90
+          </div>
         </>
       )}
       {error && (

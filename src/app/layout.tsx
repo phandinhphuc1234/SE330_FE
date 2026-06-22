@@ -1,31 +1,19 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono, Inter, Playfair_Display } from "next/font/google";
+import { Be_Vietnam_Pro } from "next/font/google";
 import { AuthProvider } from "@/features/auth/context/AuthContext";
 import { LanguageProvider } from "@/features/i18n/context/LanguageContext";
 import { ToastProvider } from "@/components/ui/ToastProvider";
 import "./globals.css";
-// Font chữ cho project 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
 
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
-
-const inter = Inter({
-  variable: "--font-inter",
-  subsets: ["latin"],
+// Font chữ chính cho toàn bộ project: hiện đại, tối giản, hỗ trợ tiếng Việt tốt.
+const beVietnamPro = Be_Vietnam_Pro({
+  variable: "--font-be-vietnam-pro",
+  subsets: ["latin", "vietnamese"],
+  weight: ["300", "400", "500", "600", "700", "800", "900"],
   display: "swap",
+  fallback: ["system-ui", "Arial", "sans-serif"],
 });
 
-const playfairDisplay = Playfair_Display({
-  variable: "--font-playfair",
-  subsets: ["latin"],
-  display: "swap",
-});
 // Define metadata cho project giúp cải thiện SEO và hiển thị thông tin trang web khi chia sẻ trên mạng xã hội
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -40,7 +28,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${geistSans.variable} ${geistMono.variable} ${inter.variable} ${playfairDisplay.variable} h-full antialiased`}
+      className={`${beVietnamPro.variable} h-full antialiased`}
       suppressHydrationWarning
     >
       <body className="min-h-dvh flex flex-col" suppressHydrationWarning>

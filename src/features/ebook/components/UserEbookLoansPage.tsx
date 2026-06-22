@@ -5,7 +5,7 @@ import Link from "next/link";
 import { useAuth } from "@/features/auth/context/AuthContext";
 import { CatalogShell, Notice, SecondaryAction } from "@/features/catalog/components/CatalogShell";
 import { EbookLoan } from "../types/ebook.type";
-import { getMyEbookLoans, renewEbook, returnEbook } from "../services/ebookService";
+import { getMyEbookLoans, renewEbook } from "../services/ebookService";
 
 // ── Helpers ──────────────────────────────────────────────────────
 function loanId(loan: EbookLoan): number {
@@ -39,12 +39,6 @@ function statusBadge(status?: string) {
       return (
         <span className="inline-flex items-center rounded-full bg-gray-100 px-2.5 py-0.5 text-xs font-semibold text-gray-600">
           Expired
-        </span>
-      );
-    case "RETURNED":
-      return (
-        <span className="inline-flex items-center rounded-full bg-blue-100 px-2.5 py-0.5 text-xs font-semibold text-blue-700">
-          Returned
         </span>
       );
     default:
@@ -94,21 +88,6 @@ export function UserEbookLoansPage() {
       window.clearTimeout(loadingTimerId);
     };
   }, [accessToken, refreshToken, showHistory, message]);
-
-  async function handleReturn(loan: EbookLoan) {
-    const id = loanId(loan);
-    if (actioningId) return;
-    setActioningId(id);
-    try {
-      await returnEbook(id, accessToken, refreshToken);
-      setMessage(`Ebook "${loan.bookTitle}" has been returned.`);
-      setError("");
-    } catch (err) {
-      setError(err instanceof Error ? err.message : "Could not return ebook.");
-    } finally {
-      setActioningId(null);
-    }
-  }
 
   async function handleRenew(loan: EbookLoan) {
     const id = loanId(loan);
@@ -222,9 +201,7 @@ export function UserEbookLoansPage() {
                       </td>
 
                       <td className="px-4 py-3 whitespace-nowrap text-gray-600">
-                        {loan.returnedAt
-                          ? `Returned ${formatDate(loan.returnedAt)}`
-                          : formatDate(expiryDate)}
+                        {formatDate(expiryDate)}
                       </td>
 
                       <td className={`px-4 py-3 whitespace-nowrap text-xs font-semibold ${
@@ -259,13 +236,6 @@ export function UserEbookLoansPage() {
                                 {isActioning ? "..." : "Renew"}
                               </button>
                             )}
-                            <button
-                              disabled={isActioning}
-                              onClick={() => handleReturn(loan)}
-                              className="rounded-lg border border-red-400 px-3 py-1 text-xs font-semibold text-red-600 hover:bg-red-50 transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
-                            >
-                              {isActioning ? "..." : "Return"}
-                            </button>
                           </div>
                         ) : (
                           <span className="text-gray-300 text-xs">–</span>

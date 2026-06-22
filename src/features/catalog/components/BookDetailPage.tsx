@@ -3,11 +3,13 @@
 import Link from "next/link";
 import Image from "next/image";
 import { useParams } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useState, type ReactNode } from "react";
 import { Icon } from "@/components/ui/Icon";
 import { Skeleton } from "@/components/ui/Skeleton";
 import { ApiError } from "@/types/api.type";
 import { useAuth } from "@/features/auth/context/AuthContext";
+import { createHold, getMyHolds } from "@/features/circulation/services/circulationService";
+import { HoldRecord } from "@/features/circulation/types/circulation.type";
 import { borrowEbook } from "@/features/ebook/services/ebookService";
 import { EbookLoan } from "@/features/ebook/types/ebook.type";
 import { useLanguage } from "@/features/i18n/context/LanguageContext";
@@ -29,7 +31,7 @@ const copy = {
   en: {
     eyebrow: "Book detail",
     fallbackTitle: "Library record",
-    description: "Inspect metadata and availability for this title.",
+    description: "Inspect metadata, physical availability, and ebook access for this title.",
     back: "Back to books",
     loadError: "Could not load book details.",
     loginFirst: "Please log in before placing a hold.",
@@ -123,7 +125,7 @@ const copy = {
   vi: {
     eyebrow: "Chi tiết sách",
     fallbackTitle: "Hồ sơ thư viện",
-    description: "Xem thông tin mô tả và tình trạng bản sao của đầu sách này.",
+    description: "Xem thông tin mô tả, tình trạng bản in và quyền truy cập ebook của đầu sách này.",
     back: "Quay lại danh sách",
     loadError: "Không thể tải chi tiết sách.",
     loginFirst: "Vui lòng đăng nhập trước khi đặt giữ sách.",
@@ -281,28 +283,39 @@ export function BookDetailPage() {
     <CatalogShell
       wide
       frameless
+      hideHeader
       eyebrow={text.eyebrow}
       title={book?.title ?? text.fallbackTitle}
       description={text.description}
-      actions={<AnimatedActionLink href="/books">{text.back}</AnimatedActionLink>}
     >
-      {error && (
-        <div className="mb-5">
-          <Notice tone="error" message={error} />
-        </div>
-      )}
+      <div className="mx-auto w-full max-w-[1296px]">
+        <section className="mb-2 flex flex-col justify-between gap-4 px-1 py-1 lg:flex-row lg:items-start">
+          <div className="min-w-0">
+            <p className="text-sm font-black text-[#E60028]">‹ {text.eyebrow}</p>
+            <h1 className="mt-2 break-words font-serif text-4xl font-bold leading-tight text-[#0B1026] md:text-5xl">{book?.title ?? text.fallbackTitle}</h1>
+            <p className="mt-2 text-sm font-medium text-[#59637A]">{text.description}</p>
+          </div>
+          <AnimatedActionLink href="/books">{text.back}</AnimatedActionLink>
+        </section>
 
-      {isLoading ? (
-        <BookDetailSkeleton />
-      ) : book ? (
-        <BookDetailContent
-          book={book}
-          relatedBooks={relatedBooks}
-          text={text}
-          ebookInfo={ebookInfo}
-          ebookInfoError={ebookInfoError}
-        />
-      ) : null}
+        {error && (
+          <div className="mb-5">
+            <Notice tone="error" message={error} />
+          </div>
+        )}
+
+        {isLoading ? (
+          <BookDetailSkeleton />
+        ) : book ? (
+          <BookDetailContent
+            book={book}
+            relatedBooks={relatedBooks}
+            text={text}
+            ebookInfo={ebookInfo}
+            ebookInfoError={ebookInfoError}
+          />
+        ) : null}
+      </div>
     </CatalogShell>
   );
 }
@@ -324,14 +337,61 @@ function BookDetailContent({
   const { locale } = useLanguage();
   const coverUrl = bookCoverUrl(book, "detail");
   const authorNames = (book.authors ?? []).map(authorLabel).join(", ") || text.unknownAuthor;
-  const authorBio = firstAuthorBio(book) || text.authorFallback;
-  const [activeTab, setActiveTab] = useState<"summary" | "author">("summary");
+  const authorBio = firstAuthorBio(book) || fallbackAuthorBio(authorNames, text);
   const [ebookLoan, setEbookLoan] = useState<EbookLoan | null>(null);
   const [isBorrowingEbook, setIsBorrowingEbook] = useState(false);
   const [ebookBorrowError, setEbookBorrowError] = useState("");
   const [isCreatingPayment, setIsCreatingPayment] = useState(false);
   const [paymentError, setPaymentError] = useState("");
+  const [userHolds, setUserHolds] = useState<HoldRecord[]>([]);
+  const [isPlacingHold, setIsPlacingHold] = useState(false);
+  const [holdError, setHoldError] = useState("");
+  const [holdSuccess, setHoldSuccess] = useState("");
   const numericBookId = Number(bookIdOf(book));
+  const bookSummary = summaryForBook(book, text);
+
+  useEffect(() => {
+    if (!isAuthenticated || !Number.isFinite(numericBookId)) return;
+
+    let isMounted = true;
+    const refreshAccessToken = async () => (await refresh())?.accessToken ?? null;
+
+    getMyHolds(accessToken, refreshAccessToken)
+      .then((holds) => {
+        if (isMounted) setUserHolds(holds.filter((h) => Number(h.bookId ?? h.id) === numericBookId));
+      })
+      .catch(() => {
+        if (isMounted) setUserHolds([]);
+      });
+
+    return () => {
+      isMounted = false;
+    };
+  }, [isAuthenticated, numericBookId, accessToken, refresh]);
+
+  async function handlePlaceHold() {
+    if (isPlacingHold || !Number.isFinite(numericBookId)) return;
+
+    if (!isAuthenticated) {
+      setHoldError(text.loginFirst);
+      return;
+    }
+
+    setIsPlacingHold(true);
+    setHoldError("");
+    setHoldSuccess("");
+
+    try {
+      const refreshAccessToken = async () => (await refresh())?.accessToken ?? null;
+      const newHold = await createHold(String(numericBookId), accessToken, refreshAccessToken);
+      setUserHolds((prev) => [newHold, ...prev]);
+      setHoldSuccess(text.holdPlaced);
+    } catch (error) {
+      setHoldError(error instanceof Error ? error.message : text.holdError);
+    } finally {
+      setIsPlacingHold(false);
+    }
+  }
 
   async function handleBorrowEbook() {
     if (isBorrowingEbook || !Number.isFinite(numericBookId) || !ebookInfo) return;
@@ -410,11 +470,11 @@ function BookDetailContent({
   }
 
   return (
-    <section className="rounded-[28px] border border-[#D8DEE8] bg-white p-6 shadow-[0_26px_80px_rgba(15,23,42,0.08)] md:p-8">
-      <div className="grid gap-10 xl:grid-cols-[minmax(300px,390px)_minmax(0,1fr)] 2xl:grid-cols-[400px_minmax(0,1fr)]">
-        <div className="mx-auto w-full max-w-[390px] self-start pt-20 xl:max-w-none">
-          <div>
-            <div className="relative aspect-[2/3] overflow-hidden rounded-lg bg-[#F3F4F6] shadow-[0_24px_60px_rgba(15,23,42,0.18)] ring-1 ring-black/5">
+    <div className="space-y-4">
+      <section className="rounded-2xl border border-[#D8DEE8] bg-white p-4 pt-6 shadow-[0_22px_70px_rgba(15,23,42,0.07)] md:p-5 lg:p-6">
+        <div className="grid items-start gap-6 lg:grid-cols-[300px_minmax(0,1fr)] xl:grid-cols-[320px_minmax(0,1fr)]">
+          <div className="mx-auto w-full max-w-[280px] lg:max-w-[300px] xl:max-w-[320px]">
+            <div className="relative aspect-[2/3] w-full overflow-hidden rounded-md bg-[#F3F4F6] shadow-[0_24px_55px_rgba(15,23,42,0.16)] ring-1 ring-black/5">
               {coverUrl ? (
                 <Image
                   src={coverUrl}
@@ -422,7 +482,7 @@ function BookDetailContent({
                   fill
                   priority
                   unoptimized
-                  sizes="(min-width: 1280px) 320px, (min-width: 1024px) 280px, 260px"
+                  sizes="(min-width: 1280px) 320px, (min-width: 1024px) 300px, 280px"
                   className="object-cover"
                 />
               ) : (
@@ -432,122 +492,81 @@ function BookDetailContent({
                   <span className="text-xs font-semibold uppercase tracking-wide text-white/60">The Athenaeum</span>
                 </div>
               )}
-              <div className="pointer-events-none absolute inset-y-0 left-0 w-8 bg-gradient-to-r from-black/20 to-transparent" />
-            </div>
-          </div>
-        </div>
-
-        <div className="min-w-0">
-          <div className="flex flex-wrap items-center gap-2">
-            <span className="rounded-full bg-[#111827] px-3 py-1 text-xs font-bold uppercase tracking-wide text-white">
-              {categoryLabel(book.category)}
-            </span>
-            <span className="rounded-full border border-[#D9DCE8] px-3 py-1 text-xs font-bold uppercase tracking-wide text-[#6B7280]">
-              {text.original}
-            </span>
-          </div>
-
-          <h2 className="mt-5 max-w-4xl font-serif text-5xl font-bold leading-tight text-[#0B1026] md:text-6xl">
-            {book.title}
-          </h2>
-          <div className="mt-3 flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
-            <p className="text-sm font-semibold text-[#59637A]">
-              {text.by}: <span className="text-[#111827]">{authorNames}</span>
-              {book.publishedDate ? <span> | {text.published}: {book.publishedDate}</span> : null}
-            </p>
-            <DetailActionGroup text={text} />
-          </div>
-
-          <div className="mt-6 flex flex-col gap-5">
-            <div className="grid gap-5 sm:grid-cols-2 xl:grid-cols-4">
-              <BookMetaPill icon="book-open" label={text.isbn} value={book.isbn} />
-              <BookMetaPill icon="clock" label={text.availableCopies} value={String(book.availableCopies ?? 0)} />
-              <BookMetaPill icon="book" label={text.totalCopies} value={String(book.totalCopies ?? 0)} />
-              <BookMetaPill icon="bookmark" label={text.editionLabel} value={book.edition || text.none} />
+              <div className="pointer-events-none absolute inset-y-0 left-0 w-7 bg-gradient-to-r from-black/20 to-transparent" />
             </div>
           </div>
 
-          <div className="mt-7">
-            <EbookAccessPanel
-              ebookInfo={ebookInfo}
-              ebookInfoError={ebookInfoError}
-              loan={ebookLoan}
-              bookId={numericBookId}
-              isAuthenticated={isAuthenticated}
-              isBorrowing={isBorrowingEbook}
-              isCreatingPayment={isCreatingPayment}
-              borrowError={ebookBorrowError}
-              paymentError={paymentError}
-              text={text}
-              onBorrow={handleBorrowEbook}
-              onPay={handleCreateEbookPayment}
-            />
-          </div>
-
-          <div className="mt-5">
-            <div className="rounded-2xl border border-amber-200 bg-amber-50/55 p-4 text-sm text-[#6B4B16]">
-              <div className="flex gap-3">
-                <span className="mt-0.5 grid h-8 w-8 shrink-0 place-items-center rounded-full bg-white text-amber-700 ring-1 ring-amber-200">
-                  <Icon name="info" size={18} aria-hidden="true" />
+          <div className="min-w-0">
+            <div className="min-w-0">
+              <div className="flex flex-wrap items-center gap-2">
+                <span className="rounded-full bg-[#111827] px-3 py-1 text-[11px] font-black uppercase tracking-wide text-white">
+                  {categoryLabel(book.category)}
                 </span>
-                <div>
-                  <p className="font-black text-[#4A3410]">{text.aboutEbookAccess}</p>
-                  <p className="mt-1 leading-6">{text.aboutEbookText}</p>
-                </div>
+                <span className="rounded-full border border-[#D8DEE8] bg-white px-3 py-1 text-[11px] font-black uppercase tracking-wide text-[#6B7280]">
+                  {text.original}
+                </span>
               </div>
+
+              <h2 className="mt-2 max-w-4xl break-words font-serif text-4xl font-bold leading-tight text-[#0B1026] md:text-[2.75rem] xl:text-[3rem]">
+                {book.title}
+              </h2>
+              <p className="mt-2 text-sm font-semibold text-[#59637A]">
+                {text.by}: <span className="text-[#111827]">{authorNames}</span>
+                {book.publishedDate ? <span> | {text.published}: {book.publishedDate}</span> : null}
+              </p>
+            </div>
+
+            <DetailActionGroup text={text} />
+
+            <div className="mt-4 grid gap-3 sm:grid-cols-2 2xl:grid-cols-4">
+              <BookMetaPill icon="book-open" label={text.isbn} value={book.isbn} tone="rose" />
+              <BookMetaPill icon="clock" label={text.availableCopies} value={String(book.availableCopies ?? 0)} tone="amber" />
+              <BookMetaPill icon="book" label={text.totalCopies} value={String(book.totalCopies ?? 0)} tone="slate" />
+              <BookMetaPill icon="bookmark" label={text.editionLabel} value={book.edition || text.none} tone="rose" />
+            </div>
+
+            <div className="mt-2">
+              <PhysicalAvailabilityPanel
+                book={book}
+                userHolds={userHolds}
+                isPlacingHold={isPlacingHold}
+                holdError={holdError}
+                holdSuccess={holdSuccess}
+                text={text}
+                onPlaceHold={handlePlaceHold}
+              />
+            </div>
+
+            <div className="mt-2">
+              <EbookAccessPanel
+                ebookInfo={ebookInfo}
+                ebookInfoError={ebookInfoError}
+                loan={ebookLoan}
+                bookId={numericBookId}
+                isAuthenticated={isAuthenticated}
+                isBorrowing={isBorrowingEbook}
+                isCreatingPayment={isCreatingPayment}
+                borrowError={ebookBorrowError}
+                paymentError={paymentError}
+                text={text}
+                onBorrow={handleBorrowEbook}
+                onPay={handleCreateEbookPayment}
+              />
             </div>
           </div>
         </div>
-      </div>
+      </section>
 
-      <div className="mt-10 border-b border-[#E1E6F0]" role="tablist" aria-label="Book information tabs">
-        <div className="flex flex-wrap gap-8 text-sm font-black">
-          <button
-            type="button"
-            role="tab"
-            aria-selected={activeTab === "summary"}
-            onClick={() => setActiveTab("summary")}
-            className={`border-b-2 pb-3 transition ${
-              activeTab === "summary"
-                ? "border-[#E60028] text-[#E60028]"
-                : "border-transparent text-[#111827] hover:border-black/25 hover:text-black"
-            }`}
-          >
-            {text.bookSummary}
-          </button>
-          <button
-            type="button"
-            role="tab"
-            aria-selected={activeTab === "author"}
-            onClick={() => setActiveTab("author")}
-            className={`border-b-2 pb-3 transition ${
-              activeTab === "author"
-                ? "border-[#E60028] text-[#E60028]"
-                : "border-transparent text-[#111827] hover:border-black/25 hover:text-black"
-            }`}
-          >
-            {text.aboutAuthor}
-          </button>
-        </div>
-      </div>
-
-      <div className="mt-6 text-sm leading-7 text-[#4B5563]">
-        {activeTab === "summary" ? (
-          <div role="tabpanel">
-            <h3 className="sr-only">{text.bookSummary}</h3>
-            <p>{text.summaryText}</p>
-            <p className="mt-4">{text.summaryText}</p>
-          </div>
-        ) : (
-          <div role="tabpanel" className="rounded-2xl border border-[#E1E6F0] bg-[#F8FAFC] p-5">
-            <h3 className="text-sm font-black uppercase tracking-wide text-[#111827]">{text.aboutAuthor}</h3>
-            <p className="mt-3">{authorBio}</p>
-          </div>
-        )}
+      <div className="grid gap-3 lg:grid-cols-[1.2fr_0.95fr]">
+        <InfoPanel title={text.bookSummary}>
+          <p>{bookSummary}</p>
+          {bookSummary === text.summaryText ? <p>{text.summaryText}</p> : null}
+        </InfoPanel>
+        <AuthorPanel authorNames={authorNames} authorBio={authorBio} text={text} />
       </div>
 
       {relatedBooks.length ? (
-        <div className="mt-10 border-t border-[#E1E6F0] pt-8">
+        <section className="rounded-2xl border border-[#D8DEE8] bg-white p-5 shadow-[0_18px_50px_rgba(15,23,42,0.06)]">
           <div className="flex items-center justify-between gap-4">
             <h3 className="text-xl font-black text-[#111827]">{text.relatedBooks}</h3>
             <Link href={`/books?categoryId=${categoryIdOf(book)}`} className="text-sm font-black text-[#E60028] transition hover:text-[#111827]">
@@ -557,12 +576,94 @@ function BookDetailContent({
           <div className="mt-5 grid gap-5 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-6">
             {relatedBooks.map((relatedBook) => (
               <RelatedBookCard key={bookIdOf(relatedBook) || relatedBook.isbn} book={relatedBook} />
-              ))}
-            </div>
-        </div>
+            ))}
+          </div>
+        </section>
       ) : null}
+    </div>
+  );
+}
+
+function InfoPanel({ title, children }: { title: string; children: ReactNode }) {
+  return (
+    <section className="relative min-h-[205px] overflow-hidden rounded-2xl border border-[#D8DEE8] bg-white p-5 shadow-[0_18px_46px_rgba(15,23,42,0.055)]">
+      <h3 className="text-base font-black text-[#0B1026]">{title}</h3>
+      <div className="mt-3 h-0.5 w-28 bg-[#E60028]" />
+      <div className="mt-4 max-w-4xl space-y-2 text-[13px] font-medium leading-6 text-[#59637A]">{children}</div>
     </section>
   );
+}
+
+function AuthorPanel({
+  authorNames,
+  authorBio,
+  text,
+}: {
+  authorNames: string;
+  authorBio: string;
+  text: typeof copy.en;
+}) {
+  const tags = authorTags(authorNames, text);
+
+  return (
+    <section className="min-h-[205px] rounded-2xl border border-[#D8DEE8] bg-white p-5 shadow-[0_18px_46px_rgba(15,23,42,0.055)]">
+      <h3 className="text-base font-black text-[#0B1026]">{text.aboutAuthor}</h3>
+      <div className="mt-3 h-0.5 w-28 bg-[#E60028]" />
+      <div className="mt-4 flex gap-4">
+        <div className="grid h-16 w-16 shrink-0 place-items-center rounded-full bg-[#EEF2F7] text-lg font-black text-[#0B1026] ring-1 ring-[#D8DEE8]">
+          {authorInitials(authorNames)}
+        </div>
+        <div className="min-w-0">
+          <h4 className="text-sm font-black text-[#0B1026]">{authorNames}</h4>
+          <p className="mt-1 line-clamp-4 text-[13px] font-medium leading-5 text-[#59637A]">{authorBio}</p>
+          <div className="mt-4 flex flex-wrap gap-2">
+            {tags.map((tag) => (
+              <span key={tag} className="rounded-full border border-[#D8DEE8] bg-white px-3 py-1 text-xs font-bold text-[#61708F]">
+                {tag}
+              </span>
+            ))}
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function summaryForBook(book: Book, text: typeof copy.en) {
+  if (typeof book.category === "object" && book.category?.description?.trim()) {
+    return book.category.description.trim();
+  }
+
+  if (book.title.trim().toLowerCase() === "số đỏ") {
+    return "Số Đỏ là tiểu thuyết trào phúng nổi tiếng của nhà văn Vũ Trọng Phụng, xuất bản lần đầu năm 1936. Tác phẩm phản ánh xã hội Việt Nam nửa phong kiến nửa thực dân với giọng văn châm biếm sắc sảo, điêu tả sự tha hóa, lố lăng và những mánh đời nhỏ bé bị cuốn vào vòng xoáy danh vọng và vật chất. Đây là một trong những tác phẩm tiêu biểu nhất của nền văn học hiện thực phê phán Việt Nam.";
+  }
+
+  return text.summaryText;
+}
+
+function fallbackAuthorBio(authorNames: string, text: typeof copy.en) {
+  if (authorNames.toLowerCase().includes("vũ trọng phụng")) {
+    return "Nhà văn hiện thực trào phúng xuất sắc của Việt Nam. Ông nổi tiếng với những tác phẩm phơi bày thói hư tật xấu trong xã hội đương thời bằng giọng văn sắc bén và sâu cay.";
+  }
+
+  return text.authorFallback;
+}
+
+function authorTags(authorNames: string, text: typeof copy.en) {
+  if (authorNames.toLowerCase().includes("vũ trọng phụng")) {
+    return ["Trào phúng", "Hiện thực phê phán", "Tác phẩm kinh điển"];
+  }
+
+  return [text.original, text.relatedBooks];
+}
+
+function authorInitials(authorNames: string) {
+  return authorNames
+    .split(/[,\s]+/)
+    .filter(Boolean)
+    .slice(0, 2)
+    .map((part) => part[0]?.toUpperCase())
+    .join("");
 }
 
 function createPaymentIdempotencyKey(targetId: number) {
@@ -594,7 +695,7 @@ function rememberPendingEbookPayment(paymentCode: string | undefined, paymentId:
 
 function DetailActionGroup({ text }: { text: typeof copy.en }) {
   return (
-    <div className="flex flex-wrap gap-3 lg:justify-end">
+    <div className="mt-4 flex flex-wrap gap-2 sm:justify-end">
       <DetailActionButton icon="heart" label={text.addWishlist} />
       <DetailActionButton icon="arrow-right" label={text.shareBook} />
       <DetailActionButton icon="alert-circle" label={text.reportIssue} />
@@ -606,10 +707,10 @@ function DetailActionButton({ icon, label }: { icon: "heart" | "arrow-right" | "
   return (
     <button
       type="button"
-      className="inline-flex h-10 items-center justify-center gap-2 rounded-full border border-[#D8DEE8] bg-white px-4 text-xs font-black text-[#0B1026] shadow-[0_8px_18px_rgba(15,23,42,0.04)] transition hover:-translate-y-0.5 hover:border-[#B30D2D] hover:text-[#B30D2D]"
+      className="inline-flex h-8 items-center justify-center gap-1.5 rounded-full border border-[#D8DEE8] bg-white px-3 text-[11px] font-black leading-none text-[#0B1026] shadow-[0_6px_14px_rgba(15,23,42,0.04)] transition hover:-translate-y-0.5 hover:border-[#B30D2D] hover:text-[#B30D2D]"
     >
-      <Icon name={icon} size={16} aria-hidden="true" />
-      {label}
+      <Icon name={icon} size={14} aria-hidden="true" className="shrink-0" />
+      <span className="whitespace-nowrap">{label}</span>
     </button>
   );
 }
@@ -618,18 +719,27 @@ function BookMetaPill({
   icon,
   label,
   value,
+  tone = "slate",
 }: {
   icon: "book-open" | "clock" | "book" | "bookmark";
   label: string;
   value: string;
+  tone?: "rose" | "amber" | "slate";
 }) {
+  const toneClass =
+    tone === "rose"
+      ? "bg-[#FDF0F3] text-[#B30D2D]"
+      : tone === "amber"
+        ? "bg-[#FFF7ED] text-[#D97706]"
+        : "bg-[#F4F6FA] text-[#0B1026]";
+
   return (
-    <div className="flex min-h-20 items-center gap-4 rounded-xl border border-[#E1E6F0] bg-white px-5 py-4 shadow-[0_12px_32px_rgba(15,23,42,0.05)]">
-      <span className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-[#F8FAFC] text-[#0B1026]">
-        <Icon name={icon} size={23} aria-hidden="true" />
+    <div className="flex min-h-[66px] items-center gap-3 rounded-xl border border-[#E1E6F0] bg-white px-4 py-3 shadow-[0_10px_28px_rgba(15,23,42,0.045)]">
+      <span className={`grid h-9 w-9 shrink-0 place-items-center rounded-xl ${toneClass}`}>
+        <Icon name={icon} size={20} aria-hidden="true" />
       </span>
       <div className="min-w-0">
-        <p className="text-[11px] font-black uppercase tracking-wide text-[#6B7280]">{label}</p>
+        <p className="text-[10px] font-black uppercase tracking-wide text-[#6B7280]">{label}</p>
         <p className="mt-1 truncate text-base font-black text-[#111827]">{value}</p>
       </div>
     </div>
@@ -668,17 +778,17 @@ function EbookAccessPanel({
   const hasActiveLoan = loan?.status === "ACTIVE";
 
   return (
-    <section className="h-full rounded-2xl border border-[#E1E6F0] bg-white p-5 shadow-[0_18px_50px_rgba(15,23,42,0.06)]">
-      <div className="flex flex-col gap-5 lg:flex-row lg:items-start lg:justify-between">
-        <div className="min-w-0 flex-1">
+    <section className="rounded-xl border border-[#E1E6F0] bg-white p-3 shadow-[0_14px_36px_rgba(15,23,42,0.05)]">
+      <div className="grid gap-4 xl:grid-cols-[minmax(0,1fr)_250px]">
+        <div className="min-w-0">
           <div className="flex items-center gap-3">
-            <span className="grid h-12 w-12 place-items-center rounded-2xl bg-[#FDF0F3] text-[#B30D2D]">
-              <Icon name="book-open" size={24} aria-hidden="true" />
+            <span className="grid h-9 w-9 place-items-center rounded-xl bg-[#FDF0F3] text-[#B30D2D]">
+              <Icon name="book-open" size={19} aria-hidden="true" />
             </span>
             <div>
-              <h3 className="font-serif text-2xl font-bold text-[#0B1026]">{text.ebookAccess}</h3>
+              <h3 className="font-serif text-xl font-bold leading-tight text-[#0B1026]">{text.ebookAccess}</h3>
               {ebookInfo?.updatedAt ? (
-                <p className="mt-1 text-xs font-semibold text-[#61708F]">
+                <p className="mt-0.5 text-xs font-semibold text-[#61708F]">
                   {text.lastUpdated}: {formatDateValue(ebookInfo.updatedAt, text)}
                 </p>
               ) : null}
@@ -691,7 +801,7 @@ function EbookAccessPanel({
             </p>
           ) : null}
 
-          <div className="mt-5 divide-y divide-[#E1E6F0]">
+          <div className="mt-2 divide-y divide-[#E1E6F0]">
             <EbookInfoRow icon="check" label={text.availabilityStatus} value={isAvailable ? text.availableNow : text.unavailableNow} />
             <EbookInfoRow icon="users" label={text.maxLicenses} value={formatLicenseLimit(ebookInfo, text)} />
             <EbookInfoRow icon="clock" label={text.loanDuration} value={formatLoanDuration(ebookInfo?.loanDurationDays, text)} />
@@ -700,62 +810,68 @@ function EbookAccessPanel({
           </div>
         </div>
 
-        <div className="w-full shrink-0 lg:w-64">
-          {hasActiveLoan ? (
-            <Link
-              href={`/books/${bookId}/read`}
-              className="inline-flex h-14 w-full items-center justify-center gap-3 rounded-xl bg-[#B30D2D] px-5 text-sm font-black text-white shadow-[0_16px_32px_rgba(179,13,45,0.24)] transition hover:-translate-y-0.5 hover:bg-[#910A24]"
-            >
-              <Icon name="book-open" size={20} aria-hidden="true" />
-              {text.readEbook}
-            </Link>
-          ) : !isAvailable ? (
-            <button
-              type="button"
-              disabled
-              className="inline-flex h-14 w-full cursor-not-allowed items-center justify-center gap-3 rounded-xl bg-[#A8AFBD] px-5 text-sm font-black text-white"
-            >
-              <Icon name="book-open" size={20} aria-hidden="true" />
-              {text.ebookUnavailable}
-            </button>
-          ) : requiresPayment && isAuthenticated ? (
-            <button
-              type="button"
-              onClick={onPay}
-              disabled={isCreatingPayment}
-              className="inline-flex h-14 w-full items-center justify-center gap-3 rounded-xl bg-[#B30D2D] px-5 text-sm font-black text-white shadow-[0_16px_32px_rgba(179,13,45,0.24)] transition hover:-translate-y-0.5 hover:bg-[#910A24] disabled:cursor-not-allowed disabled:bg-[#A8AFBD] disabled:shadow-none disabled:hover:translate-y-0"
-            >
-              <Icon name={isCreatingPayment ? "clock" : "book-open"} size={20} aria-hidden="true" />
-              {isCreatingPayment ? text.creatingPayment : text.payEbook}
-            </button>
-          ) : requiresPayment ? (
-            <Link
-              href="/login"
-              className="inline-flex h-14 w-full items-center justify-center gap-3 rounded-xl bg-[#B30D2D] px-5 text-sm font-black text-white shadow-[0_16px_32px_rgba(179,13,45,0.24)] transition hover:-translate-y-0.5 hover:bg-[#910A24]"
-            >
-              <Icon name="user" size={20} aria-hidden="true" />
-              {text.signInToPay}
-            </Link>
-          ) : isAuthenticated ? (
-            <button
-              type="button"
-              onClick={onBorrow}
-              disabled={!isAvailable || isBorrowing}
-              className="inline-flex h-14 w-full items-center justify-center gap-3 rounded-xl bg-[#B30D2D] px-5 text-sm font-black text-white shadow-[0_16px_32px_rgba(179,13,45,0.24)] transition hover:-translate-y-0.5 hover:bg-[#910A24] disabled:cursor-not-allowed disabled:bg-[#A8AFBD] disabled:shadow-none disabled:hover:translate-y-0"
-            >
-              <Icon name="book-open" size={20} aria-hidden="true" />
-              {isBorrowing ? text.borrowingEbook : text.borrowEbook}
-            </button>
-          ) : (
-            <Link
-              href="/login"
-              className="inline-flex h-14 w-full items-center justify-center gap-3 rounded-xl bg-[#B30D2D] px-5 text-sm font-black text-white shadow-[0_16px_32px_rgba(179,13,45,0.24)] transition hover:-translate-y-0.5 hover:bg-[#910A24]"
-            >
-              <Icon name="user" size={20} aria-hidden="true" />
-              {text.signInToBorrow}
-            </Link>
-          )}
-          <p className="mt-3 text-center text-sm font-medium leading-6 text-[#61708F]">
+        <div className="flex min-h-full flex-col justify-center border-t border-[#E1E6F0] pt-4 xl:border-l xl:border-t-0 xl:pl-4 xl:pt-0">
+          <div className="mb-2 inline-flex w-fit items-center gap-2 self-center rounded-lg bg-[#F7F3FF] px-4 py-2 text-xs font-bold leading-tight text-[#6D5BD0]">
+            <Icon name="check" size={14} aria-hidden="true" />
+            <span>Secure payment<br />powered by VNPAY</span>
+          </div>
+          <div className="mx-auto w-full max-w-[214px]">
+            {hasActiveLoan ? (
+              <Link
+                href={`/books/${bookId}/read`}
+                className="inline-flex h-10 w-full items-center justify-center gap-2 rounded-lg bg-[#B30D2D] px-3 text-[13px] font-black leading-none text-white shadow-[0_16px_32px_rgba(179,13,45,0.24)] transition hover:-translate-y-0.5 hover:bg-[#910A24]"
+              >
+                <Icon name="book-open" size={18} aria-hidden="true" className="shrink-0" />
+                <span className="min-w-0 truncate">{text.readEbook}</span>
+              </Link>
+            ) : !isAvailable ? (
+              <button
+                type="button"
+                disabled
+                className="inline-flex h-10 w-full cursor-not-allowed items-center justify-center gap-2 rounded-lg bg-[#A8AFBD] px-3 text-[13px] font-black leading-none text-white"
+              >
+                <Icon name="book-open" size={18} aria-hidden="true" className="shrink-0" />
+                <span className="min-w-0 truncate">{text.ebookUnavailable}</span>
+              </button>
+            ) : requiresPayment && isAuthenticated ? (
+              <button
+                type="button"
+                onClick={onPay}
+                disabled={isCreatingPayment}
+                className="inline-flex h-10 w-full items-center justify-center gap-2 rounded-lg bg-[#B30D2D] px-3 text-[13px] font-black leading-none text-white shadow-[0_16px_32px_rgba(179,13,45,0.24)] transition hover:-translate-y-0.5 hover:bg-[#910A24] disabled:cursor-not-allowed disabled:bg-[#A8AFBD] disabled:shadow-none disabled:hover:translate-y-0"
+              >
+                <Icon name={isCreatingPayment ? "clock" : "book-open"} size={18} aria-hidden="true" className="shrink-0" />
+                <span className="min-w-0 truncate">{isCreatingPayment ? text.creatingPayment : text.payEbook}</span>
+              </button>
+            ) : requiresPayment ? (
+              <Link
+                href="/login"
+                className="inline-flex h-10 w-full items-center justify-center gap-2 rounded-lg bg-[#B30D2D] px-3 text-[13px] font-black leading-none text-white shadow-[0_16px_32px_rgba(179,13,45,0.24)] transition hover:-translate-y-0.5 hover:bg-[#910A24]"
+              >
+                <Icon name="user" size={18} aria-hidden="true" className="shrink-0" />
+                <span className="min-w-0 truncate">{text.signInToPay}</span>
+              </Link>
+            ) : isAuthenticated ? (
+              <button
+                type="button"
+                onClick={onBorrow}
+                disabled={!isAvailable || isBorrowing}
+                className="inline-flex h-10 w-full items-center justify-center gap-2 rounded-lg bg-[#B30D2D] px-3 text-[13px] font-black leading-none text-white shadow-[0_16px_32px_rgba(179,13,45,0.24)] transition hover:-translate-y-0.5 hover:bg-[#910A24] disabled:cursor-not-allowed disabled:bg-[#A8AFBD] disabled:shadow-none disabled:hover:translate-y-0"
+              >
+                <Icon name="book-open" size={18} aria-hidden="true" className="shrink-0" />
+                <span className="min-w-0 truncate">{isBorrowing ? text.borrowingEbook : text.borrowEbook}</span>
+              </button>
+            ) : (
+              <Link
+                href="/login"
+                className="inline-flex h-10 w-full items-center justify-center gap-2 rounded-lg bg-[#B30D2D] px-3 text-[13px] font-black leading-none text-white shadow-[0_16px_32px_rgba(179,13,45,0.24)] transition hover:-translate-y-0.5 hover:bg-[#910A24]"
+              >
+                <Icon name="user" size={18} aria-hidden="true" className="shrink-0" />
+                <span className="min-w-0 truncate">{text.signInToBorrow}</span>
+              </Link>
+            )}
+          </div>
+          <p className="mt-2 text-center text-xs font-medium leading-5 text-[#61708F]">
             {hasActiveLoan ? text.ebookBorrowed : requiresPayment ? text.paymentPendingHelp : isAvailable ? text.onlineReaderOnly : text.ebookUnavailableBody}
           </p>
           {borrowError || paymentError ? (
@@ -771,12 +887,12 @@ function EbookAccessPanel({
 
 function EbookInfoRow({ icon, label, value }: { icon: "check" | "users" | "clock" | "bookmark" | "file"; label: string; value: string }) {
   return (
-    <div className="flex items-center justify-between gap-4 py-3 text-sm">
+    <div className="flex items-center justify-between gap-4 py-1 text-xs leading-4">
       <div className="flex min-w-0 items-center gap-3 text-[#59637A]">
-        <Icon name={icon} size={17} aria-hidden="true" className="shrink-0 text-[#0B1026]" />
+        <Icon name={icon} size={14} aria-hidden="true" className="shrink-0 text-[#0B1026]" />
         <span className="truncate font-medium">{label}</span>
       </div>
-      <span className="shrink-0 text-right font-black text-[#0B1026]">{value}</span>
+      <span className="min-w-0 max-w-[65%] truncate text-right font-black text-[#0B1026]" title={value}>{value}</span>
     </div>
   );
 }
@@ -910,6 +1026,109 @@ function AnimatedActionLink({ href, children }: { href: string; children: string
       </span>
       {children}
     </Link>
+  );
+}
+
+function PhysicalAvailabilityPanel({
+  book,
+  userHolds,
+  isPlacingHold,
+  holdError,
+  holdSuccess,
+  text,
+  onPlaceHold,
+}: {
+  book: Book;
+  userHolds: HoldRecord[];
+  isPlacingHold: boolean;
+  holdError: string;
+  holdSuccess: string;
+  text: typeof copy.en;
+  onPlaceHold: () => void;
+}) {
+  const isOutOfStock = (book.availableCopies ?? 0) === 0;
+  const hasHold = userHolds.length > 0;
+
+  return (
+    <section
+      className="relative overflow-hidden rounded-xl border px-4 py-2"
+      style={{
+        backgroundColor: isOutOfStock ? "rgba(255, 251, 235, 0.78)" : "rgba(236, 253, 245, 0.82)",
+        borderColor: isOutOfStock ? "#FDE68A" : "#BBF7D0",
+      }}
+    >
+      <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
+        <div className="min-w-0 flex-1 xl:pr-24">
+          <div className="flex items-center gap-3">
+            <span
+              className={`grid h-9 w-9 shrink-0 place-items-center rounded-full ${
+                isOutOfStock ? "bg-amber-50 text-amber-600" : "bg-emerald-50 text-emerald-600"
+              }`}
+            >
+              <Icon name={isOutOfStock ? "clock" : "check"} size={19} aria-hidden="true" />
+            </span>
+            <div>
+              <h3 className="text-base font-black text-[#0B1026]">
+                {isOutOfStock ? text.unavailableTitle : text.availableTitle}
+              </h3>
+              <p className="mt-0.5 text-xs font-medium leading-5 text-[#61708F]">
+                {isOutOfStock ? text.unavailableBody : text.availableBody}
+              </p>
+            </div>
+          </div>
+        </div>
+
+        {isOutOfStock && (
+          <div className="w-full shrink-0 lg:w-56">
+            {hasHold ? (
+              <div className="flex flex-col gap-3">
+                <button
+                  type="button"
+                  disabled
+                  className="inline-flex h-11 w-full cursor-not-allowed items-center justify-center gap-3 rounded-lg bg-emerald-500 px-5 text-sm font-black text-white"
+                >
+                  <Icon name="check" size={20} aria-hidden="true" />
+                  {text.holdPlaced.split(".")[0]}
+                </button>
+                <Link
+                  href="/user/holds"
+                  className="text-center text-sm font-bold text-[#B30D2D] transition hover:underline"
+                >
+                  {text.myHolds}
+                </Link>
+              </div>
+            ) : (
+              <button
+                type="button"
+                onClick={onPlaceHold}
+                disabled={isPlacingHold}
+                className="inline-flex h-11 w-full items-center justify-center gap-3 rounded-lg bg-[#B30D2D] px-5 text-sm font-black text-white shadow-[0_16px_32px_rgba(179,13,45,0.24)] transition hover:-translate-y-0.5 hover:bg-[#910A24] disabled:cursor-not-allowed disabled:bg-[#A8AFBD] disabled:shadow-none disabled:hover:translate-y-0"
+              >
+                <Icon name={isPlacingHold ? "clock" : "bookmark"} size={20} aria-hidden="true" />
+                {isPlacingHold ? text.placingHold : text.placeHold}
+              </button>
+            )}
+            {holdError || holdSuccess ? (
+              <p
+                className={`mt-3 rounded-xl border px-3 py-2 text-center text-xs font-bold ${
+                  holdError ? "border-rose-200 bg-rose-50 text-rose-700" : "border-emerald-200 bg-emerald-50 text-emerald-700"
+                }`}
+              >
+                {holdError || holdSuccess}
+              </p>
+            ) : null}
+          </div>
+        )}
+      </div>
+      {!isOutOfStock ? (
+        <Icon
+          name="book-open"
+          size={76}
+          aria-hidden="true"
+          className="pointer-events-none absolute right-7 top-1/2 hidden -translate-y-1/2 text-emerald-700/10 xl:block"
+        />
+      ) : null}
+    </section>
   );
 }
 

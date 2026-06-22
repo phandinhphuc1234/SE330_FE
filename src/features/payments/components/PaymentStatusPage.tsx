@@ -179,7 +179,6 @@ export function PaymentStatusPage() {
                 <PaymentInfoCard label={text.amount} value={formatMoney(payment.amount, payment.currency, text)} />
                 <PaymentInfoCard label={text.purpose} value={payment.purpose || text.notAvailable} />
                 <PaymentInfoCard label={text.target} value={formatTarget(payment, text)} />
-                <PaymentInfoCard label={text.responseCode} value={payment.providerResponseCode || text.notAvailable} />
               </div>
             </div>
 

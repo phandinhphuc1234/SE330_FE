@@ -23,7 +23,7 @@ const copy = {
     empty: "You do not have active loans.",
     renewing: "Renewing...",
     renew: "Renew",
-    headings: ["Book", "Borrowed", "Due", "Status", "Renewals", "Fine"],
+    headings: ["Book", "Borrowed", "Due", "Status", "Renewals"],
   },
   vi: {
     eyebrow: "Sách đang mượn",
@@ -37,7 +37,7 @@ const copy = {
     empty: "Bạn chưa có sách đang mượn.",
     renewing: "Đang gia hạn...",
     renew: "Gia hạn",
-    headings: ["Sách", "Ngày mượn", "Hạn trả", "Trạng thái", "Gia hạn", "Phạt"],
+    headings: ["Sách", "Ngày mượn", "Hạn trả", "Trạng thái", "Gia hạn"],
   },
 };
 
@@ -127,12 +127,21 @@ export function UserLoansPage() {
                         <div className="font-bold text-[#0B1026] line-clamp-2 max-w-[280px]" title={titleOf(loan)}>
                           {titleOf(loan)}
                         </div>
-                        <div className="mt-1 flex items-center gap-2">
+                        <div className="mt-1.5 flex items-center gap-2">
                           <span className={`inline-flex items-center rounded-full px-2 py-0.5 text-[10px] font-black uppercase tracking-wider ${isEbook ? 'bg-indigo-100 text-indigo-700' : 'bg-slate-100 text-slate-600'}`}>
                             {isEbook ? 'Ebook' : 'Physical'}
                           </span>
                           {!isEbook && loan.barcode && (
                             <span className="font-mono text-[10px] font-medium text-slate-500">{loan.barcode}</span>
+                          )}
+                          {isEbook && isActive && loan.bookId && (
+                            <Link
+                              href={`/books/${loan.bookId}/read`}
+                              className="inline-flex items-center gap-1 text-[10px] font-bold text-[#337AB7] hover:text-[#000054] transition hover:underline border-l border-slate-200 pl-2"
+                            >
+                              <Icon name="book-open" size={12} />
+                              {locale === "vi" ? "Đọc ngay" : "Read now"}
+                            </Link>
                           )}
                         </div>
                       </div>
@@ -152,13 +161,6 @@ export function UserLoansPage() {
                     ) : (
                       <span className="text-slate-400">-</span>
                     )}
-                  </td>
-                  <td className="px-4 py-4 whitespace-nowrap font-medium text-slate-700">
-                    {typeof loan.fineAmount === "number" || typeof loan.fine === "number" ? (
-                      <>
-                        {(loan.fineAmount ?? loan.fine ?? 0).toLocaleString("vi-VN")} <span className="text-[0.7em] text-slate-400 font-bold">VND</span>
-                      </>
-                    ) : "-"}
                   </td>
                 </tr>
               );

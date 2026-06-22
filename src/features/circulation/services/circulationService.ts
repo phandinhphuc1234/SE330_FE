@@ -305,8 +305,8 @@ export function getMyBorrows(params: { page?: number; size?: number } = {}, acce
   return apiFetchWithAuthRetry<BorrowRecord[]>(`/api/borrows/my?page=${page}&size=${size}`, undefined, accessToken, refreshAccessToken);
 }
 
-export function getMyBorrowHistory(params: { page?: number; size?: number } = {}, accessToken: string | null, refreshAccessToken?: AccessTokenRefresher) {
-  const { page = 0, size = 20 } = params;
+export function getMyBorrowHistory(params: { page?: number; size?: number } | null = {}, accessToken: string | null, refreshAccessToken?: AccessTokenRefresher) {
+  const { page = 0, size = 20 } = params || {};
   return apiFetchWithAuthRetry<BorrowRecord[]>(`/api/borrows/my/history?page=${page}&size=${size}`, undefined, accessToken, refreshAccessToken);
 }
 

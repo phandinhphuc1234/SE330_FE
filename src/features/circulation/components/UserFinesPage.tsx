@@ -196,7 +196,9 @@ export function UserFinesPage() {
                           <span>Paid {formatDate(fine.finePaidAt, locale)}</span>
                         )}
                         {fine.fineStatus === "WAIVED" && fine.fineWaivedReason && (
-                          <span className="italic">Reason: {fine.fineWaivedReason}</span>
+                          <span className="italic">
+                            Lý do: {fine.fineWaivedReason.replace(/^MEMBER_HAS_UNPAID_FINES:\s*/i, "")}
+                          </span>
                         )}
                       </div>
                     </td>

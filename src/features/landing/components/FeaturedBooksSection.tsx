@@ -224,7 +224,7 @@ export function FeaturedBooksSection() {
               </p>
               <Link
                 href={activeBookId ? `/books/${activeBookId}` : "/books"}
-                className="mt-auto inline-flex w-full items-center justify-center gap-5 rounded-full bg-[#C1282D] px-5 py-4 text-sm font-black text-white shadow-[0_18px_36px_rgba(193,40,45,0.28)] transition hover:-translate-y-0.5 hover:bg-black"
+                className="relative top-2 mt-auto inline-flex w-full items-center justify-center gap-5 rounded-full bg-[#C1282D] px-5 py-4 text-sm font-black text-white shadow-[0_18px_36px_rgba(193,40,45,0.28)] transition hover:top-1 hover:bg-black"
               >
                 {copy.viewDetails}
                 <span aria-hidden="true">→</span>

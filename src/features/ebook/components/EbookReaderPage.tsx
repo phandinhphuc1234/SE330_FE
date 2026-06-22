@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
+import type { PDFDocumentProxy, RenderTask } from "pdfjs-dist";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { Icon } from "@/components/ui/Icon";
 import { ApiError } from "@/types/api.type";
@@ -27,18 +28,16 @@ type ReaderStage =
   | "content-error"
   | "closing";
 
-// We define a loose type for the dynamically loaded pdfjs library to avoid TS errors without importing the module at top level
-type PDFDocumentProxy = any;
-
 const HEARTBEAT_MS = 60_000;
 const EXPIRY_SKEW_MS = 30_000;
-const SIGNED_URL_REFRESH_SKEW_MS = 45_000;
 
 export function EbookReaderPage() {
   const params = useParams<{ bookId: string }>();
   const router = useRouter();
   const { accessToken, isAuthenticated, isInitializing, refresh } = useAuth();
   const numericBookId = Number(params.bookId);
+  const hasValidBookId = Number.isInteger(numericBookId) && numericBookId > 0;
+  const bookHref = hasValidBookId ? `/books/${encodeURIComponent(String(numericBookId))}` : "/books";
   const storageKey = useMemo(() => readerStorageKey(numericBookId), [numericBookId]);
   const [session, setSession] = useState<StoredReaderSession | null>(null);
   const sessionRef = useRef<StoredReaderSession | null>(null);
@@ -48,7 +47,6 @@ export function EbookReaderPage() {
   const [pdfDoc, setPdfDoc] = useState<PDFDocumentProxy | null>(null);
   const [totalPages, setTotalPages] = useState(0);
 
-  const [contentExpiresAt, setContentExpiresAt] = useState("");
   const [stage, setStage] = useState<ReaderStage>("creating");
   const [error, setError] = useState("");
   const [page, setPage] = useState(1);
@@ -131,7 +129,6 @@ export function EbookReaderPage() {
       clearPdfState();
       setPdfDoc(doc);
       setTotalPages(doc.numPages);
-      setContentExpiresAt(content.expiresAt);
       setStage("rendering");
       setError("");
     },
@@ -140,7 +137,7 @@ export function EbookReaderPage() {
 
   const openReader = useCallback(
     async (forceNewSession = false) => {
-      if (!Number.isFinite(numericBookId)) {
+      if (!hasValidBookId) {
         setStage("content-error");
         setError("Invalid book id.");
         return;
@@ -174,10 +171,14 @@ export function EbookReaderPage() {
         setReaderSession(activeSession);
         await loadSignedPdf(activeSession);
       } catch (readerError) {
-        handleReaderError(readerError, invalidateSession, setStage, setError);
+        const shouldRecover = handleReaderError(readerError, invalidateSession, setStage, setError);
+        if (shouldRecover) {
+          setStage("expired");
+          setError("Your reading session expired. Reopen the reader to continue.");
+        }
       }
     },
-    [accessToken, invalidateSession, isAuthenticated, loadSignedPdf, numericBookId, refreshAccessToken, setReaderSession, storageKey],
+    [accessToken, hasValidBookId, invalidateSession, isAuthenticated, loadSignedPdf, numericBookId, refreshAccessToken, setReaderSession, storageKey],
   );
 
   const refreshSession = useCallback(async () => {
@@ -223,9 +224,9 @@ export function EbookReaderPage() {
       // Backend TTL will clean abandoned sessions if close is interrupted.
     } finally {
       invalidateSession();
-      router.push(`/books/${encodeURIComponent(String(numericBookId))}`);
+      router.push(bookHref);
     }
-  }, [accessToken, invalidateSession, numericBookId, refreshAccessToken, router]);
+  }, [accessToken, bookHref, invalidateSession, refreshAccessToken, router]);
 
   useEffect(() => {
     if (isInitializing || hasStartedRef.current) return;
@@ -277,33 +278,41 @@ export function EbookReaderPage() {
 
   useEffect(() => {
     if (!pdfDoc || !canvasRef.current) return;
-    let renderTask: any = null;
+    const activePdfDoc = pdfDoc;
+    let renderTask: RenderTask | null = null;
     let isCancelled = false;
 
-    pdfDoc.getPage(page).then((pdfPage: any) => {
-      if (isCancelled) return;
-      const viewport = pdfPage.getViewport({ scale: zoom / 100 });
-      const canvas = canvasRef.current;
-      if (!canvas) return;
-      const context = canvas.getContext('2d');
-      if (!context) return;
+    async function renderPage() {
+      try {
+        const pdfPage = await activePdfDoc.getPage(page);
+        if (isCancelled) return;
 
-      canvas.height = viewport.height;
-      canvas.width = viewport.width;
+        const viewport = pdfPage.getViewport({ scale: zoom / 100 });
+        const canvas = canvasRef.current;
+        if (!canvas) return;
 
-      renderTask = pdfPage.render({ canvasContext: context, viewport });
-      renderTask.promise.catch(() => {
-        // Handle rendering cancellation gracefully
-      });
-    }).catch((err: any) => {
-      console.error("Error getting PDF page", err);
-    });
+        const context = canvas.getContext("2d");
+        if (!context) {
+          throw new Error("Your browser could not initialize the PDF canvas.");
+        }
+
+        canvas.height = viewport.height;
+        canvas.width = viewport.width;
+
+        renderTask = pdfPage.render({ canvas, canvasContext: context, viewport });
+        await renderTask.promise;
+      } catch (renderError) {
+        if (isCancelled || isPdfRenderCancellation(renderError)) return;
+        setStage("content-error");
+        setError(renderError instanceof Error ? renderError.message : "This PDF page could not be rendered.");
+      }
+    }
+
+    void renderPage();
 
     return () => {
       isCancelled = true;
-      if (renderTask) {
-        renderTask.cancel();
-      }
+      renderTask?.cancel();
     };
   }, [pdfDoc, page, zoom]);
 
@@ -394,6 +403,7 @@ export function EbookReaderPage() {
               onClick={toggleFullscreen}
               className="grid h-10 w-10 place-items-center rounded-xl border border-[#D8DEE8] text-sm font-black text-[#0B1026] transition hover:border-[#B30D2D] hover:text-[#B30D2D]"
               title={isFullscreen ? "Exit Fullscreen" : "Fullscreen"}
+              aria-label={isFullscreen ? "Exit fullscreen" : "Enter fullscreen"}
             >
               <Icon name={isFullscreen ? "minimize-2" : "maximize-2"} size={16} aria-hidden="true" />
             </button>
@@ -422,7 +432,7 @@ export function EbookReaderPage() {
                 Reopen reader
               </button>
               <Link
-                href={`/books/${encodeURIComponent(String(numericBookId))}`}
+                href={bookHref}
                 className="inline-flex h-11 items-center justify-center gap-2 rounded-xl border border-[#D8DEE8] px-4 text-sm font-black text-[#0B1026] transition hover:border-[#B30D2D] hover:text-[#B30D2D]"
               >
                 <Icon name="arrow-left" size={17} aria-hidden="true" />
@@ -440,11 +450,13 @@ export function EbookReaderPage() {
         >
           {isFullscreen && (
             <button
+              type="button"
               onClick={toggleFullscreen}
               className="fixed top-4 right-6 z-50 grid h-12 w-12 place-items-center rounded-full bg-black/50 text-white backdrop-blur-sm transition hover:bg-black/80"
               title="Exit Fullscreen"
+              aria-label="Exit fullscreen"
             >
-              <Icon name="minimize-2" size={24} />
+              <Icon name="minimize-2" size={24} aria-hidden="true" />
             </button>
           )}
           <div className="mx-auto flex min-h-full w-full justify-center">
@@ -461,9 +473,7 @@ export function EbookReaderPage() {
                   </span>
                   <h3 className="mt-4 font-serif text-3xl font-bold">{stageLabel(stage)}</h3>
                   <p className="mt-2 text-sm font-semibold text-white/60">
-                    {stage === "access-required"
-                      ? "Open My ebooks after borrowing or paying for this title."
-                      : "Preparing your protected PDF content..."}
+                    {stageDescription(stage)}
                   </p>
                 </div>
               </div>
@@ -499,6 +509,10 @@ function readStoredSession(storageKey: string, bookId: number) {
 function isExpired(iso: string | undefined, skewMs = EXPIRY_SKEW_MS) {
   if (!iso) return true;
   return new Date(iso).getTime() - skewMs <= Date.now();
+}
+
+function isPdfRenderCancellation(error: unknown) {
+  return error instanceof Error && error.name === "RenderingCancelledException";
 }
 
 function handleReaderError(
@@ -573,6 +587,23 @@ function stageLabel(stage: ReaderStage) {
       return "Closing session";
     default:
       return "Content failed to load";
+  }
+}
+
+function stageDescription(stage: ReaderStage) {
+  switch (stage) {
+    case "access-required":
+      return "Open My ebooks after borrowing or paying for this title.";
+    case "loan-expired":
+      return "Return to the book page to review your access options.";
+    case "expired":
+      return "Reopen the reader to start a new secure session.";
+    case "content-error":
+      return "Use the error details above to retry or return to the book page.";
+    case "closing":
+      return "Closing your secure reading session...";
+    default:
+      return "Preparing your protected PDF content...";
   }
 }
 

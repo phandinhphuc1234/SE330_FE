@@ -15,24 +15,33 @@
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-inter);
-  --font-serif: var(--font-playfair);
+  --font-sans: var(--font-be-vietnam-pro);
+  --font-serif: var(--font-be-vietnam-pro);
+}
+
+html {
+  scroll-behavior: smooth;
+  font-family: var(--font-be-vietnam-pro), system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  text-rendering: optimizeLegibility;
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: var(--font-inter), Arial, Helvetica, sans-serif;
-}
-
-html {
-  scroll-behavior: smooth;
+  font-family: inherit;
 }
 
 button,
 input,
+select,
+textarea,
 a {
   font: inherit;
+}
+
+.font-serif,
+.font-sans {
+  font-family: var(--font-be-vietnam-pro), system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif !important;
 }
 
 @keyframes fade-up {
