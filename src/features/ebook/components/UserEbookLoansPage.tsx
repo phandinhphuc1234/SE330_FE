@@ -110,7 +110,35 @@ export function UserEbookLoansPage() {
     }
   }
 
-  async function handleRenew(loan: EbookLoan) {
+  /**
+   * Renewing an ebook loan requires paying a renewal fee.
+   * Open the standalone Payment tab; once payment succeeds there,
+   * the user can come back here (or this tab will refresh) to see
+   * the updated loan with the new expiry date.
+   */
+  function handleRenew(loan: EbookLoan) {
+    const id = loanId(loan);
+    const url = new URL("/payment", window.location.origin);
+    url.searchParams.set("purpose", "EBOOK_RENEWAL");
+    url.searchParams.set("loanId", String(id));
+    if (loan.bookId) url.searchParams.set("bookId", String(loan.bookId));
+    if (loan.bookTitle) url.searchParams.set("bookTitle", loan.bookTitle);
+
+    const paymentTab = window.open(url.toString(), "_blank", "noopener,noreferrer");
+
+    // Poll: when the payment tab closes, refresh the loans list and
+    // attempt the actual renewal (in case payment succeeded).
+    if (paymentTab) {
+      const interval = window.setInterval(async () => {
+        if (paymentTab.closed) {
+          window.clearInterval(interval);
+          await finalizeRenewal(loan);
+        }
+      }, 1000);
+    }
+  }
+
+  async function finalizeRenewal(loan: EbookLoan) {
     const id = loanId(loan);
     if (actioningId) return;
     setActioningId(id);
@@ -119,7 +147,7 @@ export function UserEbookLoansPage() {
       setMessage(`Ebook "${loan.bookTitle}" has been renewed for 14 more days.`);
       setError("");
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Could not renew ebook.");
+      setError(err instanceof Error ? err.message : "Could not renew ebook. If you completed the payment, please refresh this page.");
     } finally {
       setActioningId(null);
     }
