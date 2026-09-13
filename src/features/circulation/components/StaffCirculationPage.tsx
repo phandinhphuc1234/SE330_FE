@@ -284,9 +284,7 @@ function CheckoutPreviewPanel({ fallbackBarcode, preview }: { fallbackBarcode?: 
           <h3 className="text-xs font-bold uppercase tracking-wide text-amber-800">Notes</h3>
           <ul className="mt-2 grid gap-2 text-sm font-semibold text-amber-900">
             {reasons.map((item, index) => {
-              const text = typeof item === "string" ? item : (item as any)?.message || JSON.stringify(item);
-              const key = typeof item === "string" ? item : (item as any)?.code || String(index);
-              return <li key={`${key}-${index}`}>{text}</li>;
+              return <li key={`${item}-${index}`}>{item}</li>;
             })}
           </ul>
         </section>

@@ -44,6 +44,9 @@ export function Navbar() {
     { labelKey: "nav.about", href: "/about" },
     { labelKey: "nav.circulation", href: "/staff/circulation" },
     { labelKey: "nav.borrowers", href: "/staff/members" },
+    ...(hasAdminAccess
+      ? [{ labelKey: "menu.borrowStatistics", href: "/admin/statistics/borrows" } as TopNavItem]
+      : []),
   ];
   const topNavItems: TopNavItem[] = hasStaffAccess
     ? staffNavItems

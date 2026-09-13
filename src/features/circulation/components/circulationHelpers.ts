@@ -7,7 +7,7 @@ export function formatDate(value?: string | null, locale: "en" | "vi" = "en") {
 
 export function money(value?: number | null, locale: "en" | "vi" = "en") {
   return typeof value === "number"
-    ? `${value.toLocaleString("vi-VN")} VND`
+    ? `${value.toLocaleString(locale === "vi" ? "vi-VN" : "en-US")} VND`
     : "-";
 }
 

@@ -27,6 +27,8 @@ import {
   firstAuthorImageUrl,
 } from "./catalogHelpers";
 import { CatalogShell, Notice } from "./CatalogShell";
+import { BookReviewSection } from "@/features/review/components/BookReviewSection";
+import { StarRating } from "@/features/review/components/StarRating";
 
 const copy = {
   en: {
@@ -567,6 +569,8 @@ function BookDetailContent({
         <AuthorPanel authorNames={authorNames} authorBio={authorBio} authorImageUrl={authorImageUrl} text={text} />
       </div>
 
+      <BookReviewSection bookId={String(bookIdOf(book))} />
+
       {relatedBooks.length ? (
         <section className="rounded-2xl border border-[#D8DEE8] bg-white p-5 shadow-[0_18px_50px_rgba(15,23,42,0.06)]">
           <div className="flex items-center justify-between gap-4">
@@ -1016,7 +1020,20 @@ function RelatedBookCard({ book }: { book: Book }) {
       <h4 className="mt-3 line-clamp-2 text-sm font-black leading-snug text-[#111827] transition group-hover:text-[#E60028]">
         {book.title}
       </h4>
-      <p className="mt-1 line-clamp-1 text-xs font-medium text-[#6B7280]">
+      {/* Star rating */}
+      <div className="mt-1 flex items-center gap-1">
+        <StarRating rating={book.averageRating ?? 0} size="sm" />
+        {book.totalReviews && book.totalReviews > 0 ? (
+          <span className="text-[10px] font-bold text-[#f59e0b]">
+            {book.averageRating?.toFixed(1)} ({book.totalReviews})
+          </span>
+        ) : (
+          <span className="text-[10px] font-medium text-[#A0A0A0]">
+            (0)
+          </span>
+        )}
+      </div>
+      <p className="mt-1.5 line-clamp-1 text-xs font-medium text-[#6B7280]">
         {(book.authors ?? []).map(authorLabel).join(", ")}
       </p>
     </Link>

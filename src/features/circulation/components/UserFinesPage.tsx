@@ -2,14 +2,13 @@
 
 import { useCallback, useEffect, useState } from "react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
 import { useAuth } from "@/features/auth/context/AuthContext";
 import { CatalogShell, Notice } from "@/features/catalog/components/CatalogShell";
 import { Icon } from "@/components/ui/Icon";
 import { useLanguage } from "@/features/i18n/context/LanguageContext";
 import { FineRecord } from "../types/circulation.type";
 import { getMyFines } from "../services/circulationService";
-import { formatDate, money } from "./circulationHelpers";
+import { formatDate } from "./circulationHelpers";
 import { createPayment } from "@/features/payments/services/paymentService";
 
 const copy = {
@@ -45,7 +44,6 @@ export function UserFinesPage() {
   const { locale } = useLanguage();
   const text = copy[locale];
   const { accessToken, refresh } = useAuth();
-  const router = useRouter();
   const [fines, setFines] = useState<FineRecord[]>([]);
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(true);
@@ -85,13 +83,13 @@ export function UserFinesPage() {
           provider: "VNPAY",
           locale: locale === "vi" ? "vn" : "en",
         },
-        `fine-payment-${borrowId}-${Date.now()}`,
+        createFinePaymentIdempotencyKey(borrowId),
         accessToken,
         refreshAccessToken
       );
 
       if (payment.paymentUrl) {
-        window.location.href = payment.paymentUrl;
+        window.location.assign(payment.paymentUrl);
       } else {
         setError(text.paymentError);
       }
@@ -235,6 +233,15 @@ export function UserFinesPage() {
       )}
     </CatalogShell>
   );
+}
+
+function createFinePaymentIdempotencyKey(borrowId: number) {
+  const randomPart =
+    typeof crypto !== "undefined" && "randomUUID" in crypto
+      ? crypto.randomUUID()
+      : `${Date.now()}-${Math.random().toString(16).slice(2)}`;
+
+  return `fine-payment-${borrowId}-${randomPart}`;
 }
 
 function FineStatusBadge({ status }: { status?: string }) {

@@ -106,6 +106,8 @@ export type Book = {
   totalCopies?: number;
   availableCopies?: number;
   ebookUrl?: string | null;
+  averageRating?: number;
+  totalReviews?: number;
 };
 
 export type BookCopy = {

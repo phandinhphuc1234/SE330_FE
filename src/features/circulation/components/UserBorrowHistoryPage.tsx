@@ -1,6 +1,5 @@
 "use client";
 
-import Link from "next/link";
 import { useCallback, useEffect, useState } from "react";
 import { Icon } from "@/components/ui/Icon";
 import { useAuth } from "@/features/auth/context/AuthContext";
@@ -44,7 +43,6 @@ export function UserBorrowHistoryPage() {
 
   useEffect(() => {
     let isMounted = true;
-    setIsLoading(true);
     getMyBorrowHistory({}, accessToken, refreshAccessToken)
       .then((items) => {
         if (isMounted) {

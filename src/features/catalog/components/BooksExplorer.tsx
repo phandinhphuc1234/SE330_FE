@@ -10,6 +10,7 @@ import { Book, BookSearchParams, Category } from "../types/catalog.type";
 import { getBooks, getCategories } from "../services/catalogService";
 import { authorLabel, availabilityLabel, bookCoverAlt, bookCoverUrl, bookIdOf, categoryLabel, entityIdOf } from "./catalogHelpers";
 import { CatalogShell, Notice } from "./CatalogShell";
+import { StarRating } from "@/features/review/components/StarRating";
 
 const BOOKS_PER_PAGE = "24";
 
@@ -432,7 +433,25 @@ function BookShelfCard({ book, copy }: { book: Book; copy: typeof booksExplorerC
           <p className="mt-1 line-clamp-1 text-sm font-medium text-[#666666]">
             {(book.authors ?? []).map(authorLabel).join(", ") || copy.unknownAuthor}
           </p>
-          <div className="mt-4 flex flex-wrap items-center gap-2">
+          {/* Star rating */}
+          <div className="mt-2 flex items-center gap-1.5">
+            <StarRating rating={book.averageRating ?? 0} size="sm" />
+            {book.totalReviews && book.totalReviews > 0 ? (
+              <>
+                <span className="text-xs font-bold text-[#f59e0b]">
+                  {book.averageRating?.toFixed(1)}
+                </span>
+                <span className="text-[11px] font-bold text-[#888888]">
+                  ({book.totalReviews})
+                </span>
+              </>
+            ) : (
+              <span className="text-[11px] font-medium text-[#A0A0A0]">
+                (0)
+              </span>
+            )}
+          </div>
+          <div className="mt-3 flex flex-wrap items-center gap-2">
             <span className="rounded-full bg-[#F1F1EF] px-3 py-1.5 text-xs font-bold text-[#151515]">
               {availabilityText}
             </span>

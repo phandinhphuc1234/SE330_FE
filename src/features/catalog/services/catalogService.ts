@@ -26,7 +26,7 @@ const REQUEST_TIMEOUT_MS = 300000;
 const DEFAULT_AUTHOR_PAGE = "0";
 const DEFAULT_AUTHOR_PAGE_SIZE = "6";
 
-async function catalogFetch<T>(path: string, init?: RequestInit, accessToken?: string | null) {
+export async function catalogFetch<T>(path: string, init?: RequestInit, accessToken?: string | null) {
   const body = await catalogFetchResponse<T>(path, init, accessToken);
 
   if (isApiResponse<T>(body)) {

@@ -22,7 +22,6 @@ export function AdminReceiptDetailPage() {
     if (!paymentCode) return;
 
     let active = true;
-    setIsLoading(true);
 
     getAdminReceiptByCode(paymentCode, accessToken, refreshToken)
       .then((data) => {

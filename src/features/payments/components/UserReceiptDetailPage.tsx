@@ -22,7 +22,6 @@ export function UserReceiptDetailPage() {
     if (!paymentCode) return;
 
     let active = true;
-    setIsLoading(true);
 
     getReceiptByCode(paymentCode, accessToken, refreshToken)
       .then((data) => {

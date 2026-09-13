@@ -8,7 +8,7 @@ import { CatalogShell, Notice, SecondaryAction } from "@/features/catalog/compon
 import { useLanguage } from "@/features/i18n/context/LanguageContext";
 import { BorrowRecord } from "../types/circulation.type";
 import { getMyBorrows, renewMyBorrow } from "../services/circulationService";
-import { formatDate, money, recordId, statusLabel, titleOf } from "./circulationHelpers";
+import { formatDate, recordId, statusLabel, titleOf } from "./circulationHelpers";
 
 const copy = {
   en: {
@@ -157,7 +157,19 @@ export function UserLoansPage() {
                   <td className="px-4 py-4 whitespace-nowrap">{statusLabel(loan.status, locale)}</td>
                   <td className="px-4 py-4 whitespace-nowrap text-center text-slate-600">
                     {!isEbook ? (
-                      <span className="font-mono">{loan.renewCount ?? 0} / {loan.maxRenewals ?? "-"}</span>
+                      <div className="flex items-center justify-center gap-3">
+                        <span className="font-mono">{loan.renewCount ?? 0} / {loan.maxRenewals ?? "-"}</span>
+                        {isActive && id ? (
+                          <button
+                            type="button"
+                            onClick={() => void handleRenew(id)}
+                            disabled={Boolean(renewingBorrowId)}
+                            className="rounded-lg border border-[#D8DEE8] bg-white px-3 py-1.5 text-xs font-bold text-[#0B1026] transition hover:border-[#337AB7] hover:text-[#337AB7] disabled:cursor-wait disabled:opacity-55"
+                          >
+                            {renewingBorrowId === id ? text.renewing : text.renew}
+                          </button>
+                        ) : null}
+                      </div>
                     ) : (
                       <span className="text-slate-400">-</span>
                     )}

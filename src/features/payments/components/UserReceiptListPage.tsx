@@ -18,7 +18,6 @@ export function UserReceiptListPage() {
 
   useEffect(() => {
     let active = true;
-    setIsLoading(true);
 
     getMyReceipts({ page: 0, size: 50 }, accessToken, refreshToken)
       .then((data) => {
@@ -67,7 +66,7 @@ export function UserReceiptListPage() {
               {receipts.length === 0 ? (
                 <tr>
                   <td colSpan={6} className="px-6 py-12 text-center text-[#59637A] font-medium italic">
-                    You don't have any payment receipts yet.
+                    You do not have any payment receipts yet.
                   </td>
                 </tr>
               ) : (

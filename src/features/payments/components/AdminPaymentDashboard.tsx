@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useCallback, useEffect, useState } from "react";
 import { useAuth } from "@/features/auth/context/AuthContext";
 import { CatalogShell, Notice } from "@/features/catalog/components/CatalogShell";
@@ -47,11 +48,19 @@ export function AdminPaymentDashboard() {
   }, [accessToken, refreshToken, q, status, paidFrom, paidTo, page]);
 
   useEffect(() => {
-    fetchSummary();
+    const summaryTimer = window.setTimeout(() => {
+      void fetchSummary();
+    }, 0);
+
+    return () => window.clearTimeout(summaryTimer);
   }, [fetchSummary]);
 
   useEffect(() => {
-    fetchPayments();
+    const paymentsTimer = window.setTimeout(() => {
+      void fetchPayments();
+    }, 0);
+
+    return () => window.clearTimeout(paymentsTimer);
   }, [fetchPayments]);
 
   return (

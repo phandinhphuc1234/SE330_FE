@@ -31,6 +31,7 @@ export type TranslationKey =
   | "menu.adminDashboard"
   | "menu.adminBooks"
   | "menu.categories"
+  | "menu.borrowStatistics"
   | "menu.logout"
   | "notifications.open"
   | "notifications.title"
@@ -80,6 +81,7 @@ const translations: Record<Locale, Record<TranslationKey, string>> = {
     "menu.adminDashboard": "Admin dashboard",
     "menu.adminBooks": "Admin books",
     "menu.categories": "Categories",
+    "menu.borrowStatistics": "Borrow statistics",
     "menu.logout": "Logout",
     "notifications.open": "Open notifications",
     "notifications.title": "Notifications",
@@ -119,6 +121,7 @@ const translations: Record<Locale, Record<TranslationKey, string>> = {
     "menu.adminDashboard": "Dashboard quản trị",
     "menu.adminBooks": "Sách quản trị",
     "menu.categories": "Danh mục",
+    "menu.borrowStatistics": "Thống kê mượn/trả",
     "menu.logout": "Đăng xuất",
     "notifications.open": "Mở thông báo",
     "notifications.title": "Thông báo",

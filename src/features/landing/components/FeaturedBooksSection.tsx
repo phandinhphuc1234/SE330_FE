@@ -13,6 +13,7 @@ import {
 import { getBooks } from "@/features/catalog/services/catalogService";
 import { Book } from "@/features/catalog/types/catalog.type";
 import { useLanguage } from "@/features/i18n/context/LanguageContext";
+import { StarRating } from "@/features/review/components/StarRating";
 
 const FEATURED_BOOKS_LIMIT = "5";
 
@@ -204,6 +205,24 @@ export function FeaturedBooksSection() {
               <p className="mt-6 text-sm font-medium text-[#333333]">
                 {copy.by} <span className="text-[#111827]">{activeAuthors}</span>
               </p>
+              {/* Star rating */}
+              <div className="mt-3 flex items-center gap-1.5">
+                <StarRating rating={activeBook?.averageRating ?? 0} size="sm" />
+                {activeBook?.totalReviews && activeBook.totalReviews > 0 ? (
+                  <>
+                    <span className="text-sm font-bold text-[#f59e0b]">
+                      {activeBook.averageRating?.toFixed(1)}
+                    </span>
+                    <span className="text-xs font-bold text-[#666666]">
+                      ({activeBook.totalReviews})
+                    </span>
+                  </>
+                ) : (
+                  <span className="text-xs font-medium text-[#888888]">
+                    (0)
+                  </span>
+                )}
+              </div>
               <div className="mt-7 flex flex-wrap items-center gap-3 text-[11px] text-[#555555]">
                 <span className="rounded-full border border-black/12 px-3 py-1 font-semibold">
                   {activeBook ? categoryLabel(activeBook.category) : ""}

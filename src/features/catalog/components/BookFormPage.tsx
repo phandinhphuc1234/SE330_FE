@@ -418,7 +418,20 @@ export function BookFormPage({ mode }: { mode: "create" | "edit" }) {
       eyebrow={isEdit ? "Edit catalog record" : "Create catalog record"}
       title={isEdit ? "Update book metadata" : "Create a new book"}
       description="Book metadata is managed separately from physical copies, matching the backend catalog workflow."
-      actions={<BackToStaffBooks />}
+      actions={
+        <div className="flex flex-wrap items-center gap-3">
+          <BackToStaffBooks />
+          <button
+            type="submit"
+            form="book-metadata-form"
+            disabled={isLoading || isSaving}
+            className="inline-flex h-11 items-center justify-center gap-2 rounded-xl bg-[#111827] px-5 text-sm font-black text-white transition hover:bg-black disabled:cursor-not-allowed disabled:opacity-55"
+          >
+            <Icon name="check" size={16} aria-hidden="true" />
+            {isSaving ? "Saving..." : isEdit ? "Save changes" : "Create book"}
+          </button>
+        </div>
+      }
     >
       <div className="grid gap-3">
         {isLoading ? <Notice message="Loading form data..." /> : null}

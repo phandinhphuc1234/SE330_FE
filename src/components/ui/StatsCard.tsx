@@ -9,9 +9,11 @@ interface StatsCardProps {
   trend?: {
     value: number;
     isPositive: boolean;
+    label?: string;
   };
   color?: "primary" | "secondary" | "success" | "warning";
   className?: string;
+  isCurrency?: boolean;
 }
 
 const colorStyles = {
@@ -48,6 +50,7 @@ export function StatsCard({
   trend,
   color = "primary",
   className = "",
+  isCurrency = false,
 }: StatsCardProps) {
   const [displayValue, setDisplayValue] = useState(0);
   const styles = colorStyles[color];
@@ -83,7 +86,7 @@ export function StatsCard({
             {label}
           </p>
           <p className={`mt-3 font-serif text-4xl font-bold ${styles.text} transition-all duration-300 group-hover:scale-105`}>
-            {displayValue.toLocaleString()}
+            {isCurrency ? `${displayValue.toLocaleString("vi-VN")} VND` : displayValue.toLocaleString()}
           </p>
           {trend && (
             <div className="mt-2 flex items-center gap-1">
@@ -92,9 +95,9 @@ export function StatsCard({
                   trend.isPositive ? "text-green-600" : "text-red-600"
                 }`}
               >
-                {trend.isPositive ? "↑" : "↓"} {Math.abs(trend.value)}%
+                {trend.isPositive ? "↑" : "↓"} {Math.abs(trend.value)}{trend.label ? "" : "%"}
               </span>
-              <span className="text-xs text-black/70">vs last month</span>
+              <span className="text-xs text-black/70">{trend.label ?? "vs last month"}</span>
             </div>
           )}
         </div>

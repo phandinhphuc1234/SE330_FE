@@ -444,48 +444,12 @@ function ActionCard({ item }: { item: ActionItem }) {
   );
 }
 
-function ProgressRow({ label, value, max, color, locale }: { label: string; value: number; max: number; color: string; locale: "en" | "vi" }) {
-  const width = `${Math.max(4, Math.round((value / max) * 100))}%`;
-
-  return (
-    <div>
-      <div className="flex items-center justify-between gap-4 text-sm">
-        <span className="font-bold text-[#000054]">{label}</span>
-        <span className="font-semibold text-[#333333]/75">{value.toLocaleString(locale === "vi" ? "vi-VN" : "en-US")}</span>
-      </div>
-      <div className="mt-2 h-3 overflow-hidden rounded-full bg-[#E6ECF6]">
-        <div className="h-full rounded-full transition-all duration-500" style={{ width, backgroundColor: color }} />
-      </div>
-    </div>
-  );
-}
-
-function ShortcutCard({ title, description, href, openLabel }: { title: string; description: string; href: string; openLabel: string }) {
-  return (
-    <Link href={href} className="group rounded-2xl border border-[#E6ECF6] bg-[#F8FAFE] p-4 transition-all duration-300 hover:-translate-y-1 hover:bg-white hover:shadow-md">
-      <p className="font-bold text-[#000054] transition group-hover:text-[#337AB7]">{title}</p>
-      <p className="mt-2 text-sm leading-6 text-[#333333]">{description}</p>
-      <span className="mt-3 inline-flex text-sm font-bold text-[#E60028] transition-transform duration-300 group-hover:translate-x-1">{openLabel}</span>
-    </Link>
-  );
-}
-
 function GeneratedAt({ value, locale, waitingLabel }: { value?: string; locale: "en" | "vi"; waitingLabel: string }) {
   if (!value) {
     return <span className="rounded-full border border-[#DDE5F4] bg-white px-4 py-2 text-xs font-bold uppercase tracking-wide text-[#333333]/70">{waitingLabel}</span>;
   }
 
   return <span className="rounded-full border border-[#DDE5F4] bg-white px-4 py-2 text-xs font-bold uppercase tracking-wide text-[#337AB7]">{formatDateTime(value, locale)}</span>;
-}
-
-function maxActivity(summary: StaffDashboardSummary | null) {
-  return Math.max(
-    numberOf(summary?.borrowedToday),
-    numberOf(summary?.returnedToday),
-    numberOf(summary?.holdsReadyForPickup),
-    numberOf(summary?.overdueLoans),
-    1,
-  );
 }
 
 function numberOf(value?: number) {
@@ -499,7 +463,7 @@ function formatNumber(value?: number, locale: "en" | "vi" = "en") {
 function formatCurrency(value?: number, locale: "en" | "vi" = "en") {
   return typeof value === "number" ? (
     <>
-      {value.toLocaleString("vi-VN")} <span className="text-[0.7em] opacity-80 font-bold">VND</span>
+      {value.toLocaleString(locale === "vi" ? "vi-VN" : "en-US")} <span className="text-[0.7em] opacity-80 font-bold">VND</span>
     </>
   ) : (
     <>0 <span className="text-[0.7em] opacity-80 font-bold">VND</span></>
