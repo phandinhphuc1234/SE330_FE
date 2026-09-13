@@ -43,6 +43,11 @@ export function firstAuthorBio(book: Book) {
   return firstAuthor?.bio?.trim() ?? "";
 }
 
+export function firstAuthorImageUrl(book: Book) {
+  const firstAuthor = book.authors?.find((author): author is Author => typeof author !== "string" && Boolean(author.imageUrl?.trim()));
+  return firstAuthor?.imageUrl?.trim() ?? "";
+}
+
 export function availabilityLabel(book: Book) {
   const available = book.availableCopies ?? 0;
   const total = book.totalCopies ?? 0;

@@ -691,6 +691,12 @@ button[class~="rounded-full"][class~="border-[#D9DCE8]"]:not(:disabled):hover {
   width: 100%;
 }
 
+.book-import-layout {
+  display: grid;
+  gap: 1.5rem;
+  min-width: 0;
+}
+
 @media (min-width: 1280px) {
   .books-filter-fields {
     align-items: center;
@@ -721,5 +727,11 @@ button[class~="rounded-full"][class~="border-[#D9DCE8]"]:not(:disabled):hover {
   .books-filter-reset {
     flex: 0 0 7rem;
     width: 7rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .book-import-layout {
+    grid-template-columns: minmax(320px, 0.82fr) minmax(0, 1.18fr);
   }
 }

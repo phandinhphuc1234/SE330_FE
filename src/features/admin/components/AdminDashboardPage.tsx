@@ -524,6 +524,5 @@ function getMockStatusData(summary: StaffDashboardSummary | null) {
     { name: "Active Loans", value: numberOf(summary?.activeLoans), color: "#337AB7" },
     { name: "Overdue", value: numberOf(summary?.overdueLoans), color: "#E60028" },
     { name: "Holds Ready", value: numberOf(summary?.holdsReadyForPickup), color: "#28A745" },
-    { name: "Reservations", value: numberOf(summary?.pendingReservations), color: "#F59E0B" },
   ];
 }

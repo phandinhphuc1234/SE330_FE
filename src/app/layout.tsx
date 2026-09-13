@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Be_Vietnam_Pro } from "next/font/google";
 import { AuthProvider } from "@/features/auth/context/AuthContext";
 import { LanguageProvider } from "@/features/i18n/context/LanguageContext";
+import { NotificationProvider } from "@/features/notifications/context/NotificationContext";
 import { ToastProvider } from "@/components/ui/ToastProvider";
 import "./globals.css";
 
@@ -40,7 +41,9 @@ export default function RootLayout({
         </a>
         <LanguageProvider>
           <AuthProvider>
-            <ToastProvider>{children}</ToastProvider>
+            <NotificationProvider>
+              <ToastProvider>{children}</ToastProvider>
+            </NotificationProvider>
           </AuthProvider>
         </LanguageProvider>
       </body>

@@ -24,6 +24,7 @@ import {
   categoryIdOf,
   categoryLabel,
   firstAuthorBio,
+  firstAuthorImageUrl,
 } from "./catalogHelpers";
 import { CatalogShell, Notice } from "./CatalogShell";
 
@@ -338,6 +339,7 @@ function BookDetailContent({
   const coverUrl = bookCoverUrl(book, "detail");
   const authorNames = (book.authors ?? []).map(authorLabel).join(", ") || text.unknownAuthor;
   const authorBio = firstAuthorBio(book) || fallbackAuthorBio(authorNames, text);
+  const authorImageUrl = firstAuthorImageUrl(book);
   const [ebookLoan, setEbookLoan] = useState<EbookLoan | null>(null);
   const [isBorrowingEbook, setIsBorrowingEbook] = useState(false);
   const [ebookBorrowError, setEbookBorrowError] = useState("");
@@ -562,7 +564,7 @@ function BookDetailContent({
           <p>{bookSummary}</p>
           {bookSummary === text.summaryText ? <p>{text.summaryText}</p> : null}
         </InfoPanel>
-        <AuthorPanel authorNames={authorNames} authorBio={authorBio} text={text} />
+        <AuthorPanel authorNames={authorNames} authorBio={authorBio} authorImageUrl={authorImageUrl} text={text} />
       </div>
 
       {relatedBooks.length ? (
@@ -597,10 +599,12 @@ function InfoPanel({ title, children }: { title: string; children: ReactNode }) 
 function AuthorPanel({
   authorNames,
   authorBio,
+  authorImageUrl,
   text,
 }: {
   authorNames: string;
   authorBio: string;
+  authorImageUrl: string;
   text: typeof copy.en;
 }) {
   const tags = authorTags(authorNames, text);
@@ -610,8 +614,12 @@ function AuthorPanel({
       <h3 className="text-base font-black text-[#0B1026]">{text.aboutAuthor}</h3>
       <div className="mt-3 h-0.5 w-28 bg-[#E60028]" />
       <div className="mt-4 flex gap-4">
-        <div className="grid h-16 w-16 shrink-0 place-items-center rounded-full bg-[#EEF2F7] text-lg font-black text-[#0B1026] ring-1 ring-[#D8DEE8]">
-          {authorInitials(authorNames)}
+        <div className="relative grid h-16 w-16 shrink-0 place-items-center overflow-hidden rounded-full bg-[#EEF2F7] text-lg font-black text-[#0B1026] ring-1 ring-[#D8DEE8]">
+          {authorImageUrl ? (
+            <Image src={authorImageUrl} alt={`${authorNames} portrait`} fill unoptimized sizes="64px" className="object-cover" />
+          ) : (
+            authorInitials(authorNames)
+          )}
         </div>
         <div className="min-w-0">
           <h4 className="text-sm font-black text-[#0B1026]">{authorNames}</h4>

@@ -3,6 +3,8 @@ export type Author = {
   id?: number;
   name: string;
   bio?: string | null;
+  imageUrl?: string | null;
+  imageProvider?: string | null;
   createdAt?: string;
   updatedAt?: string;
 };
@@ -168,6 +170,7 @@ export type ImportCsvResult = {
   jobId?: string;
   id?: string;
   filename?: string;
+  originalFilename?: string;
   status?: string;
   processedRows?: number;
   totalRows?: number;
@@ -175,6 +178,10 @@ export type ImportCsvResult = {
   failedRows?: number;
   createdBooks?: number;
   createdCopies?: number;
+  errorMessage?: string | null;
+  createdAt?: string | null;
+  startedAt?: string | null;
+  completedAt?: string | null;
   errors?: Array<{
     rowNumber?: number;
     isbn?: string;

@@ -122,6 +122,7 @@ export type BookImportJob = {
   jobId?: string;
   id?: string;
   filename?: string;
+  originalFilename?: string;
   status?: "PENDING" | "PROCESSING" | "COMPLETED" | "FAILED" | string;
   totalRows?: number;
   processedRows?: number;
@@ -129,6 +130,10 @@ export type BookImportJob = {
   failedRows?: number;
   createdBooks?: number;
   createdCopies?: number;
+  errorMessage?: string | null;
+  createdAt?: string | null;
+  startedAt?: string | null;
+  completedAt?: string | null;
   errors?: Array<{
     rowNumber?: number;
     isbn?: string;

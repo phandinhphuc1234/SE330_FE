@@ -404,6 +404,20 @@ export function updateAuthor(authorId: string, payload: Pick<Author, "name" | "b
   );
 }
 
+export function updateAuthorImage(authorId: string, file: File, accessToken: string | null) {
+  const formData = new FormData();
+  formData.append("file", file);
+
+  return catalogFetch<Author>(
+    `/api/authors/${authorId}/image`,
+    {
+      method: "PUT",
+      body: formData,
+    },
+    accessToken,
+  );
+}
+
 export function getCategories() {
   return catalogFetch<Category[]>("/api/categories");
 }

@@ -3,9 +3,11 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { UsersRound } from "@/components/animate-ui/icons/users-round";
+import { Icon } from "@/components/ui/Icon";
 import { publicNavItems } from "@/constants/nav-items";
 import { useAuth } from "@/features/auth/context/AuthContext";
 import { TranslationKey, useLanguage } from "@/features/i18n/context/LanguageContext";
+import { useNotifications } from "@/features/notifications/context/NotificationContext";
 import { BrandMark } from "./BrandMark";
 
 type TopNavItem = {
@@ -86,12 +88,15 @@ export function Navbar() {
           {isInitializing ? (
             <div className="h-9 w-9 animate-pulse rounded-full bg-[#EDEDF2]" aria-label="Checking session" />
           ) : isAuthenticated ? (
-            <UserMenu
-              currentUser={currentUser}
-              hasAdminAccess={hasAdminAccess}
-              hasStaffAccess={hasStaffAccess}
-              onLogout={() => logout()}
-            />
+            <>
+              <NotificationMenu />
+              <UserMenu
+                currentUser={currentUser}
+                hasAdminAccess={hasAdminAccess}
+                hasStaffAccess={hasStaffAccess}
+                onLogout={() => logout()}
+              />
+            </>
           ) : (
             <>
               <Link
@@ -112,6 +117,123 @@ export function Navbar() {
       </nav>
     </header>
   );
+}
+
+function NotificationMenu() {
+  const { t } = useLanguage();
+  const { clearNotifications, markAllRead, notifications, unreadCount } = useNotifications();
+  const hasNotifications = notifications.length > 0;
+
+  return (
+    <div className="group relative">
+      <button
+        type="button"
+        aria-label={t("notifications.open")}
+        title={t("notifications.open")}
+        className="relative grid h-9 w-9 place-items-center rounded-full text-[#111827] transition-colors duration-150 hover:bg-[#F1F2F4] hover:text-black focus:outline-none focus:ring-4 focus:ring-black/10"
+      >
+        <Icon name="bell" size={18} aria-hidden="true" />
+        {unreadCount ? (
+          <span className="absolute -right-0.5 -top-0.5 grid min-h-4 min-w-4 place-items-center rounded-full bg-[#A33A3A] px-1 text-[10px] font-bold leading-none text-white">
+            {unreadCount > 9 ? "9+" : unreadCount}
+          </span>
+        ) : null}
+      </button>
+
+      <div className="invisible absolute right-0 top-[calc(100%+12px)] w-80 translate-y-2 rounded-2xl border border-[#DED5C8] bg-white p-2 opacity-0 shadow-[0_24px_60px_rgba(23,20,18,0.14)] transition-all duration-200 group-hover:visible group-hover:translate-y-0 group-hover:opacity-100 group-focus-within:visible group-focus-within:translate-y-0 group-focus-within:opacity-100">
+        <div className="px-3 pb-3 pt-2">
+          <div className="flex items-start justify-between gap-3">
+            <div>
+              <p className="text-xs font-bold uppercase tracking-wide text-[#6F675E]">{t("notifications.title")}</p>
+              <p className="mt-1 text-sm font-bold text-[#171412]">
+                {hasNotifications ? t("notifications.latestTitle") : t("notifications.emptyTitle")}
+              </p>
+            </div>
+            {unreadCount ? (
+              <span className="rounded-full bg-[#F3E5E8] px-2 py-1 text-xs font-bold text-[#7A263A]">
+                {unreadCount}
+              </span>
+            ) : null}
+          </div>
+          {!hasNotifications ? (
+            <p className="mt-1 text-xs font-semibold leading-5 text-[#6F675E]">{t("notifications.emptyBody")}</p>
+          ) : null}
+        </div>
+        {hasNotifications ? (
+          <div className="max-h-80 overflow-y-auto">
+            {notifications.slice(0, 5).map((notification) => {
+              const content = (
+                <div className={`rounded-lg px-3 py-2.5 ${notification.read ? "bg-white" : "bg-[#F3E5E8]"}`}>
+                  <div className="flex items-start gap-2">
+                    <span className={`mt-1 h-2 w-2 shrink-0 rounded-full ${getNotificationDotClass(notification.tone)}`} />
+                    <div className="min-w-0">
+                      <p className="truncate text-sm font-bold text-[#171412]">{notification.title}</p>
+                      {notification.body ? (
+                        <p className="mt-1 line-clamp-2 text-xs font-semibold leading-5 text-[#6F675E]">{notification.body}</p>
+                      ) : null}
+                      <p className="mt-1 text-[11px] font-bold uppercase tracking-wide text-[#9A9187]">
+                        {formatNotificationTime(notification.createdAt)}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              );
+
+              return notification.href ? (
+                <Link key={notification.id} href={notification.href} className="block rounded-lg transition hover:bg-[#EFE6D6]">
+                  {content}
+                </Link>
+              ) : (
+                <div key={notification.id}>{content}</div>
+              );
+            })}
+          </div>
+        ) : null}
+        <div className="mb-1 h-px bg-[#DED5C8]" />
+        {hasNotifications ? (
+          <div className="grid grid-cols-2 gap-1">
+            <button
+              type="button"
+              onClick={markAllRead}
+              className="h-10 rounded-lg px-3 text-left text-xs font-bold text-[#243B53] transition hover:bg-[#E7EEF4] focus:outline-none focus:ring-2 focus:ring-[#7A263A] focus:ring-offset-2"
+            >
+              {t("notifications.markAllRead")}
+            </button>
+            <button
+              type="button"
+              onClick={clearNotifications}
+              className="h-10 rounded-lg px-3 text-left text-xs font-bold text-[#A33A3A] transition hover:bg-[#F6E4E1] focus:outline-none focus:ring-2 focus:ring-[#A33A3A] focus:ring-offset-2"
+            >
+              {t("notifications.clear")}
+            </button>
+          </div>
+        ) : null}
+        <Link
+          href="/notices"
+          className="flex h-11 items-center justify-between rounded-lg px-3 text-sm font-semibold text-[#2B2723] transition hover:bg-[#EFE6D6] hover:text-[#7A263A] focus:outline-none focus:ring-2 focus:ring-[#7A263A] focus:ring-offset-2"
+        >
+          {t("notifications.viewNotices")}
+          <span className="text-sm leading-none text-[#9A9187]" aria-hidden="true">&gt;</span>
+        </Link>
+      </div>
+    </div>
+  );
+}
+
+function getNotificationDotClass(tone?: "info" | "success" | "error") {
+  if (tone === "success") return "bg-[#2F5D50]";
+  if (tone === "error") return "bg-[#A33A3A]";
+  return "bg-[#243B53]";
+}
+
+function formatNotificationTime(value: string) {
+  const date = new Date(value);
+
+  if (Number.isNaN(date.getTime())) {
+    return "";
+  }
+
+  return date.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
 }
 
 function LanguageToggle() {
@@ -173,6 +295,9 @@ function UserMenu({
   onLogout: () => void;
 }) {
   const { t } = useLanguage();
+  const menuItemClass =
+    "flex h-11 items-center justify-between rounded-lg px-3 text-sm font-semibold text-[#2B2723] transition hover:bg-[#EFE6D6] hover:text-[#7A263A] focus:outline-none focus:ring-2 focus:ring-[#7A263A] focus:ring-offset-2";
+  const arrowClass = "text-sm leading-none text-[#9A9187]";
 
   return (
     <div className="group relative">
@@ -184,137 +309,82 @@ function UserMenu({
         <UsersRound animateOnHover size={18} aria-hidden="true" />
       </button>
 
-      <div className="invisible absolute right-0 top-[calc(100%+12px)] w-64 translate-y-2 rounded-2xl border border-[#EDEDF2] bg-white p-2 opacity-0 shadow-[0_24px_60px_rgba(7,7,88,0.16)] transition-all duration-200 group-hover:visible group-hover:translate-y-0 group-hover:opacity-100 group-focus-within:visible group-focus-within:translate-y-0 group-focus-within:opacity-100">
-        <div className="px-3 py-2">
-          <p className="text-xs font-bold uppercase tracking-wide text-black/70">{t("menu.account")}</p>
-          <p className="mt-1 text-sm font-bold text-black">{currentUser?.fullName || t("menu.memberFallback")}</p>
-          <p className="mt-1 text-xs font-bold uppercase tracking-wide text-[#333333]/70">{currentUser?.role || "Member"}</p>
+      <div className="invisible absolute right-0 top-[calc(100%+12px)] w-64 translate-y-2 rounded-2xl border border-[#DED5C8] bg-white p-2 opacity-0 shadow-[0_24px_60px_rgba(23,20,18,0.14)] transition-all duration-200 group-hover:visible group-hover:translate-y-0 group-hover:opacity-100 group-focus-within:visible group-focus-within:translate-y-0 group-focus-within:opacity-100">
+        <div className="px-3 pb-3 pt-2">
+          <p className="text-xs font-bold uppercase tracking-wide text-[#6F675E]">{t("menu.account")}</p>
+          <p className="mt-1 truncate text-sm font-bold text-[#171412]">{currentUser?.fullName || t("menu.memberFallback")}</p>
+          <p className="mt-1 text-xs font-bold uppercase tracking-wide text-[#7A263A]">{currentUser?.role || "Member"}</p>
         </div>
+        <div className="mb-1 h-px bg-[#DED5C8]" />
         <Link
           href="/profile"
-          className="mt-1 flex items-center justify-between rounded-xl px-3 py-3 text-sm font-semibold text-[#111827] transition hover:bg-black hover:text-white"
+          className={menuItemClass}
         >
           {t("menu.myProfile")}
-          <span aria-hidden="true">&gt;</span>
+          <span className={arrowClass} aria-hidden="true">&gt;</span>
         </Link>
+        {hasAdminAccess ? (
+          <Link
+            href="/admin/dashboard"
+            className={menuItemClass}
+          >
+            {t("menu.adminCenter")}
+            <span className={arrowClass} aria-hidden="true">&gt;</span>
+          </Link>
+        ) : null}
         {!hasStaffAccess ? (
           <Link
             href="/user/loans"
-            className="mt-1 flex items-center justify-between rounded-xl px-3 py-3 text-sm font-semibold text-[#111827] transition hover:bg-black hover:text-white"
+            className={menuItemClass}
           >
             {t("menu.myLoans")}
-            <span aria-hidden="true">&gt;</span>
+            <span className={arrowClass} aria-hidden="true">&gt;</span>
           </Link>
         ) : null}
         {!hasStaffAccess ? (
           <Link
             href="/user/ebook-loans"
-            className="mt-1 flex items-center justify-between rounded-xl px-3 py-3 text-sm font-semibold text-[#111827] transition hover:bg-black/[0.06] hover:text-black"
+            className={menuItemClass}
           >
-            My ebooks
-            <span aria-hidden="true">&gt;</span>
+            {t("menu.myEbooks")}
+            <span className={arrowClass} aria-hidden="true">&gt;</span>
           </Link>
         ) : null}
         {!hasStaffAccess ? (
           <Link
             href="/user/fines"
-            className="mt-1 flex items-center justify-between rounded-xl px-3 py-3 text-sm font-semibold text-[#111827] transition hover:bg-black hover:text-white"
+            className={menuItemClass}
           >
             {t("menu.myFines")}
-            <span aria-hidden="true">&gt;</span>
+            <span className={arrowClass} aria-hidden="true">&gt;</span>
           </Link>
         ) : null}
         {!hasStaffAccess ? (
           <Link
             href="/user/holds"
-            className="mt-1 flex items-center justify-between rounded-xl px-3 py-3 text-sm font-semibold text-[#111827] transition hover:bg-black hover:text-white"
+            className={menuItemClass}
           >
             {t("menu.myHolds")}
-            <span aria-hidden="true">&gt;</span>
+            <span className={arrowClass} aria-hidden="true">&gt;</span>
           </Link>
         ) : null}
         {!hasStaffAccess ? (
           <Link
             href="/user/receipts"
-            className="mt-1 flex items-center justify-between rounded-xl px-3 py-3 text-sm font-semibold text-[#111827] transition hover:bg-black hover:text-white"
+            className={menuItemClass}
           >
-            My receipts
-            <span aria-hidden="true">&gt;</span>
+            {t("menu.myReceipts")}
+            <span className={arrowClass} aria-hidden="true">&gt;</span>
           </Link>
         ) : null}
-        {hasStaffAccess ? (
-          <>
-            <div className="my-2 h-px bg-[#EDEDF2]" />
-            <Link
-              href="/staff/circulation"
-              className="flex items-center justify-between rounded-xl px-3 py-3 text-sm font-semibold text-[#111827] transition hover:bg-black hover:text-white"
-            >
-              {t("nav.circulation")}
-              <span aria-hidden="true">&gt;</span>
-            </Link>
-            <Link
-              href="/staff/loans"
-              className="mt-1 flex items-center justify-between rounded-xl px-3 py-3 text-sm font-semibold text-[#111827] transition hover:bg-black hover:text-white"
-            >
-              {t("menu.activeLoans")}
-              <span aria-hidden="true">&gt;</span>
-            </Link>
-            <Link
-              href="/staff/holds"
-              className="mt-1 flex items-center justify-between rounded-xl px-3 py-3 text-sm font-semibold text-[#111827] transition hover:bg-black hover:text-white"
-            >
-              {t("menu.holds")}
-              <span aria-hidden="true">&gt;</span>
-            </Link>
-            <Link
-              href="/staff/books/import"
-              className="mt-1 flex items-center justify-between rounded-xl px-3 py-3 text-sm font-semibold text-[#111827] transition hover:bg-black hover:text-white"
-            >
-              {t("menu.importCsv")}
-              <span aria-hidden="true">&gt;</span>
-            </Link>
-          </>
-        ) : null}
-        {hasAdminAccess ? (
-          <>
-            <div className="my-2 h-px bg-[#EDEDF2]" />
-            <Link
-              href="/admin/dashboard"
-              className="flex items-center justify-between rounded-xl px-3 py-3 text-sm font-bold text-[#E60028] transition hover:bg-[#E60028] hover:text-white"
-            >
-              {t("menu.adminDashboard")}
-              <span aria-hidden="true">&gt;</span>
-            </Link>
-            <Link
-              href="/admin/books"
-              className="mt-1 flex items-center justify-between rounded-xl px-3 py-3 text-sm font-bold text-[#E60028] transition hover:bg-[#E60028] hover:text-white"
-            >
-              {t("menu.adminBooks")}
-              <span aria-hidden="true">&gt;</span>
-            </Link>
-            <Link
-              href="/admin/categories"
-              className="mt-1 flex items-center justify-between rounded-xl px-3 py-3 text-sm font-bold text-[#E60028] transition hover:bg-[#E60028] hover:text-white"
-            >
-              {t("menu.categories")}
-              <span aria-hidden="true">&gt;</span>
-            </Link>
-            <Link
-              href="/admin/payments"
-              className="mt-1 flex items-center justify-between rounded-xl px-3 py-3 text-sm font-bold text-[#E60028] transition hover:bg-[#E60028] hover:text-white"
-            >
-              Payment dashboard
-              <span aria-hidden="true">&gt;</span>
-            </Link>
-          </>
-        ) : null}
+        <div className="my-1 h-px bg-[#DED5C8]" />
         <button
           type="button"
-          className="mt-1 flex w-full items-center justify-between rounded-xl px-3 py-3 text-left text-sm font-bold text-[#E60028] transition hover:bg-[#E60028] hover:text-white"
+          className="flex h-11 w-full items-center justify-between rounded-lg px-3 text-left text-sm font-bold text-[#A33A3A] transition hover:bg-[#F6E4E1] hover:text-[#7F2D2D] focus:outline-none focus:ring-2 focus:ring-[#A33A3A] focus:ring-offset-2"
           onClick={onLogout}
         >
           {t("menu.logout")}
-          <span aria-hidden="true">&gt;</span>
+          <span className="text-sm leading-none text-[#A33A3A]" aria-hidden="true">&gt;</span>
         </button>
       </div>
     </div>

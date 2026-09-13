@@ -288,7 +288,7 @@ function wait(ms: number) {
   });
 }
 
-function isApiResponse<T>(body: ApiResponse<T> | T): body is ApiResponse<T> {
+function isApiResponse<T>(body: unknown): body is ApiResponse<T> {
   return typeof body === "object" && body !== null && "success" in body && "timestamp" in body;
 }
 
@@ -387,8 +387,187 @@ export function checkinCopy(barcode: string, accessToken: string | null, refresh
   );
 }
 
-export function getImportJob(jobId: string, accessToken: string | null, refreshAccessToken?: AccessTokenRefresher) {
-  return apiFetchWithAuthRetry<BookImportJob>(`/api/books/import-csv/${jobId}`, undefined, accessToken, refreshAccessToken);
+export type BookImportEventName =
+  | "book-import-snapshot"
+  | "book-import-processing"
+  | "book-import-progress"
+  | "book-import-completed"
+  | "book-import-failed"
+  | string;
+
+export type BookImportEventHandlers = {
+  onEvent: (eventName: BookImportEventName, job: BookImportJob) => void;
+  onError?: (error: Error) => void;
+  onOpen?: () => void;
+  onClose?: () => void;
+};
+
+export function subscribeImportJobEvents(
+  jobId: string,
+  accessToken: string | null,
+  refreshAccessToken: AccessTokenRefresher | undefined,
+  handlers: BookImportEventHandlers,
+) {
+  const controller = new AbortController();
+  let isActive = true;
+
+  void connectImportJobEvents(jobId, accessToken, refreshAccessToken, handlers, controller, () => isActive);
+
+  return () => {
+    isActive = false;
+    controller.abort();
+  };
+}
+
+async function connectImportJobEvents(
+  jobId: string,
+  accessToken: string | null,
+  refreshAccessToken: AccessTokenRefresher | undefined,
+  handlers: BookImportEventHandlers,
+  controller: AbortController,
+  isActive: () => boolean,
+) {
+  try {
+    const response = await openImportJobEventStream(jobId, accessToken, controller.signal);
+
+    if (shouldRefreshAndRetryResponse(response) && refreshAccessToken) {
+      const refreshedToken = await refreshAccessToken();
+
+      if (refreshedToken && isActive()) {
+        await readImportJobEventStream(await openImportJobEventStream(jobId, refreshedToken, controller.signal), handlers, isActive);
+        return;
+      }
+    }
+
+    await readImportJobEventStream(response, handlers, isActive);
+  } catch (error) {
+    if (!isActive() || controller.signal.aborted) return;
+    handlers.onError?.(error instanceof Error ? error : new Error("Could not read import job events."));
+  }
+}
+
+function openImportJobEventStream(jobId: string, accessToken: string | null, signal: AbortSignal) {
+  const headers = new Headers({ Accept: "text/event-stream" });
+
+  if (accessToken) {
+    headers.set("Authorization", `Bearer ${accessToken}`);
+  }
+
+  return fetch(`${API_URL}/api/books/import-csv/${encodeURIComponent(jobId)}/events`, {
+    method: "GET",
+    headers,
+    credentials: "include",
+    signal,
+  });
+}
+
+function shouldRefreshAndRetryResponse(response: Response) {
+  return response.status === 401 || response.status === 403;
+}
+
+async function readImportJobEventStream(
+  response: Response,
+  handlers: BookImportEventHandlers,
+  isActive: () => boolean,
+) {
+  if (!response.ok) {
+    throw new ApiError(await getResponseErrorMessage(response), response.status);
+  }
+
+  if (!response.body) {
+    throw new ApiError("Import event stream is not available.", response.status);
+  }
+
+  handlers.onOpen?.();
+
+  const reader = response.body.getReader();
+  const decoder = new TextDecoder();
+  let buffer = "";
+
+  try {
+    while (isActive()) {
+      const { value, done } = await reader.read();
+
+      if (done) break;
+
+      buffer += decoder.decode(value, { stream: true });
+      buffer = processImportEventBuffer(buffer, handlers);
+    }
+
+    buffer += decoder.decode();
+    processImportEventBuffer(`${buffer}\n\n`, handlers);
+    handlers.onClose?.();
+  } finally {
+    reader.releaseLock();
+  }
+}
+
+function processImportEventBuffer(buffer: string, handlers: BookImportEventHandlers) {
+  const normalizedBuffer = buffer.replace(/\r\n/g, "\n");
+  const chunks = normalizedBuffer.split("\n\n");
+  const remaining = chunks.pop() ?? "";
+
+  chunks.forEach((chunk) => {
+    const parsedEvent = parseImportEventChunk(chunk);
+
+    if (!parsedEvent.data) return;
+
+    const job = parseImportEventPayload(parsedEvent.data);
+
+    if (job) {
+      handlers.onEvent(parsedEvent.eventName, job);
+    }
+  });
+
+  return remaining;
+}
+
+function parseImportEventChunk(chunk: string) {
+  let eventName: BookImportEventName = "message";
+  const dataLines: string[] = [];
+
+  chunk.split("\n").forEach((line) => {
+    if (!line || line.startsWith(":")) return;
+
+    if (line.startsWith("event:")) {
+      eventName = line.slice("event:".length).trim();
+      return;
+    }
+
+    if (line.startsWith("data:")) {
+      dataLines.push(line.slice("data:".length).trimStart());
+    }
+  });
+
+  return {
+    eventName,
+    data: dataLines.join("\n"),
+  };
+}
+
+function parseImportEventPayload(data: string) {
+  if (!data || data === "[DONE]") return null;
+
+  const parsed = tryParseJson(data) as ApiResponse<BookImportJob> | BookImportJob | { data?: BookImportJob } | null;
+
+  if (!parsed) return null;
+
+  if (isApiResponse<BookImportJob>(parsed) || isDataEnvelope(parsed)) {
+    return parsed.data ?? null;
+  }
+
+  return parsed;
+}
+
+function isDataEnvelope(payload: unknown): payload is { data?: BookImportJob } {
+  return typeof payload === "object" && payload !== null && "data" in payload;
+}
+
+async function getResponseErrorMessage(response: Response) {
+  const responseText = await response.text().catch(() => "");
+  const body = responseText ? (tryParseJson(responseText) as ApiResponse<unknown> | null) : null;
+
+  return body?.message || responseText || `Request failed with status ${response.status}.`;
 }
 
 export function searchStaffLoans(

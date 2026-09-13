@@ -16,6 +16,7 @@ type IconName =
   | "clock"
   | "bell"
   | "check"
+  | "check-circle"
   | "x"
   | "alert-circle"
   | "info"
@@ -25,11 +26,25 @@ type IconName =
   | "chevron-up"
   | "arrow-right"
   | "arrow-left"
+  | "arrow-up-right"
+  | "arrow-down-right"
   | "menu"
   | "eye"
   | "eye-off"
   | "upload"
   | "download"
+  | "camera"
+  | "image"
+  | "more-vertical"
+  | "credit-card"
+  | "dollar-sign"
+  | "banknote"
+  | "trending-up"
+  | "database"
+  | "file-text"
+  | "printer"
+  | "smartphone"
+  | "shield"
   | "file"
   | "edit"
   | "trash"
@@ -65,6 +80,7 @@ const iconPaths: Record<IconName, string> = {
   clock: "M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z M12 6v6l4 2",
   bell: "M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9 M13.73 21a2 2 0 0 1-3.46 0",
   check: "M20 6L9 17l-5-5",
+  "check-circle": "M22 11.08V12a10 10 0 1 1-5.93-9.14 M22 4 12 14.01l-3-3",
   x: "M18 6L6 18 M6 6l12 12",
   "alert-circle": "M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z M12 8v4 M12 16h.01",
   info: "M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z M12 16v-4 M12 8h.01",
@@ -74,11 +90,25 @@ const iconPaths: Record<IconName, string> = {
   "chevron-up": "M18 15l-6-6-6 6",
   "arrow-right": "M5 12h14 M12 5l7 7-7 7",
   "arrow-left": "M19 12H5 M12 19l-7-7 7-7",
+  "arrow-up-right": "M7 7h10v10 M7 17 17 7",
+  "arrow-down-right": "M7 7l10 10 M17 7v10H7",
   menu: "M3 12h18 M3 6h18 M3 18h18",
   eye: "M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6z",
   "eye-off": "M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24 M1 1l22 22",
   upload: "M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4 M17 8l-5-5-5 5 M12 3v12",
   download: "M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4 M7 10l5 5 5-5 M12 15V3",
+  camera: "M14.5 4l-1-2h-3l-1 2H5a3 3 0 0 0-3 3v11a3 3 0 0 0 3 3h14a3 3 0 0 0 3-3V7a3 3 0 0 0-3-3z M12 17a4 4 0 1 0 0-8 4 4 0 0 0 0 8z",
+  image: "M21 19V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2z M8.5 8.5h.01 M21 15l-5-5L5 21",
+  "more-vertical": "M12 8h.01 M12 12h.01 M12 16h.01",
+  "credit-card": "M1 4h22v16H1z M1 10h22",
+  "dollar-sign": "M12 2v20 M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6",
+  banknote: "M3 6h18v12H3z M7 12h.01 M17 12h.01 M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6z",
+  "trending-up": "M3 17l6-6 4 4 8-8 M14 7h7v7",
+  database: "M12 3c4.97 0 9 1.34 9 3s-4.03 3-9 3-9-1.34-9-3 4.03-3 9-3z M3 6v6c0 1.66 4.03 3 9 3s9-1.34 9-3V6 M3 12v6c0 1.66 4.03 3 9 3s9-1.34 9-3v-6",
+  "file-text": "M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z M13 2v7h7 M8 13h8 M8 17h8 M8 9h1",
+  printer: "M6 9V2h12v7 M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2 M6 14h12v8H6z",
+  smartphone: "M17 2H7a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2z M12 18h.01",
+  shield: "M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z",
   file: "M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z M13 2v7h7",
   edit: "M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7 M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z",
   trash: "M3 6h18 M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2",

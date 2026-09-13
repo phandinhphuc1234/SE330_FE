@@ -23,6 +23,10 @@
 # misc
 .DS_Store
 *.pem
+.codex-*.png
+.codex-chrome-profile/
+__pycache__/
+*.pyc
 
 # debug
 npm-debug.log*

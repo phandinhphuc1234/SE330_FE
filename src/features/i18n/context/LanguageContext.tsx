@@ -20,14 +20,26 @@ export type TranslationKey =
   | "menu.memberFallback"
   | "menu.myProfile"
   | "menu.myLoans"
+  | "menu.myEbooks"
+  | "menu.myFines"
   | "menu.myHolds"
+  | "menu.myReceipts"
   | "menu.activeLoans"
   | "menu.holds"
   | "menu.importCsv"
+  | "menu.adminCenter"
   | "menu.adminDashboard"
   | "menu.adminBooks"
   | "menu.categories"
   | "menu.logout"
+  | "notifications.open"
+  | "notifications.title"
+  | "notifications.emptyTitle"
+  | "notifications.emptyBody"
+  | "notifications.latestTitle"
+  | "notifications.markAllRead"
+  | "notifications.clear"
+  | "notifications.viewNotices"
   | "language.switchToEnglish"
   | "language.switchToVietnamese";
 
@@ -57,15 +69,26 @@ const translations: Record<Locale, Record<TranslationKey, string>> = {
     "menu.memberFallback": "The Athenaeum member",
     "menu.myProfile": "My profile",
     "menu.myLoans": "My borrows",
+    "menu.myEbooks": "My ebooks",
     "menu.myFines": "My fines",
     "menu.myHolds": "My holds",
+    "menu.myReceipts": "My receipts",
     "menu.activeLoans": "Active loans",
     "menu.holds": "Holds",
     "menu.importCsv": "Import CSV",
+    "menu.adminCenter": "Admin Center",
     "menu.adminDashboard": "Admin dashboard",
     "menu.adminBooks": "Admin books",
     "menu.categories": "Categories",
     "menu.logout": "Logout",
+    "notifications.open": "Open notifications",
+    "notifications.title": "Notifications",
+    "notifications.emptyTitle": "No new notifications",
+    "notifications.emptyBody": "Library messages, pickup reminders, and account updates will appear here.",
+    "notifications.latestTitle": "Latest updates",
+    "notifications.markAllRead": "Mark all read",
+    "notifications.clear": "Clear",
+    "notifications.viewNotices": "View library notices",
     "language.switchToEnglish": "Switch to English",
     "language.switchToVietnamese": "Switch to Vietnamese",
   },
@@ -85,15 +108,26 @@ const translations: Record<Locale, Record<TranslationKey, string>> = {
     "menu.memberFallback": "Thành viên The Athenaeum",
     "menu.myProfile": "Hồ sơ của tôi",
     "menu.myLoans": "Sách đang mượn",
+    "menu.myEbooks": "Ebook của tôi",
     "menu.myFines": "Sổ tiền phạt",
     "menu.myHolds": "Lượt đặt giữ",
+    "menu.myReceipts": "Biên lai của tôi",
     "menu.activeLoans": "Khoản mượn đang mở",
     "menu.holds": "Hàng đợi giữ sách",
     "menu.importCsv": "Nhập CSV",
+    "menu.adminCenter": "Trung tâm quản trị",
     "menu.adminDashboard": "Dashboard quản trị",
     "menu.adminBooks": "Sách quản trị",
     "menu.categories": "Danh mục",
     "menu.logout": "Đăng xuất",
+    "notifications.open": "Mở thông báo",
+    "notifications.title": "Thông báo",
+    "notifications.emptyTitle": "Chưa có thông báo mới",
+    "notifications.emptyBody": "Thông báo thư viện, nhắc lịch nhận sách và cập nhật tài khoản sẽ hiển thị tại đây.",
+    "notifications.latestTitle": "Cập nhật mới nhất",
+    "notifications.markAllRead": "Đánh dấu đã đọc",
+    "notifications.clear": "Xóa",
+    "notifications.viewNotices": "Xem thông báo thư viện",
     "language.switchToEnglish": "Chuyển sang tiếng Anh",
     "language.switchToVietnamese": "Chuyển sang tiếng Việt",
   },
