@@ -6,6 +6,7 @@ import {
   RegisterRequest,
   ResendVerificationRequest,
   UpdateMyProfileRequest,
+  VerifyEmailCodeRequest,
 } from "../types/auth.type";
 // Định nghĩa URL cơ sở cho API, sử dụng biến môi trường nếu có, hoặc mặc định là localhost
 export const API_URL = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:8080";
@@ -123,6 +124,17 @@ export async function verifyEmail(token: string) {
   const response = await fetchWithTimeout(`${API_URL}/api/auth/verify-email?token=${encodeURIComponent(token)}`, {
     method: "GET",
     credentials: "include",
+  });
+
+  return parseResponse<string>(response);
+}
+
+export async function verifyEmailCode(payload: VerifyEmailCodeRequest) {
+  const response = await fetchWithTimeout(`${API_URL}/api/auth/verify-email`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    credentials: "include",
+    body: JSON.stringify(payload),
   });
 
   return parseResponse<string>(response);
