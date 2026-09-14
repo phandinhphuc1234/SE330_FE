@@ -60,9 +60,9 @@ export function Navbar() {
     <header
       className="sticky inset-x-0 top-0 z-30 border-b border-[#EDEDF2] bg-white text-[#111827] shadow-[0_12px_30px_rgba(7,7,88,0.12)]"
     >
-      <nav className="mx-auto flex min-h-14 w-full max-w-7xl items-center justify-between gap-5 px-5 py-3 lg:px-8">
+      <nav className="mx-auto flex min-h-14 w-full max-w-7xl items-center justify-between gap-3 px-4 py-3 lg:px-6 xl:gap-4 2xl:px-8">
         <BrandMark tone="dark" />
-        <div className="hidden items-center gap-1 lg:flex">
+        <div className="hidden min-w-0 flex-1 items-center justify-center gap-0 lg:flex xl:gap-0.5">
           {topNavItems.map((item) => {
             const originalHref = item.originalHref ?? item.href;
             const isActive = isActiveNavItem(pathname, originalHref, item.href, hasStaffAccess);
@@ -72,7 +72,7 @@ export function Navbar() {
                 key={item.href}
                 href={item.href}
                 aria-current={isActive ? "page" : undefined}
-                className={`group relative rounded-full px-3 py-2 text-sm font-semibold text-[#111827] transition-colors duration-150 hover:bg-[#F1F2F4] hover:text-black ${
+                className={`group relative shrink-0 whitespace-nowrap rounded-full px-1.5 py-2 text-xs font-semibold text-[#111827] transition-colors duration-150 hover:bg-[#F1F2F4] hover:text-black xl:px-2.5 xl:text-[13px] 2xl:px-3 2xl:text-sm ${
                   isActive ? "bg-[#F1F2F4] text-black" : ""
                 }`}
               >
@@ -86,7 +86,7 @@ export function Navbar() {
             );
           })}
         </div>
-        <div className="flex items-center gap-2">
+        <div className="flex shrink-0 items-center gap-2">
           <LanguageToggle />
           {isInitializing ? (
             <div className="h-9 w-9 animate-pulse rounded-full bg-[#EDEDF2]" aria-label="Checking session" />
