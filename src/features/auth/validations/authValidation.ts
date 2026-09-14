@@ -51,6 +51,11 @@ export const resendVerificationSchema = z.object({
 
 export const verifyEmailTokenSchema = z.string().trim().min(1, "Verification token is required.");
 
+export const verificationCodeSchema = z
+  .string()
+  .trim()
+  .regex(/^\d{9}$/, "Verification code must contain exactly 9 digits.");
+
 export type LoginFormValues = z.infer<typeof loginSchema>;
 export type RegisterFormValues = z.infer<typeof registerSchema>;
 

@@ -41,3 +41,8 @@ export type RegisterRequest = {
 export type ResendVerificationRequest = {
   email: string;
 };
+
+export type VerifyEmailCodeRequest = {
+  email: string;
+  code: string;
+};
