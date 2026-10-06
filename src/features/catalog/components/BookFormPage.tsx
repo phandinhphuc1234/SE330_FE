@@ -17,6 +17,7 @@ import {
   getBookEbookInfo,
   getBookEbookManagementDetail,
   getCategories,
+  reindexBookEbook,
   updateBook,
   updateBookAuthors,
   updateBookCover,
@@ -46,6 +47,7 @@ export function BookFormPage({ mode }: { mode: "create" | "edit" }) {
   const [isCoverUploading, setIsCoverUploading] = useState(false);
   const [isEbookUploading, setIsEbookUploading] = useState(false);
   const [isEbookPolicySaving, setIsEbookPolicySaving] = useState(false);
+  const [isEbookReindexing, setIsEbookReindexing] = useState(false);
   const [managedEbook, setManagedEbook] = useState<BookEbook | null>(null);
   const [ebookDetailError, setEbookDetailError] = useState("");
   const [authorSearch, setAuthorSearch] = useState("");
@@ -137,6 +139,37 @@ export function BookFormPage({ mode }: { mode: "create" | "edit" }) {
       isMounted = false;
     };
   }, [accessToken, bookId, isEdit, refresh]);
+
+  useEffect(() => {
+    const bookEbookId = managedEbook?.bookEbookId;
+    if (!isEdit || !bookId || typeof bookEbookId !== "number" || !isEbookIngestionPending(managedEbook?.ingestionStatus)) {
+      return undefined;
+    }
+
+    let isMounted = true;
+    const intervalId = window.setInterval(() => {
+      void loadBookEbookManagementDetail(
+        bookId,
+        String(bookEbookId),
+        accessToken,
+        async () => (await refresh())?.accessToken ?? null,
+      )
+        .then((ebookDetail) => {
+          if (!isMounted) return;
+          setManagedEbook(ebookDetail);
+          setEbookDetailError("");
+        })
+        .catch((pollError) => {
+          if (!isMounted) return;
+          setEbookDetailError(pollError instanceof Error ? pollError.message : "Could not refresh AI indexing status.");
+        });
+    }, 5000);
+
+    return () => {
+      isMounted = false;
+      window.clearInterval(intervalId);
+    };
+  }, [accessToken, bookId, isEdit, managedEbook?.bookEbookId, managedEbook?.ingestionStatus, refresh]);
 
   useEffect(() => {
     const sourceKey = book ? `book:${entityIdOf(book)}` : `mode:${mode}`;
@@ -385,6 +418,37 @@ export function BookFormPage({ mode }: { mode: "create" | "edit" }) {
     }
   }
 
+  async function handleEbookReindex() {
+    const bookEbookId = ebook?.bookEbookId;
+    if (!isEdit || !bookId || typeof bookEbookId !== "number") {
+      setError("Upload an ebook PDF before requesting AI re-indexing.");
+      return;
+    }
+    if (!canUseMediaUploadApi) {
+      setError(mediaUploadPermissionNotice);
+      return;
+    }
+
+    setIsEbookReindexing(true);
+    try {
+      const updatedEbook = await requestBookEbookReindex(
+        bookId,
+        String(bookEbookId),
+        accessToken,
+        async () => (await refresh())?.accessToken ?? null,
+      );
+      setBook((current) => (current ? applyEbookToBook(current, updatedEbook) : current));
+      setManagedEbook(updatedEbook);
+      setMessage("Ebook re-indexing was queued. Status will refresh automatically.");
+      setError("");
+      setEbookDetailError("");
+    } catch (reindexError) {
+      setError(getEbookReindexErrorMessage(reindexError, currentUser?.role));
+    } finally {
+      setIsEbookReindexing(false);
+    }
+  }
+
   function handleEbookInputChange(event: FormEvent<HTMLInputElement>) {
     const input = event.currentTarget;
     void handleEbookFile(input.files?.item(0));
@@ -543,6 +607,7 @@ export function BookFormPage({ mode }: { mode: "create" | "edit" }) {
             isCoverUploading={isCoverUploading}
             isEbookUploading={isEbookUploading}
             isEbookPolicySaving={isEbookPolicySaving}
+            isEbookReindexing={isEbookReindexing}
             isEdit={isEdit}
             permissionNotice={mediaUploadPermissionNotice}
             fileInputRef={coverFileInputRef}
@@ -551,6 +616,7 @@ export function BookFormPage({ mode }: { mode: "create" | "edit" }) {
             onEbookDrop={handleEbookDrop}
             onEbookFile={handleEbookFile}
             onEbookPolicySave={handleEbookPolicySave}
+            onEbookReindex={handleEbookReindex}
             onFile={handleCoverFile}
             onOpenEbookFilePicker={() => ebookFileInputRef.current?.click()}
             onOpenFilePicker={() => coverFileInputRef.current?.click()}
@@ -582,6 +648,7 @@ function BookCoverPanel({
   isCoverUploading,
   isEbookUploading,
   isEbookPolicySaving,
+  isEbookReindexing,
   isEdit,
   permissionNotice,
   fileInputRef,
@@ -590,6 +657,7 @@ function BookCoverPanel({
   onEbookDrop,
   onEbookFile,
   onEbookPolicySave,
+  onEbookReindex,
   onFile,
   onOpenEbookFilePicker,
   onOpenFilePicker,
@@ -604,6 +672,7 @@ function BookCoverPanel({
   isCoverUploading: boolean;
   isEbookUploading: boolean;
   isEbookPolicySaving: boolean;
+  isEbookReindexing: boolean;
   isEdit: boolean;
   permissionNotice: string;
   fileInputRef: RefObject<HTMLInputElement | null>;
@@ -612,6 +681,7 @@ function BookCoverPanel({
   onEbookDrop: (event: DragEvent<HTMLButtonElement>) => void;
   onEbookFile: (file?: File | null) => void;
   onEbookPolicySave: (payload: UpdateBookEbookPayload) => Promise<boolean>;
+  onEbookReindex: () => void;
   onFile: (file?: File | null) => void;
   onOpenEbookFilePicker: () => void;
   onOpenFilePicker: () => void;
@@ -696,10 +766,12 @@ function BookCoverPanel({
         disabled={!isEdit || isEbookUploading || Boolean(permissionNotice)}
         isUploading={isEbookUploading}
         isPolicySaving={isEbookPolicySaving}
+        isReindexing={isEbookReindexing}
         onDrop={onEbookDrop}
         onFile={onEbookFile}
         onOpenFilePicker={onOpenEbookFilePicker}
         onSavePolicy={onEbookPolicySave}
+        onReindex={onEbookReindex}
       />
 
       <div className="mt-6">
@@ -798,10 +870,12 @@ function EbookUploadPanel({
   disabled,
   isUploading,
   isPolicySaving,
+  isReindexing,
   onDrop,
   onFile,
   onOpenFilePicker,
   onSavePolicy,
+  onReindex,
 }: {
   book: Book | null;
   ebook: BookEbook | null;
@@ -809,13 +883,16 @@ function EbookUploadPanel({
   disabled: boolean;
   isUploading: boolean;
   isPolicySaving: boolean;
+  isReindexing: boolean;
   onDrop: (event: DragEvent<HTMLButtonElement>) => void;
   onFile: (file?: File | null) => void;
   onOpenFilePicker: () => void;
   onSavePolicy: (payload: UpdateBookEbookPayload) => Promise<boolean>;
+  onReindex: () => void;
 }) {
   const hasEbook = Boolean(ebook);
   const [isPolicyOpen, setIsPolicyOpen] = useState(false);
+  const canReindex = hasEbook && isEbookReindexAllowed(ebook?.ingestionStatus);
 
   return (
     <div className="mt-5 grid gap-5 lg:grid-cols-[minmax(0,1fr)_190px]">
@@ -856,6 +933,18 @@ function EbookUploadPanel({
                 Change policy
               </button>
             ) : null}
+            {hasEbook ? (
+              <button
+                type="button"
+                onClick={onReindex}
+                disabled={disabled || isReindexing || !canReindex}
+                title={canReindex ? "Build a fresh AI search index from the stored PDF" : "Wait for the current indexing job to finish"}
+                className="inline-flex h-10 items-center justify-center gap-2 rounded-xl border border-[#CFA9B3] bg-[#FDF7F8] px-3 text-xs font-black text-[#7A263A] transition hover:bg-[#F3E5E8] disabled:cursor-not-allowed disabled:opacity-55"
+              >
+                <Icon name="sparkles" size={15} aria-hidden="true" />
+                {isReindexing ? "Queueing..." : "Re-index AI"}
+              </button>
+            ) : null}
             <button
               type="button"
               onClick={onOpenFilePicker}
@@ -884,6 +973,8 @@ function EbookUploadPanel({
             Upload a protected PDF to enable ebook loans, pricing, and access policy controls.
           </div>
         )}
+
+        {hasEbook ? <EbookIngestionPanel ebook={ebook} detailError={detailError} /> : null}
 
         {detailError && !hasEbook ? (
           <p className="mt-4 rounded-xl border border-amber-200 bg-amber-50 px-3 py-2 text-xs font-bold text-amber-800">
@@ -1200,6 +1291,56 @@ function MediaMeta({ label, value }: { label: string; value: string }) {
   );
 }
 
+function EbookIngestionPanel({ ebook, detailError }: { ebook: BookEbook | null; detailError: string }) {
+  const status = ebookIngestionDisplayStatus(ebook?.ingestionStatus);
+  const isFailed = status === "INDEX_FAILED";
+  const isIndexed = status === "INDEXED";
+  const containerStyle = isFailed
+    ? "border-[#E2B8B2] bg-[#F6E4E1]"
+    : isIndexed
+      ? "border-[#BFD8CC] bg-[#E5F0EB]"
+      : "border-[#D8CCBC] bg-[#FBF8F1]";
+  const accentStyle = isFailed ? "text-[#7F2D2D]" : isIndexed ? "text-[#2F5D50]" : "text-[#7A263A]";
+
+  return (
+    <section className={`mt-4 rounded-xl border px-4 py-4 ${containerStyle}`} aria-label="AI indexing status">
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+        <div className="flex min-w-0 items-start gap-3">
+          <span className={`grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-white/80 ${accentStyle}`}>
+            <Icon name={isFailed ? "alert-circle" : isIndexed ? "check-circle" : "clock"} size={18} aria-hidden="true" />
+          </span>
+          <div className="min-w-0">
+            <p className="text-[11px] font-black uppercase tracking-[0.12em] text-[#6F675E]">AI search index</p>
+            <p className={`mt-1 text-sm font-black ${accentStyle}`}>{formatIngestionStatus(status)}</p>
+            <p className="mt-1 text-xs leading-5 text-[#59637A]">{ingestionStatusDescription(status)}</p>
+          </div>
+        </div>
+        {ebook?.ingestionStage ? (
+          <span className="w-fit rounded-full border border-black/10 bg-white/75 px-2.5 py-1 text-[11px] font-bold text-[#4C453F]">
+            {ebook.ingestionStage.replace(/_/g, " ")}
+          </span>
+        ) : null}
+      </div>
+
+      <div className="mt-3 grid gap-2 text-xs text-[#59637A] sm:grid-cols-2">
+        <p><span className="font-bold text-[#2B2723]">Job:</span> {ebook?.ragJobId ?? "not assigned"}</p>
+        <p><span className="font-bold text-[#2B2723]">Poll failures:</span> {ebook?.ingestionPollFailureCount ?? 0}</p>
+        <p><span className="font-bold text-[#2B2723]">Last checked:</span> {formatDateTime(ebook?.ingestionLastCheckedAt)}</p>
+        <p><span className="font-bold text-[#2B2723]">Next retry:</span> {formatDateTime(ebook?.ingestionNextCheckAt)}</p>
+      </div>
+
+      {ebook?.ingestionLastError ? (
+        <p className="mt-3 break-words rounded-lg border border-black/10 bg-white/75 px-3 py-2 text-xs font-semibold text-[#7F2D2D]">
+          {ebook.ingestionLastError}
+        </p>
+      ) : null}
+      {detailError ? (
+        <p className="mt-3 text-xs font-semibold text-[#7F2D2D]">Could not refresh indexing status: {detailError}</p>
+      ) : null}
+    </section>
+  );
+}
+
 function GalleryCard({ book, coverUrl, isPrimary }: { book: Book | null; coverUrl: string; isPrimary?: boolean }) {
   if (!book || !coverUrl) {
     return <GalleryPlaceholder label="Primary cover" />;
@@ -1393,6 +1534,25 @@ async function saveBookEbookPolicy(
   }
 }
 
+async function requestBookEbookReindex(
+  bookId: string,
+  bookEbookId: string,
+  accessToken: string | null,
+  refreshAccessToken: () => Promise<string | null>,
+) {
+  try {
+    return await reindexBookEbook(bookId, bookEbookId, accessToken);
+  } catch (error) {
+    if (error instanceof ApiError && (error.status === 401 || error.status === 403)) {
+      const refreshedToken = await refreshAccessToken();
+      if (refreshedToken) {
+        return reindexBookEbook(bookId, bookEbookId, refreshedToken);
+      }
+    }
+    throw error;
+  }
+}
+
 function uploadCoverImage(bookId: string, file: File, shouldReplace: boolean, accessToken: string | null) {
   return shouldReplace ? updateBookCover(bookId, file, accessToken) : addBookCover(bookId, file, accessToken);
 }
@@ -1449,6 +1609,22 @@ function getEbookPolicyErrorMessage(error: unknown, role?: string | null) {
   return error instanceof Error ? error.message : "Could not update ebook policy.";
 }
 
+function getEbookReindexErrorMessage(error: unknown, role?: string | null) {
+  if (error instanceof ApiError) {
+    if (error.status === 403) {
+      return `Ebook re-indexing was forbidden by the backend. Current profile role is ${role ?? "unknown"}; this API requires LIBRARIAN or ADMIN authority.`;
+    }
+    if (error.status === 401) {
+      return "Your session expired while requesting ebook re-indexing. Please sign in again and retry.";
+    }
+    if (error.code === "RAG_SERVICE_ERROR") {
+      return "The AI indexing service is unavailable or disabled. Reading and ebook loans are unaffected.";
+    }
+    return formatApiErrorDiagnostic(error);
+  }
+  return error instanceof Error ? error.message : "Could not queue ebook re-indexing.";
+}
+
 function formatApiErrorDiagnostic(error: ApiError) {
   const parts = [`Status ${error.status}`];
 
@@ -1495,6 +1671,44 @@ function ebookFileName(book: Book | null, ebook: BookEbook | null) {
 
   const isbn = book?.isbn?.trim();
   return isbn ? `${isbn}_ebook.pdf` : "ebook.pdf";
+}
+
+function ebookIngestionDisplayStatus(status?: string | null) {
+  const normalized = status?.trim().toUpperCase();
+  if (normalized === "INDEXED") return "INDEXED";
+  if (normalized === "INDEX_FAILED" || normalized === "FAILED") return "INDEX_FAILED";
+  if (normalized === "NOT_REQUESTED" || normalized === "QUEUED" || !normalized) return "PENDING";
+  return "PROCESSING";
+}
+
+function isEbookIngestionPending(status?: string | null) {
+  const normalized = status?.trim().toUpperCase();
+  return Boolean(normalized && normalized !== "NOT_REQUESTED" && normalized !== "INDEXED"
+    && normalized !== "INDEX_FAILED" && normalized !== "FAILED");
+}
+
+function isEbookReindexAllowed(status?: string | null) {
+  const normalized = status?.trim().toUpperCase();
+  if (!normalized || normalized === "NOT_REQUESTED") return true;
+  const displayStatus = ebookIngestionDisplayStatus(status);
+  return displayStatus === "INDEXED" || displayStatus === "INDEX_FAILED";
+}
+
+function formatIngestionStatus(status: string) {
+  return status.replace(/_/g, " ").toLowerCase().replace(/\b\w/g, (letter) => letter.toUpperCase());
+}
+
+function ingestionStatusDescription(status: string) {
+  switch (status) {
+    case "INDEXED":
+      return "AI search and grounded answers are ready for readers.";
+    case "INDEX_FAILED":
+      return "Indexing stopped after repeated failures. Review the error, then request a fresh index.";
+    case "PROCESSING":
+      return "The PDF is being parsed, embedded, or written to the vector index.";
+    default:
+      return "The PDF is waiting for the indexing worker to start.";
+  }
 }
 
 function formatProvider(provider?: string | null) {

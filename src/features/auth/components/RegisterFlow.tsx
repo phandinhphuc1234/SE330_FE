@@ -184,7 +184,7 @@ export function RegisterFlow() {
       });
       window.sessionStorage.setItem("pendingVerificationEmail", form.email.trim());
       setIsSubmitted(true);
-      router.push(`/check-email?email=${encodeURIComponent(form.email.trim())}`);
+      router.push("/check-email");
     } catch (caughtError) {
       const apiError = caughtError as ApiError;
       setError(formatRegisterError(apiError));

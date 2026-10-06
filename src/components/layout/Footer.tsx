@@ -1,47 +1,59 @@
 "use client";
 
 import Link from "next/link";
-import type { ReactNode } from "react";
+import { ArrowRight, ArrowUpRight } from "lucide-react";
 import { useLanguage } from "@/features/i18n/context/LanguageContext";
-import { BrandMark } from "./BrandMark";
+import { editorialSerif } from "./editorialFont";
 
 const footerCopy = {
   en: {
-    ctaKicker: "Heard enough?",
-    ctaTitle: "Contact us",
-    tagline: "A modern space for knowledge discovery.",
-    copyright: "© 2026 The Athenaeum. Built with Next.js and Spring Boot.",
-    locationTitle: "Library desk",
-    contactEmail: "support@athenaeum.local",
-    contactPhone: "+84 396 807 074",
-    address: "SE313 Library Hall, University Quarter",
-    map: "See location",
-    smartTitle: "Want a smarter library day?",
-    newsletter: "Sign up for library notices",
-    follow: "Follow us",
+    title: "A home for curious minds.",
+    tagline: "Discover a new perspective, revisit a favourite, and make room for your next great read.",
+    browse: "Find your next book",
+    copyright: "© 2026 The Athenaeum.",
+    closing: "Discover. Borrow. Read.",
     groups: [
-      { title: "Explore", links: ["Books", "Categories", "Authors", "Borrowing Guide"] },
-      { title: "Account", links: ["Login", "Register", "My Borrows", "Reservations"] },
-      { title: "System", links: ["About", "Notices", "Contact", "Help Desk"] },
+      { title: "Explore", links: [
+        { label: "Book catalogue", href: "/books" },
+        { label: "Borrowing guide", href: "/borrowing-guide" },
+        { label: "About the library", href: "/about" },
+      ] },
+      { title: "Your library", links: [
+        { label: "My profile", href: "/profile" },
+        { label: "My borrows", href: "/user/loans" },
+        { label: "Reservations", href: "/user/holds" },
+        { label: "My ebooks", href: "/user/ebook-loans" },
+      ] },
+      { title: "Stay connected", links: [
+        { label: "Library notices", href: "/notices" },
+        { label: "Sign in", href: "/login" },
+        { label: "Become a member", href: "/register" },
+      ] },
     ],
   },
   vi: {
-    ctaKicker: "Đủ thông tin chưa?",
-    ctaTitle: "Liên hệ",
-    tagline: "Không gian hiện đại cho hành trình khám phá tri thức.",
-    copyright: "© 2026 The Athenaeum. Xây dựng với Next.js và Spring Boot.",
-    locationTitle: "Quầy thư viện",
-    contactEmail: "support@athenaeum.local",
-    contactPhone: "+84 396 807 074",
-    address: "Sảnh thư viện SE313, khu đại học",
-    map: "Xem vị trí",
-    smartTitle: "Muốn một ngày thư viện thông minh hơn?",
-    newsletter: "Đăng ký nhận thông báo thư viện",
-    follow: "Theo dõi",
+    title: "Nơi nuôi dưỡng niềm ham học.",
+    tagline: "Khám phá góc nhìn mới, tìm lại cuốn sách yêu thích và dành chỗ cho những trang sách tiếp theo.",
+    browse: "Tìm cuốn sách tiếp theo",
+    copyright: "© 2026 The Athenaeum.",
+    closing: "Khám phá. Mượn sách. Đọc.",
     groups: [
-      { title: "Khám phá", links: ["Sách", "Danh mục", "Tác giả", "Hướng dẫn mượn"] },
-      { title: "Tài khoản", links: ["Đăng nhập", "Đăng ký", "Sách đang mượn", "Đặt giữ"] },
-      { title: "Hệ thống", links: ["Giới thiệu", "Thông báo", "Liên hệ", "Quầy hỗ trợ"] },
+      { title: "Khám phá", links: [
+        { label: "Danh mục sách", href: "/books" },
+        { label: "Hướng dẫn mượn", href: "/borrowing-guide" },
+        { label: "Về thư viện", href: "/about" },
+      ] },
+      { title: "Thư viện của bạn", links: [
+        { label: "Hồ sơ cá nhân", href: "/profile" },
+        { label: "Sách đang mượn", href: "/user/loans" },
+        { label: "Lượt đặt giữ", href: "/user/holds" },
+        { label: "Ebook của tôi", href: "/user/ebook-loans" },
+      ] },
+      { title: "Kết nối", links: [
+        { label: "Thông báo thư viện", href: "/notices" },
+        { label: "Đăng nhập", href: "/login" },
+        { label: "Đăng ký thành viên", href: "/register" },
+      ] },
     ],
   },
 };
@@ -51,85 +63,41 @@ export function Footer() {
   const copy = footerCopy[locale];
 
   return (
-    <footer className="w-full bg-[#050505] text-white">
-      <div className="w-full overflow-hidden">
-        <div className="bg-[radial-gradient(circle_at_20%_0%,#232323_0%,#111111_42%,#050505_100%)]">
-          <div className="grid min-h-[430px] w-full gap-12 px-8 py-18 md:grid-cols-[0.95fr_0.85fr_1.45fr_0.9fr] lg:px-16 xl:px-24">
-            <div className="space-y-5">
-              <BrandMark />
-              <h2 className="max-w-72 text-4xl font-semibold leading-[0.95] tracking-[-0.05em] text-white">
-                The agency for curious readers
-              </h2>
-              <p className="max-w-sm text-sm leading-6 text-white/65">{copy.tagline}</p>
-            </div>
-
-            <div className="space-y-4">
-              <h3 className="text-xs font-black uppercase tracking-wide text-white/90">{copy.locationTitle}</h3>
-              <div className="space-y-1 text-sm font-semibold leading-6 text-white/75">
-                <p className="underline decoration-white/50 underline-offset-4">{copy.contactEmail}</p>
-                <p>{copy.contactPhone}</p>
-                <p>{copy.address}</p>
-              </div>
-              <Link href="/about" className="inline-flex text-xs font-black uppercase tracking-wide text-white underline decoration-white/50 underline-offset-4 transition hover:text-[#DFFF00]">
-                {copy.map} <span aria-hidden="true">&nbsp;-&gt;</span>
-              </Link>
-            </div>
-
-            <div className="grid gap-6 sm:grid-cols-3 md:grid-cols-3">
-              {copy.groups.map((group) => (
-                <div key={group.title}>
-                  <h3 className="text-xs font-black uppercase tracking-wide text-white/90">{group.title}</h3>
-                  <div className="mt-3 grid gap-2">
-                    {group.links.map((link) => (
-                      <Link key={link} href="#" className="text-sm font-semibold text-white/65 transition hover:text-white">
-                        {link}
-                      </Link>
-                    ))}
-                  </div>
-                </div>
-              ))}
-            </div>
-
-            <div className="space-y-7">
-              <div>
-                <h3 className="max-w-64 text-sm font-black uppercase leading-5 tracking-wide text-white">
-                  {copy.smartTitle}
-                </h3>
-                <Link href="/notices" className="mt-5 inline-flex text-xs font-black uppercase tracking-wide text-white underline decoration-white/50 underline-offset-4 transition hover:text-[#DFFF00]">
-                  {copy.newsletter} <span aria-hidden="true">&nbsp;-&gt;</span>
-                </Link>
-              </div>
-              <div>
-                <h3 className="text-xs font-black uppercase tracking-wide text-white/80">{copy.follow}</h3>
-                <div className="mt-5 flex items-center gap-5">
-                  <SocialLink label="Facebook">
-                    <span className="text-lg font-black">f</span>
-                  </SocialLink>
-                  <SocialLink label="X">
-                    <span className="text-sm font-black">X</span>
-                  </SocialLink>
-                  <SocialLink label="Google">
-                    <span className="text-sm font-black">G</span>
-                  </SocialLink>
-                </div>
-              </div>
-              <p className="text-xs text-white/45">{copy.copyright}</p>
-            </div>
+    <footer className="border-t-2 border-[#B8872B]/70 bg-[#26231F] px-4 text-[#F7F3EA] sm:px-6 lg:px-8">
+      <div className="mx-auto max-w-7xl">
+        <div className="grid gap-10 py-12 sm:py-14 lg:grid-cols-[1.15fr_1.8fr] lg:gap-20">
+          <div>
+            <Link href="/" className="inline-flex min-h-11 items-center transition-colors hover:text-[#E1C38B] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#E1C38B]">
+              <span className={`${editorialSerif.className} text-2xl font-medium`}>The Athenaeum<span aria-hidden="true" className="ml-1 text-[#C6A367]">.</span></span>
+            </Link>
+            <p className={`${editorialSerif.className} mt-4 max-w-sm text-2xl leading-snug text-[#E8DDCD]`}>{copy.title}</p>
+            <p className="mt-3 max-w-sm text-[13px] leading-6 text-[#C3B7A6]">{copy.tagline}</p>
+            <Link href="/books" className="mt-5 inline-flex min-h-11 items-center gap-3 text-sm text-[#E1C38B] underline decoration-[#C6A367]/50 underline-offset-4 transition-colors hover:text-[#FFFCF5] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#E1C38B]">
+              {copy.browse}<ArrowRight size={16} aria-hidden="true" />
+            </Link>
           </div>
+          <div className="grid grid-cols-2 gap-x-6 gap-y-8 sm:grid-cols-3">
+            {copy.groups.map((group) => (
+              <nav key={group.title} aria-label={group.title}>
+                <h2 className="mb-3 text-[11px] font-semibold uppercase tracking-[0.12em] text-[#E1C38B]">{group.title}</h2>
+                <ul>
+                  {group.links.map((link) => (
+                    <li key={link.href}>
+                      <Link href={link.href} className="group inline-flex min-h-11 items-center gap-2 py-2 text-[13px] leading-5 text-[#D4C8B7] transition-colors hover:text-[#FFFCF5] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#E1C38B]">
+                        {link.label}<ArrowUpRight size={13} aria-hidden="true" className="shrink-0 opacity-0 transition-opacity group-hover:opacity-100 group-focus-visible:opacity-100" />
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              </nav>
+            ))}
+          </div>
+        </div>
+        <div className="flex flex-col justify-between gap-3 border-t border-[#C3B7A6]/20 py-6 text-xs leading-5 text-[#C3B7A6] sm:flex-row">
+          <p>{copy.copyright}</p>
+          <p>{copy.closing}</p>
         </div>
       </div>
     </footer>
-  );
-}
-
-function SocialLink({ label, children }: { label: string; children: ReactNode }) {
-  return (
-    <Link
-      href="#"
-      aria-label={label}
-      className="grid h-9 w-9 place-items-center rounded-full border border-white/20 text-white transition hover:border-[#DFFF00] hover:bg-[#DFFF00] hover:text-black"
-    >
-      {children}
-    </Link>
   );
 }

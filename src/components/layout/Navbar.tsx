@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { UsersRound } from "@/components/animate-ui/icons/users-round";
+import { useEffect, useRef, useState } from "react";
 import { Icon } from "@/components/ui/Icon";
 import { publicNavItems } from "@/constants/nav-items";
 import { useAuth } from "@/features/auth/context/AuthContext";
@@ -295,104 +295,178 @@ function UserMenu({
   hasStaffAccess,
   onLogout,
 }: {
-  currentUser: { fullName?: string; role?: string } | null;
+  currentUser: { email?: string; fullName?: string; role?: string } | null;
   hasAdminAccess: boolean;
   hasStaffAccess: boolean;
   onLogout: () => void;
 }) {
   const { t } = useLanguage();
+  const [isOpen, setIsOpen] = useState(false);
+  const menuRef = useRef<HTMLDivElement>(null);
+  const displayName = currentUser?.fullName || t("menu.memberFallback");
+  const displayRole = currentUser?.role || "Member";
+  const displayMeta = currentUser?.email || displayRole;
+  const initials = getUserInitials(displayName);
   const menuItemClass =
-    "flex h-11 items-center justify-between rounded-lg px-3 text-sm font-semibold text-[#2B2723] transition hover:bg-[#EFE6D6] hover:text-[#7A263A] focus:outline-none focus:ring-2 focus:ring-[#7A263A] focus:ring-offset-2";
-  const arrowClass = "text-sm leading-none text-[#9A9187]";
+    "group/item flex min-h-11 w-full items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-semibold text-[#2B2723] transition-colors duration-200 hover:bg-[#EFE6D6] hover:text-[#7A263A] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#7A263A] focus-visible:ring-offset-2";
+  const menuItems: Array<{
+    href: string;
+    icon: Parameters<typeof Icon>[0]["name"];
+    labelKey: TranslationKey;
+  }> = [
+    { href: "/profile", icon: "user", labelKey: "menu.myProfile" },
+    ...(hasAdminAccess
+      ? [{ href: "/admin/dashboard", icon: "shield" as const, labelKey: "menu.adminCenter" as TranslationKey }]
+      : []),
+    ...(!hasStaffAccess
+      ? [
+          { href: "/user/loans", icon: "book", labelKey: "menu.myLoans" },
+          { href: "/user/ebook-loans", icon: "book-open", labelKey: "menu.myEbooks" },
+          { href: "/user/fines", icon: "banknote", labelKey: "menu.myFines" },
+          { href: "/user/holds", icon: "bookmark", labelKey: "menu.myHolds" },
+          { href: "/user/receipts", icon: "file-text", labelKey: "menu.myReceipts" },
+        ] as Array<{
+          href: string;
+          icon: Parameters<typeof Icon>[0]["name"];
+          labelKey: TranslationKey;
+        }>
+      : []),
+  ];
+
+  useEffect(() => {
+    if (!isOpen) return;
+
+    function closeOnOutsidePointer(event: PointerEvent) {
+      if (!menuRef.current?.contains(event.target as Node)) {
+        setIsOpen(false);
+      }
+    }
+
+    function closeOnEscape(event: KeyboardEvent) {
+      if (event.key === "Escape") {
+        setIsOpen(false);
+      }
+    }
+
+    document.addEventListener("pointerdown", closeOnOutsidePointer);
+    document.addEventListener("keydown", closeOnEscape);
+
+    return () => {
+      document.removeEventListener("pointerdown", closeOnOutsidePointer);
+      document.removeEventListener("keydown", closeOnEscape);
+    };
+  }, [isOpen]);
 
   return (
-    <div className="group relative">
+    <div
+      ref={menuRef}
+      className="relative"
+      onBlur={(event) => {
+        if (!event.currentTarget.contains(event.relatedTarget)) {
+          setIsOpen(false);
+        }
+      }}
+    >
       <button
         type="button"
         aria-label={t("menu.openUserMenu")}
-        className="grid h-9 w-9 place-items-center rounded-full text-[#111827] transition-colors duration-150 hover:bg-[#F1F2F4] hover:text-black focus:outline-none focus:ring-4 focus:ring-black/10"
+        aria-expanded={isOpen}
+        aria-haspopup="menu"
+        aria-controls="navbar-user-menu"
+        onClick={() => setIsOpen((open) => !open)}
+        className="flex h-11 max-w-[13rem] cursor-pointer items-center gap-2 rounded-xl border border-[#DED5C8] bg-[#FFFCF5] p-1.5 pr-2 text-left text-[#171412] shadow-[0_4px_14px_rgba(23,20,18,0.05)] transition-colors duration-200 hover:border-[#CBBEAE] hover:bg-[#FBF8F1] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#7A263A] focus-visible:ring-offset-2"
       >
-        <UsersRound animateOnHover size={18} aria-hidden="true" />
+        <span className="grid h-8 w-8 shrink-0 place-items-center rounded-lg bg-[#7A263A] font-serif text-xs font-bold tracking-wide text-white shadow-[0_3px_10px_rgba(122,38,58,0.18)]">
+          {initials}
+        </span>
+        <span className="hidden min-w-0 flex-1 sm:block">
+          <span className="block truncate text-sm font-bold leading-4">{displayName}</span>
+          <span className="mt-0.5 block truncate text-[11px] font-medium leading-3 text-[#6F675E]">
+            {displayMeta}
+          </span>
+        </span>
+        <Icon
+          name="chevron-down"
+          size={15}
+          aria-hidden="true"
+          className={`hidden shrink-0 text-[#6F675E] transition-transform duration-200 sm:block ${
+            isOpen ? "rotate-180" : ""
+          }`}
+        />
       </button>
 
-      <div className="invisible absolute right-0 top-[calc(100%+12px)] w-64 translate-y-2 rounded-2xl border border-[#DED5C8] bg-white p-2 opacity-0 shadow-[0_24px_60px_rgba(23,20,18,0.14)] transition-all duration-200 group-hover:visible group-hover:translate-y-0 group-hover:opacity-100 group-focus-within:visible group-focus-within:translate-y-0 group-focus-within:opacity-100">
-        <div className="px-3 pb-3 pt-2">
-          <p className="text-xs font-bold uppercase tracking-wide text-[#6F675E]">{t("menu.account")}</p>
-          <p className="mt-1 truncate text-sm font-bold text-[#171412]">{currentUser?.fullName || t("menu.memberFallback")}</p>
-          <p className="mt-1 text-xs font-bold uppercase tracking-wide text-[#7A263A]">{currentUser?.role || "Member"}</p>
+      <div
+        id="navbar-user-menu"
+        role="menu"
+        aria-label={t("menu.account")}
+        className={`absolute right-0 z-50 mt-3 w-72 max-w-[calc(100vw-2rem)] origin-top-right overflow-hidden rounded-2xl border border-[#DED5C8] bg-[#FFFCF5] p-2 shadow-[0_24px_60px_rgba(23,20,18,0.16)] transition-[opacity,transform,visibility] duration-200 ${
+          isOpen ? "visible translate-y-0 opacity-100" : "invisible -translate-y-1 opacity-0"
+        }`}
+      >
+        <div className="rounded-xl bg-[#F7F3EA] p-3">
+          <div className="flex items-center gap-3">
+            <span className="grid h-11 w-11 shrink-0 place-items-center rounded-xl bg-[#7A263A] font-serif text-sm font-bold tracking-wide text-white shadow-[0_4px_14px_rgba(122,38,58,0.2)]">
+              {initials}
+            </span>
+            <div className="min-w-0">
+              <p className="truncate text-sm font-bold text-[#171412]">{displayName}</p>
+              {currentUser?.email ? (
+                <p className="mt-0.5 truncate text-xs font-medium text-[#6F675E]">{currentUser.email}</p>
+              ) : null}
+              <p className="mt-1 inline-flex rounded-md bg-[#F3E5E8] px-2 py-0.5 text-[10px] font-bold uppercase tracking-[0.08em] text-[#7A263A]">
+                {displayRole}
+              </p>
+            </div>
+          </div>
         </div>
-        <div className="mb-1 h-px bg-[#DED5C8]" />
-        <Link
-          href="/profile"
-          className={menuItemClass}
-        >
-          {t("menu.myProfile")}
-          <span className={arrowClass} aria-hidden="true">&gt;</span>
-        </Link>
-        {hasAdminAccess ? (
-          <Link
-            href="/admin/dashboard"
-            className={menuItemClass}
-          >
-            {t("menu.adminCenter")}
-            <span className={arrowClass} aria-hidden="true">&gt;</span>
-          </Link>
-        ) : null}
-        {!hasStaffAccess ? (
-          <Link
-            href="/user/loans"
-            className={menuItemClass}
-          >
-            {t("menu.myLoans")}
-            <span className={arrowClass} aria-hidden="true">&gt;</span>
-          </Link>
-        ) : null}
-        {!hasStaffAccess ? (
-          <Link
-            href="/user/ebook-loans"
-            className={menuItemClass}
-          >
-            {t("menu.myEbooks")}
-            <span className={arrowClass} aria-hidden="true">&gt;</span>
-          </Link>
-        ) : null}
-        {!hasStaffAccess ? (
-          <Link
-            href="/user/fines"
-            className={menuItemClass}
-          >
-            {t("menu.myFines")}
-            <span className={arrowClass} aria-hidden="true">&gt;</span>
-          </Link>
-        ) : null}
-        {!hasStaffAccess ? (
-          <Link
-            href="/user/holds"
-            className={menuItemClass}
-          >
-            {t("menu.myHolds")}
-            <span className={arrowClass} aria-hidden="true">&gt;</span>
-          </Link>
-        ) : null}
-        {!hasStaffAccess ? (
-          <Link
-            href="/user/receipts"
-            className={menuItemClass}
-          >
-            {t("menu.myReceipts")}
-            <span className={arrowClass} aria-hidden="true">&gt;</span>
-          </Link>
-        ) : null}
-        <div className="my-1 h-px bg-[#DED5C8]" />
+
+        <div className="mt-2 max-h-[min(22rem,calc(100vh-12rem))] space-y-0.5 overflow-y-auto">
+          {menuItems.map((item) => (
+            <Link
+              key={item.href}
+              href={item.href}
+              role="menuitem"
+              className={menuItemClass}
+              onClick={() => setIsOpen(false)}
+            >
+              <Icon name={item.icon} size={17} aria-hidden="true" className="shrink-0 text-[#7A263A]" />
+              <span className="min-w-0 flex-1">{t(item.labelKey)}</span>
+              <Icon
+                name="chevron-right"
+                size={15}
+                aria-hidden="true"
+                className="shrink-0 text-[#9A9187] transition-transform duration-200 group-hover/item:translate-x-0.5 group-hover/item:text-[#7A263A]"
+              />
+            </Link>
+          ))}
+        </div>
+
+        <div className="my-2 h-px bg-[#DED5C8]" />
         <button
           type="button"
-          className="flex h-11 w-full items-center justify-between rounded-lg px-3 text-left text-sm font-bold text-[#A33A3A] transition hover:bg-[#F6E4E1] hover:text-[#7F2D2D] focus:outline-none focus:ring-2 focus:ring-[#A33A3A] focus:ring-offset-2"
-          onClick={onLogout}
+          role="menuitem"
+          className="flex min-h-11 w-full cursor-pointer items-center gap-3 rounded-xl px-3 py-2.5 text-left text-sm font-bold text-[#A33A3A] transition-colors duration-200 hover:bg-[#F6E4E1] hover:text-[#7F2D2D] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#A33A3A] focus-visible:ring-offset-2"
+          onClick={() => {
+            setIsOpen(false);
+            onLogout();
+          }}
         >
-          {t("menu.logout")}
-          <span className="text-sm leading-none text-[#A33A3A]" aria-hidden="true">&gt;</span>
+          <Icon name="logout" size={17} aria-hidden="true" className="shrink-0" />
+          <span className="flex-1">{t("menu.logout")}</span>
         </button>
       </div>
     </div>
   );
+}
+
+function getUserInitials(name: string) {
+  const initials = name
+    .trim()
+    .split(/\s+/)
+    .filter(Boolean)
+    .slice(0, 2)
+    .map((part) => part.charAt(0).toUpperCase())
+    .join("");
+
+  return initials || "A";
 }

@@ -57,6 +57,16 @@ export type BookEbook = {
   accessFee?: number | null;
   currency?: string | null;
   accessDurationDays?: number | null;
+  ingestionStatus?: string | null;
+  ragDocumentId?: string | null;
+  ragJobId?: number | null;
+  ingestionStage?: string | null;
+  ingestionLastError?: string | null;
+  indexingRequestedAt?: string | null;
+  ingestionLastCheckedAt?: string | null;
+  ingestionPollFailureCount?: number | null;
+  ingestionNextCheckAt?: string | null;
+  indexingCompletedAt?: string | null;
   createdAt?: string | null;
   updatedAt?: string | null;
 };

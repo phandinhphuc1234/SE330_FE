@@ -10,6 +10,7 @@ type IconName =
   | "users"
   | "user-check"
   | "search"
+  | "sparkles"
   | "filter"
   | "sort"
   | "calendar"
@@ -74,6 +75,7 @@ const iconPaths: Record<IconName, string> = {
   users: "M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2 M23 21v-2a4 4 0 0 0-3-3.87 M16 3.13a4 4 0 0 1 0 7.75 M9 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8z",
   "user-check": "M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2 M12.5 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8z M17 11l2 2 4-4",
   search: "M21 21l-6-6m2-5a7 7 0 1 1-14 0 7 7 0 0 1 14 0z",
+  sparkles: "M12 3l1.15 3.1L16 7.5l-2.85 1.4L12 12l-1.15-3.1L8 7.5l2.85-1.4L12 3z M5 13l.9 2.1L8 16l-2.1.9L5 19l-.9-2.1L2 16l2.1-.9L5 13z M18.5 12l1.05 2.45L22 15.5l-2.45 1.05L18.5 19l-1.05-2.45L15 15.5l2.45-1.05L18.5 12z",
   filter: "M22 3H2l8 9.46V19l4 2v-8.54L22 3z",
   sort: "M3 6h18 M7 12h10 M11 18h2",
   calendar: "M19 4H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2z M16 2v4 M8 2v4 M3 10h18",

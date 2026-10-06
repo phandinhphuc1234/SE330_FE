@@ -8,6 +8,7 @@ import { Icon } from "@/components/ui/Icon";
 import { ApiError } from "@/types/api.type";
 import { useAuth } from "@/features/auth/context/AuthContext";
 import { CatalogShell, Notice } from "@/features/catalog/components/CatalogShell";
+import { EbookSemanticSearchPanel } from "./EbookSemanticSearchPanel";
 
 import {
   closeReadingSession,
@@ -52,6 +53,7 @@ export function EbookReaderPage() {
   const [page, setPage] = useState(1);
   const [zoom, setZoom] = useState(100);
   const [isFullscreen, setIsFullscreen] = useState(false);
+  const [isAiPanelOpen, setIsAiPanelOpen] = useState(false);
   const hasStartedRef = useRef(false);
 
   useEffect(() => {
@@ -334,6 +336,15 @@ export function EbookReaderPage() {
 
   const isBusy = stage === "creating" || stage === "loading-content" || stage === "refreshing" || stage === "closing";
 
+  const navigateToCitationPage = useCallback((nextPage: number) => {
+    if (!Number.isInteger(nextPage) || nextPage < 1 || (totalPages > 0 && nextPage > totalPages)) return;
+    setPage(nextPage);
+
+    if (window.matchMedia("(max-width: 1279px)").matches) {
+      readerContainerRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+  }, [totalPages]);
+
   return (
     <CatalogShell
       protectedPage
@@ -409,6 +420,21 @@ export function EbookReaderPage() {
             </button>
             <button
               type="button"
+              onClick={() => setIsAiPanelOpen((current) => !current)}
+              disabled={!session || stage === "closing"}
+              aria-expanded={isAiPanelOpen}
+              aria-controls="ebook-ai-reader-panel"
+              className={`inline-flex h-10 items-center justify-center gap-2 rounded-xl border px-4 text-xs font-black outline-none transition focus-visible:ring-2 focus-visible:ring-[#7A263A] focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 ${
+                isAiPanelOpen
+                  ? "border-[#CFA9B3] bg-[#F3E5E8] text-[#5A1C2B]"
+                  : "border-[#D8DEE8] bg-white text-[#0B1026] hover:border-[#7A263A] hover:text-[#7A263A]"
+              }`}
+            >
+              <Icon name="sparkles" size={16} aria-hidden="true" />
+              Ask this book
+            </button>
+            <button
+              type="button"
               onClick={() => void closeReader()}
               disabled={stage === "closing"}
               className="inline-flex h-10 items-center justify-center gap-2 rounded-xl bg-[#111827] px-4 text-xs font-black text-white transition hover:-translate-y-0.5 hover:bg-black disabled:cursor-not-allowed disabled:opacity-50"
@@ -442,42 +468,60 @@ export function EbookReaderPage() {
           </div>
         ) : null}
 
-        <div
-          ref={readerContainerRef}
-          className={`relative mt-4 overflow-y-auto bg-neutral-900 shadow-inner ${
-            isFullscreen ? "h-screen w-screen rounded-none p-0" : "h-[calc(100vh-280px)] min-h-[560px] rounded-2xl p-6"
-          }`}
-        >
-          {isFullscreen && (
-            <button
-              type="button"
-              onClick={toggleFullscreen}
-              className="fixed top-4 right-6 z-50 grid h-12 w-12 place-items-center rounded-full bg-black/50 text-white backdrop-blur-sm transition hover:bg-black/80"
-              title="Exit Fullscreen"
-              aria-label="Exit fullscreen"
-            >
-              <Icon name="minimize-2" size={24} aria-hidden="true" />
-            </button>
-          )}
-          <div className="mx-auto flex min-h-full w-full justify-center">
-            {pdfDoc ? (
-              <canvas
-                ref={canvasRef}
-                className="h-auto max-w-full block bg-white shadow-2xl rounded-lg"
-              />
-            ) : (
-              <div className="flex h-full w-full items-center justify-center text-white">
-                <div className="text-center">
-                  <span className="mx-auto grid h-16 w-16 place-items-center rounded-2xl bg-white/10 text-[#B30D2D] shadow-sm">
-                    <Icon name={isBusy ? "clock" : "alert-circle"} size={30} animate={isBusy ? "pulse" : "none"} aria-hidden="true" />
-                  </span>
-                  <h3 className="mt-4 font-serif text-3xl font-bold">{stageLabel(stage)}</h3>
-                  <p className="mt-2 text-sm font-semibold text-white/60">
-                    {stageDescription(stage)}
-                  </p>
-                </div>
-              </div>
+        <div className={`mt-4 grid gap-4 ${isAiPanelOpen ? "xl:grid-cols-[minmax(0,1fr)_380px]" : "grid-cols-1"}`}>
+          <div
+            ref={readerContainerRef}
+            className={`order-last relative overflow-y-auto bg-neutral-900 shadow-inner xl:order-first ${
+              isFullscreen ? "h-screen w-screen rounded-none p-0" : "h-[calc(100vh-280px)] min-h-[560px] rounded-2xl p-6"
+            }`}
+          >
+            {isFullscreen && (
+              <button
+                type="button"
+                onClick={toggleFullscreen}
+                className="fixed top-4 right-6 z-50 grid h-12 w-12 place-items-center rounded-full bg-black/50 text-white backdrop-blur-sm transition hover:bg-black/80"
+                title="Exit Fullscreen"
+                aria-label="Exit fullscreen"
+              >
+                <Icon name="minimize-2" size={24} aria-hidden="true" />
+              </button>
             )}
+            <div className="mx-auto flex min-h-full w-full justify-center">
+              {pdfDoc ? (
+                <canvas
+                  ref={canvasRef}
+                  className="block h-auto max-w-full rounded-lg bg-white shadow-2xl"
+                />
+              ) : (
+                <div className="flex h-full w-full items-center justify-center text-white">
+                  <div className="text-center">
+                    <span className="mx-auto grid h-16 w-16 place-items-center rounded-2xl bg-white/10 text-[#B30D2D] shadow-sm">
+                      <Icon name={isBusy ? "clock" : "alert-circle"} size={30} animate={isBusy ? "pulse" : "none"} aria-hidden="true" />
+                    </span>
+                    <h3 className="mt-4 font-serif text-3xl font-bold">{stageLabel(stage)}</h3>
+                    <p className="mt-2 text-sm font-semibold text-white/60">
+                      {stageDescription(stage)}
+                    </p>
+                  </div>
+                </div>
+              )}
+            </div>
+          </div>
+
+          <div
+            aria-hidden={!isAiPanelOpen}
+            className={isAiPanelOpen ? "contents" : "hidden"}
+          >
+            <EbookSemanticSearchPanel
+              bookId={numericBookId}
+              session={session}
+              accessToken={accessToken}
+              refreshAccessToken={refreshAccessToken}
+              totalPages={totalPages}
+              onNavigateToPage={navigateToCitationPage}
+              onSessionExpired={() => void openReader(true)}
+              onClose={() => setIsAiPanelOpen(false)}
+            />
           </div>
         </div>
       </section>
