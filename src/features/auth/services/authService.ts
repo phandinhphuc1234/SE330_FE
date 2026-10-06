@@ -74,9 +74,19 @@ export async function login(payload: LoginRequest) {
 }
 
 export async function refreshToken() {
+  const csrfResponse = await fetchWithTimeout(`${API_URL}/api/auth/csrf`, {
+    method: "GET",
+    credentials: "include",
+    cache: "no-store",
+  });
+  const csrf = await parseResponse<{ token: string; headerName: string }>(csrfResponse);
+  if (!csrf.data?.token || !csrf.data.headerName) {
+    throw new ApiError("Could not prepare a secure session refresh.", 503, "CSRF_TOKEN_MISSING");
+  }
   const response = await fetchWithTimeout(`${API_URL}/api/auth/refresh`, {
     method: "POST",
     credentials: "include",
+    headers: { [csrf.data.headerName]: csrf.data.token },
   });
 
   return parseResponse<AuthResponse>(response);
