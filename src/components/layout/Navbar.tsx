@@ -9,6 +9,7 @@ import { useAuth } from "@/features/auth/context/AuthContext";
 import { TranslationKey, useLanguage } from "@/features/i18n/context/LanguageContext";
 import { useNotifications } from "@/features/notifications/context/NotificationContext";
 import { BrandMark } from "./BrandMark";
+import { AdminNavigation } from "./AdminNavigation";
 
 type TopNavItem = {
   labelKey: TranslationKey;
@@ -35,18 +36,13 @@ export function Navbar() {
   } = useAuth();
   const { t } = useLanguage();
   const pathname = usePathname();
-  const staffBooksHref = hasAdminAccess ? "/admin/books" : "/staff/books";
   const staffNavItems: TopNavItem[] = [
-    ...(hasAdminAccess ? [{ labelKey: "nav.dashboard", href: "/admin/dashboard" } as TopNavItem] : []),
-    { labelKey: "nav.books", href: staffBooksHref, originalHref: "/books" },
+    { labelKey: "nav.books", href: "/staff/books", originalHref: "/books" },
     { labelKey: "nav.borrowingGuide", href: "/borrowing-guide" },
     { labelKey: "nav.libraryNotices", href: "/notices" },
     { labelKey: "nav.about", href: "/about" },
     { labelKey: "nav.circulation", href: "/staff/circulation" },
     { labelKey: "nav.borrowers", href: "/staff/members" },
-    ...(hasAdminAccess
-      ? [{ labelKey: "menu.borrowStatistics", href: "/admin/statistics/borrows" } as TopNavItem]
-      : []),
   ];
   const topNavItems: TopNavItem[] = hasStaffAccess
     ? staffNavItems
@@ -58,44 +54,50 @@ export function Navbar() {
 
   return (
     <header
-      className="sticky inset-x-0 top-0 z-30 border-b border-[#EDEDF2] bg-white text-[#111827] shadow-[0_12px_30px_rgba(7,7,88,0.12)]"
+      className={`sticky inset-x-0 top-0 z-30 border-b text-[#111827] ${hasAdminAccess ? "border-[#DED5C8] bg-[#FFFCF5] shadow-[0_4px_16px_rgba(23,20,18,0.04)]" : "border-[#EDEDF2] bg-white shadow-[0_12px_30px_rgba(7,7,88,0.12)]"}`}
     >
-      <nav className="mx-auto flex min-h-16 w-full max-w-7xl flex-wrap items-center gap-x-4 gap-y-2 px-4 py-3 sm:px-6">
+      <nav className={`mx-auto min-h-16 w-full max-w-7xl items-center px-4 py-3 sm:px-6 ${hasAdminAccess ? "grid grid-cols-[auto_minmax(0,1fr)_auto] gap-x-2 xl:gap-x-4" : "flex flex-wrap gap-x-4 gap-y-2"}`}>
         <BrandMark tone="dark" />
-        <div className="order-3 min-w-0 basis-full overflow-x-auto xl:order-2 xl:flex-1 xl:basis-0">
-          <div className="flex w-max min-w-full items-center gap-0.5 xl:justify-center">
-            {topNavItems.map((item) => {
-              const originalHref = item.originalHref ?? item.href;
-              const isActive = isActiveNavItem(pathname, originalHref, item.href, hasStaffAccess);
+        {hasAdminAccess ? (
+          <AdminNavigation key={pathname} mobileActions={<LanguageToggle />} />
+        ) : (
+          <div className="order-3 min-w-0 basis-full overflow-x-auto xl:order-2 xl:flex-1 xl:basis-0">
+            <div className="flex w-max min-w-full items-center gap-0.5 xl:justify-center">
+              {topNavItems.map((item) => {
+                const originalHref = item.originalHref ?? item.href;
+                const isActive = isActiveNavItem(pathname, originalHref, item.href, hasStaffAccess);
 
-              return (
-                <Link
-                  key={item.href}
-                  href={item.href}
-                  aria-current={isActive ? "page" : undefined}
-                  className={`group relative flex min-h-11 shrink-0 items-center whitespace-nowrap rounded-full px-2 py-2 font-semibold text-[#111827] transition-colors duration-150 hover:bg-[#F1F2F4] hover:text-black focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-[#7A263A] ${
-                    isActive ? "bg-[#F1F2F4] text-black" : ""
-                  }`}
-                >
-                  {/* Size the label directly; the global anchor reset inherits font. */}
-                  <span className="text-sm leading-5">{t(item.labelKey)}</span>
-                  <span
-                    className={`absolute inset-x-3 bottom-1 h-0.5 rounded-full bg-[#E60028] transition-transform duration-200 ${
-                      isActive ? "scale-x-100" : "scale-x-0 group-hover:scale-x-100"
+                return (
+                  <Link
+                    key={item.href}
+                    href={item.href}
+                    aria-current={isActive ? "page" : undefined}
+                    className={`group relative flex min-h-11 shrink-0 items-center whitespace-nowrap rounded-full px-2 py-2 font-semibold text-[#111827] transition-colors duration-150 hover:bg-[#F1F2F4] hover:text-black focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-[#7A263A] ${
+                      isActive ? "bg-[#F1F2F4] text-black" : ""
                     }`}
-                  />
-                </Link>
-              );
-            })}
+                  >
+                    {/* Size the label directly; the global anchor reset inherits font. */}
+                    <span className="text-sm leading-5">{t(item.labelKey)}</span>
+                    <span
+                      className={`absolute inset-x-3 bottom-1 h-0.5 rounded-full bg-[#E60028] transition-transform duration-200 ${
+                        isActive ? "scale-x-100" : "scale-x-0 group-hover:scale-x-100"
+                      }`}
+                    />
+                  </Link>
+                );
+              })}
+            </div>
           </div>
-        </div>
-        <div className="order-2 ml-auto flex shrink-0 items-center gap-2 text-sm xl:order-3">
-          <LanguageToggle />
+        )}
+        <div className={`ml-auto flex shrink-0 items-center gap-2 text-sm ${hasAdminAccess ? "col-start-2 row-start-1 xl:col-start-3" : "order-2 xl:order-3"}`}>
+          <div className={hasAdminAccess ? "hidden xl:block" : undefined}>
+            <LanguageToggle />
+          </div>
           {isInitializing ? (
             <div className="h-9 w-9 animate-pulse rounded-full bg-[#EDEDF2]" aria-label="Checking session" />
           ) : isAuthenticated ? (
             <>
-              <NotificationMenu />
+              <NotificationMenu compact={hasAdminAccess} />
               <UserMenu
                 currentUser={currentUser}
                 hasAdminAccess={hasAdminAccess}
@@ -125,7 +127,7 @@ export function Navbar() {
   );
 }
 
-function NotificationMenu() {
+function NotificationMenu({ compact = false }: { compact?: boolean }) {
   const { t } = useLanguage();
   const { clearNotifications, markAllRead, notifications, unreadCount } = useNotifications();
   const hasNotifications = notifications.length > 0;
@@ -146,7 +148,7 @@ function NotificationMenu() {
         ) : null}
       </button>
 
-      <div className="invisible absolute right-0 top-[calc(100%+12px)] w-80 translate-y-2 rounded-2xl border border-[#DED5C8] bg-white p-2 opacity-0 shadow-[0_24px_60px_rgba(23,20,18,0.14)] transition-all duration-200 group-hover:visible group-hover:translate-y-0 group-hover:opacity-100 group-focus-within:visible group-focus-within:translate-y-0 group-focus-within:opacity-100">
+      <div className={`invisible translate-y-2 rounded-2xl border border-[#DED5C8] bg-white p-2 opacity-0 shadow-[0_24px_60px_rgba(23,20,18,0.14)] transition-all duration-200 group-hover:visible group-hover:translate-y-0 group-hover:opacity-100 group-focus-within:visible group-focus-within:translate-y-0 group-focus-within:opacity-100 ${compact ? "fixed inset-x-4 top-20 w-auto xl:absolute xl:inset-x-auto xl:right-0 xl:top-[calc(100%+12px)] xl:w-80" : "absolute right-0 top-[calc(100%+12px)] w-80"}`}>
         <div className="px-3 pb-3 pt-2">
           <div className="flex items-start justify-between gap-3">
             <div>
