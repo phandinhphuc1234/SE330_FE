@@ -13,6 +13,13 @@ export type TranslationKey =
   | "nav.dashboard"
   | "nav.circulation"
   | "nav.borrowers"
+  | "nav.overview"
+  | "nav.borrowReturn"
+  | "nav.management"
+  | "nav.adminNavigation"
+  | "nav.openNavigation"
+  | "nav.authors"
+  | "nav.payments"
   | "nav.login"
   | "nav.register"
   | "menu.openUserMenu"
@@ -63,6 +70,13 @@ const translations: Record<Locale, Record<TranslationKey, string>> = {
     "nav.dashboard": "Dashboard",
     "nav.circulation": "Circulation",
     "nav.borrowers": "Borrowers",
+    "nav.overview": "Overview",
+    "nav.borrowReturn": "Borrow / return",
+    "nav.management": "Management",
+    "nav.adminNavigation": "Admin navigation",
+    "nav.openNavigation": "Open admin navigation",
+    "nav.authors": "Authors",
+    "nav.payments": "Payments",
     "nav.login": "Login",
     "nav.register": "Register",
     "menu.openUserMenu": "Open user menu",
@@ -103,6 +117,13 @@ const translations: Record<Locale, Record<TranslationKey, string>> = {
     "nav.dashboard": "Bảng điều khiển",
     "nav.circulation": "Lưu thông",
     "nav.borrowers": "Người mượn",
+    "nav.overview": "Tổng quan",
+    "nav.borrowReturn": "Mượn / trả",
+    "nav.management": "Quản lý",
+    "nav.adminNavigation": "Điều hướng quản trị",
+    "nav.openNavigation": "Mở điều hướng quản trị",
+    "nav.authors": "Tác giả",
+    "nav.payments": "Thanh toán",
     "nav.login": "Đăng nhập",
     "nav.register": "Đăng ký",
     "menu.openUserMenu": "Mở menu người dùng",
