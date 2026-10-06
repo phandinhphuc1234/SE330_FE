@@ -1,27 +1,35 @@
 "use client";
 
 import Link from "next/link";
+import { ArrowRight, Search } from "lucide-react";
+import { editorialSerif } from "@/components/layout/editorialFont";
 import { useAuth } from "@/features/auth/context/AuthContext";
 import { useLanguage } from "@/features/i18n/context/LanguageContext";
 
 const heroCopy = {
   en: {
+    eyebrow: "A place for curious minds",
     title: "The Athenaeum",
     subtitle: "A modern space for knowledge discovery.",
     searchLabel: "Search library catalogue",
-    placeholder: "Search by book title, author, ISBN or category...",
+    placeholder: "Title, author or ISBN…",
     button: "Search",
-    popularLabel: "Popular searches:",
+    popularLabel: "Popular searches",
     popularSearches: ["Computer Science", "Database", "Java", "Finance", "English"],
+    explore: "Explore the collection",
+    note: "Discover. Borrow. Read.",
   },
   vi: {
+    eyebrow: "Khơi mở những trang tri thức",
     title: "The Athenaeum",
     subtitle: "Không gian hiện đại cho hành trình khám phá tri thức.",
     searchLabel: "Tìm kiếm trong danh mục thư viện",
-    placeholder: "Tìm theo tên sách, tác giả, ISBN hoặc danh mục...",
+    placeholder: "Tên sách, tác giả hoặc ISBN…",
     button: "Tìm kiếm",
-    popularLabel: "Tìm kiếm phổ biến:",
+    popularLabel: "Tìm kiếm phổ biến",
     popularSearches: ["Khoa học máy tính", "Cơ sở dữ liệu", "Java", "Tài chính", "Tiếng Anh"],
+    explore: "Khám phá bộ sưu tập",
+    note: "Khám phá. Mượn sách. Đọc.",
   },
 };
 
@@ -32,53 +40,51 @@ export function HeroSearchSection() {
   const searchTarget = hasAdminAccess ? "/admin/books" : hasStaffAccess ? "/staff/books" : "/books";
 
   return (
-    <section className="relative flex min-h-[calc(100vh-64px)] items-center overflow-hidden bg-black bg-[linear-gradient(rgba(0,0,0,0.32),rgba(0,0,0,0.32)),url('/image.png')] bg-cover bg-[center_42%] px-5 py-16 text-white md:bg-fixed lg:px-8 lg:py-24">
-      {/* Enhanced gradient overlays */}
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_0%,rgba(81,210,255,0.22),transparent_40%)]" />
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_80%_100%,rgba(230,0,40,0.15),transparent_50%)]" />
-      <div className="absolute inset-0 bg-gradient-to-r from-black/45 via-black/15 to-transparent" />
-      <div className="absolute inset-x-0 bottom-0 h-32 bg-gradient-to-t from-black/60 to-transparent" />
-      
-      <div className="relative mx-auto max-w-7xl">
-        <div className="relative max-w-5xl">
-          {/* Enhanced title with text gradient */}
-          <h1 className="animate-fade-up animate-delay-75 mt-6 max-w-3xl font-serif text-4xl font-bold leading-tight text-white drop-shadow-[0_4px_20px_rgba(0,0,0,0.5)] md:text-6xl">
+    <section aria-labelledby="home-title" className="relative isolate overflow-hidden bg-[#27231F] px-4 py-10 text-[#FFFCF5] sm:px-6 sm:py-16 lg:px-8 lg:py-20">
+      <div aria-hidden="true" className="absolute inset-0 -z-20 bg-[url('/image.png')] bg-cover bg-[center_42%]" />
+      <div aria-hidden="true" className="absolute inset-0 -z-10 bg-[linear-gradient(90deg,rgba(23,20,18,0.9)_0%,rgba(23,20,18,0.76)_45%,rgba(23,20,18,0.52)_100%)]" />
+      <div className="mx-auto w-full max-w-7xl">
+        <div className="max-w-3xl">
+          <p className="flex items-center gap-3 text-[11px] font-semibold uppercase tracking-[0.18em] text-[#E1C38B] sm:text-xs">
+            <span aria-hidden="true" className="h-px w-8 shrink-0 bg-[#C6A367]" />
+            {copy.eyebrow}
+          </p>
+          <h1 id="home-title" className={`${editorialSerif.className} mt-5 text-4xl font-medium leading-[1.12] sm:text-6xl lg:text-[4.25rem]`}>
             {copy.title}
           </h1>
-          <p className="animate-fade-up animate-delay-150 mt-5 max-w-2xl text-lg font-medium leading-8 text-white drop-shadow-[0_2px_10px_rgba(0,0,0,0.45)]">
-            {copy.subtitle}
-          </p>
-          
-          {/* Enhanced search form with better glass effect */}
-          <form action={searchTarget} method="get" className="animate-fade-up animate-delay-225 mt-9 flex w-full max-w-5xl flex-col gap-3 rounded-2xl border border-white/30 bg-white/95 p-3 shadow-2xl backdrop-blur-lg sm:flex-row">
-            <label className="sr-only" htmlFor="library-search">
-              {copy.searchLabel}
-            </label>
-            <input
-              id="library-search"
-              name="q"
-              className="min-h-12 flex-1 rounded-lg border border-[#D9DCE8] bg-white px-5 text-base text-[#333333] outline-none transition-all duration-200 focus:border-2 focus:border-[#337AB7] focus:shadow-[0_0_0_4px_rgba(51,122,183,0.12)]"
-              placeholder={copy.placeholder}
-              type="search"
-            />
-            <button type="submit" className="min-h-12 rounded-full bg-gradient-to-r from-[#E60028] to-[#c90022] px-8 text-sm font-bold text-white shadow-lg shadow-[#E60028]/30 transition-all duration-200 hover:-translate-y-0.5 hover:shadow-xl hover:shadow-[#E60028]/40">
-              {copy.button}
+          <p className="mt-4 max-w-xl text-base leading-7 text-[#E8E0D4] sm:text-lg sm:leading-8">{copy.subtitle}</p>
+
+          <form action={searchTarget} method="get" role="search" className="mt-6 flex flex-col gap-2 rounded-xl border border-[#E5DCD0] bg-[#FFFCF5] p-2 shadow-[0_12px_36px_rgba(0,0,0,0.15)] sm:mt-8 sm:flex-row">
+            <label className="sr-only" htmlFor="library-search">{copy.searchLabel}</label>
+            <div className="flex min-w-0 flex-1 items-center gap-3 rounded-lg px-3 text-[#7A263A] focus-within:ring-2 focus-within:ring-[#7A263A]">
+              <Search size={20} strokeWidth={1.7} aria-hidden="true" className="shrink-0" />
+              <input
+                id="library-search"
+                name="q"
+                className="min-h-12 w-full min-w-0 bg-transparent text-sm text-[#171412] outline-none placeholder:text-[#6F675E]"
+                placeholder={copy.placeholder}
+                type="search"
+              />
+            </div>
+            <button type="submit" className="inline-flex min-h-12 cursor-pointer items-center justify-center gap-3 rounded-lg bg-[#7A263A] px-6 text-sm font-semibold text-white transition-colors duration-200 hover:bg-[#5A1C2B] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#7A263A]">
+              {copy.button}<ArrowRight size={17} aria-hidden="true" />
             </button>
           </form>
-          
-          {/* Enhanced popular searches */}
-          <div className="animate-fade-up animate-delay-300 mt-6 flex flex-wrap items-center gap-2 text-sm">
-            <span className="font-bold text-white drop-shadow-[0_2px_8px_rgba(0,0,0,0.55)]">{copy.popularLabel}</span>
+
+          <div className="mt-4 flex flex-wrap items-center gap-x-4 gap-y-1 text-xs">
+            <span className="text-[#D4C8B7]">{copy.popularLabel}:</span>
             {copy.popularSearches.map((term) => (
-              <Link 
-                key={term} 
-                href={`${searchTarget}?q=${encodeURIComponent(term)}`}
-                className="rounded-full border border-white/25 bg-black/40 px-3 py-2 font-semibold text-white shadow-sm backdrop-blur-md transition-all duration-200 hover:-translate-y-0.5 hover:scale-105 hover:border-white/40 hover:bg-white/20 hover:text-[#51D2FF] hover:shadow-md"
-              >
+              <Link key={term} href={`${searchTarget}?q=${encodeURIComponent(term)}`} className="inline-flex min-h-11 items-center text-[#FFFCF5] underline decoration-[#BAA98E]/55 underline-offset-4 transition-colors hover:text-[#E1C38B] focus-visible:rounded-sm focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#E1C38B]">
                 {term}
               </Link>
             ))}
           </div>
+        </div>
+        <div className="mt-4 flex flex-wrap items-center justify-between gap-x-5 gap-y-2 border-t border-[#F7F3EA]/20 pt-4 text-xs text-[#D4C8B7] sm:mt-7">
+          <span className="hidden sm:block">{copy.note}</span>
+          <Link href="#new-books" className="inline-flex min-h-11 items-center gap-3 text-[#FFFCF5] transition-colors hover:text-[#E1C38B] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#E1C38B]">
+            {copy.explore}<ArrowRight size={16} aria-hidden="true" />
+          </Link>
         </div>
       </div>
     </section>

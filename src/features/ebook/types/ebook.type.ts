@@ -72,3 +72,65 @@ export type StoredReaderSession = {
   loanExpiresAt: string;
   sessionExpiresAt: string;
 };
+
+export type EbookSemanticSearchRequest = {
+  query: string;
+  topK?: number;
+  scoreThreshold?: number;
+};
+
+export type EbookSemanticSearchCitation = {
+  documentId?: string | null;
+  bookId: number;
+  ebookId: number;
+  chapterTitle?: string | null;
+  chapterIndex?: number | null;
+  pageStart?: number | null;
+  pageEnd?: number | null;
+  chunkIndex?: number | null;
+};
+
+export type EbookSemanticSearchHit = {
+  chunkId?: string | null;
+  score: number;
+  text?: string | null;
+  citation: EbookSemanticSearchCitation;
+};
+
+export type EbookSemanticSearchResponse = {
+  bookId: number;
+  ebookId: number;
+  resultCount: number;
+  results: EbookSemanticSearchHit[];
+};
+
+export type EbookAnswerRequest = {
+  question: string;
+  topK?: number;
+  scoreThreshold?: number;
+};
+
+export type EbookAnswerCitation = {
+  documentId?: string | null;
+  bookId: number;
+  ebookId: number;
+  chapterTitle?: string | null;
+  chapterIndex?: number | null;
+  pageStart?: number | null;
+  pageEnd?: number | null;
+  chunkIndex?: number | null;
+  chunkId: string;
+  excerpt?: string | null;
+  score: number;
+};
+
+export type EbookAnswerResponse = {
+  bookId: number;
+  ebookId: number;
+  answer: string;
+  grounded: boolean;
+  abstained: boolean;
+  reason?: string | null;
+  citations: EbookAnswerCitation[];
+  promptVersion: string;
+};

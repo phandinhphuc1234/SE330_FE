@@ -231,6 +231,14 @@ export function updateBookEbookMetadata(
   );
 }
 
+export function reindexBookEbook(bookId: string, bookEbookId: string, accessToken: string | null) {
+  return catalogFetch<BookEbook>(
+    `/api/books/${bookId}/ebooks/${bookEbookId}/reindex`,
+    { method: "POST" },
+    accessToken,
+  );
+}
+
 export function createBook(payload: BookPayload, accessToken: string | null) {
   return catalogFetch<Book>(
     "/api/books",

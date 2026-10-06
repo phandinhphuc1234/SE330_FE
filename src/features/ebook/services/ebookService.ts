@@ -4,24 +4,34 @@ import { ApiError, ApiResponse } from "@/types/api.type";
 import { API_URL } from "@/features/auth/services/authService";
 import {
   BorrowEbookRequest,
+  EbookAnswerRequest,
+  EbookAnswerResponse,
   EbookLoan,
   EbookPageParams,
   EbookReadingSessionCloseResponse,
   EbookReadingSessionRefreshResponse,
   EbookReadingSessionResponse,
+  EbookSemanticSearchRequest,
+  EbookSemanticSearchResponse,
   EbookSignedContentResponse,
 } from "../types/ebook.type";
 
 const REQUEST_TIMEOUT_MS = 30000;
+const AI_ANSWER_TIMEOUT_MS = 45000;
 type AccessTokenRefresher = () => Promise<string | null>;
 
 // ─────────────────────────────────────────────
 // Fetch helpers (mirror pattern of circulationService)
 // ─────────────────────────────────────────────
 
-async function ebookFetch<T>(path: string, init?: RequestInit, accessToken?: string | null): Promise<T> {
+async function ebookFetch<T>(
+  path: string,
+  init?: RequestInit,
+  accessToken?: string | null,
+  timeoutMs = REQUEST_TIMEOUT_MS,
+): Promise<T> {
   const controller = new AbortController();
-  const timeoutId = window.setTimeout(() => controller.abort(), REQUEST_TIMEOUT_MS);
+  const timeoutId = window.setTimeout(() => controller.abort(), timeoutMs);
 
   try {
     const headers = new Headers(init?.headers);
@@ -63,13 +73,14 @@ async function ebookFetchWithRetry<T>(
   init: RequestInit | undefined,
   accessToken?: string | null,
   refreshAccessToken?: AccessTokenRefresher,
+  timeoutMs = REQUEST_TIMEOUT_MS,
 ): Promise<T> {
   try {
-    return await ebookFetch<T>(path, init, accessToken);
+    return await ebookFetch<T>(path, init, accessToken, timeoutMs);
   } catch (error) {
     if (error instanceof ApiError && (error.status === 401 || error.status === 403) && refreshAccessToken) {
       const refreshed = await refreshAccessToken();
-      if (refreshed) return ebookFetch<T>(path, init, refreshed);
+      if (refreshed) return ebookFetch<T>(path, init, refreshed, timeoutMs);
     }
     throw error;
   }
@@ -259,5 +270,50 @@ export function closeReadingSession(
     },
     accessToken,
     refreshAccessToken,
+  );
+}
+
+export function semanticSearchEbook(
+  bookId: number,
+  sessionToken: string,
+  request: EbookSemanticSearchRequest,
+  accessToken: string | null,
+  refreshAccessToken?: AccessTokenRefresher,
+): Promise<EbookSemanticSearchResponse> {
+  return ebookFetchWithRetry<EbookSemanticSearchResponse>(
+    `/api/ebooks/${bookId}/reader/semantic-search`,
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "X-Reading-Session": sessionToken,
+      },
+      body: JSON.stringify(request),
+    },
+    accessToken,
+    refreshAccessToken,
+  );
+}
+
+export function askEbookQuestion(
+  bookId: number,
+  sessionToken: string,
+  request: EbookAnswerRequest,
+  accessToken: string | null,
+  refreshAccessToken?: AccessTokenRefresher,
+): Promise<EbookAnswerResponse> {
+  return ebookFetchWithRetry<EbookAnswerResponse>(
+    `/api/ebooks/${bookId}/reader/ask`,
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "X-Reading-Session": sessionToken,
+      },
+      body: JSON.stringify(request),
+    },
+    accessToken,
+    refreshAccessToken,
+    AI_ANSWER_TIMEOUT_MS,
   );
 }

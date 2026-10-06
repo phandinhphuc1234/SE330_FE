@@ -2,6 +2,8 @@
 
 import { Footer } from "@/components/layout/Footer";
 import { Navbar } from "@/components/layout/Navbar";
+import { editorialSerif } from "@/components/layout/editorialFont";
+import { BookOpenCheck, Bookmark, Clock3 } from "lucide-react";
 import { useLanguage } from "@/features/i18n/context/LanguageContext";
 import { FeaturedBooksSection } from "./FeaturedBooksSection";
 import { HeroSearchSection } from "./HeroSearchSection";
@@ -21,29 +23,37 @@ const landingCards = {
   ],
 };
 
+const borrowingIcons = [BookOpenCheck, Bookmark, Clock3];
+
 export function LandingPage() {
   const { locale } = useLanguage();
 
   return (
-    <div className="min-h-dvh bg-white">
+    <div className="min-h-dvh bg-[#F7F3EA] text-[#2B2723]">
       <Navbar />
       <main id="main-content" tabIndex={-1} className="min-h-[calc(100dvh-4.5rem)] outline-none">
         <HeroSearchSection />
         <LibraryServicesSection />
         <FeaturedBooksSection />
-        <section className="bg-[linear-gradient(180deg,#FFFFFF_0%,#F8F9FA_100%)] px-5 py-20 lg:px-8">
-          <div className="mx-auto grid max-w-7xl gap-6 md:grid-cols-3">
-            {landingCards[locale].map(([title, description], index) => (
-              <article
-                key={title}
-                className={`animate-fade-up rounded-lg border border-[#EDEDF2] border-l-4 border-l-[#E60028] bg-white p-7 shadow-[0_2px_8px_rgba(7,7,88,0.06)] transition-all duration-300 hover:-translate-y-1 hover:border-[#337AB7]/35 hover:shadow-[0_16px_30px_rgba(7,7,88,0.12)] ${
-                  index === 0 ? "animate-delay-75" : index === 1 ? "animate-delay-150" : "animate-delay-225"
-                }`}
-              >
-                <h2 className="text-xl font-bold text-[#000054]">{title}</h2>
-                <p className="mt-3 text-sm leading-6 text-[#333333]">{description}</p>
-              </article>
-            ))}
+        <section aria-labelledby="borrowing-title" className="border-b border-[#DED5C8] bg-[#EFE6D6] px-4 py-10 sm:px-6 sm:py-12 lg:px-8">
+          <div className="mx-auto max-w-7xl">
+            <h2 id="borrowing-title" className="mb-7 text-[11px] font-semibold uppercase tracking-[0.16em] text-[#7A263A]">
+              {locale === "vi" ? "Cùng bạn trên từng trang sách" : "With you through every chapter"}
+            </h2>
+            <div className="grid gap-7 md:grid-cols-3 md:gap-0">
+              {landingCards[locale].map(([title, description], index) => {
+                const BorrowingIcon = borrowingIcons[index];
+                return (
+                  <article key={title} className="flex gap-4 border-[#CBBEAE] max-md:border-b max-md:pb-7 max-md:last:border-0 max-md:last:pb-0 md:border-r md:px-6 md:first:pl-0 md:last:border-0 md:last:pr-0 lg:px-8">
+                    <BorrowingIcon size={24} strokeWidth={1.5} aria-hidden="true" className="mt-1 shrink-0 text-[#7A263A]" />
+                    <div>
+                      <h3 className={`${editorialSerif.className} text-xl font-medium leading-7`}>{title}</h3>
+                      <p className="mt-2 text-[13px] leading-6 text-[#6F675E]">{description}</p>
+                    </div>
+                  </article>
+                );
+              })}
+            </div>
           </div>
         </section>
         <NoticesSection />

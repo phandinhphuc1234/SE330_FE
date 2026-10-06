@@ -31,12 +31,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const setAccessToken = useCallback((token: string | null) => {
     setAccessTokenState(token);
-
-    if (token) {
-      window.sessionStorage.setItem(ACCESS_TOKEN_STORAGE_KEY, token);
-    } else {
-      window.sessionStorage.removeItem(ACCESS_TOKEN_STORAGE_KEY);
-    }
+    persistAccessToken(token);
   }, []);
 
   const refresh = useCallback(async () => {
@@ -69,7 +64,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     let isMounted = true;
 
     async function initializeAuth() {
-      const storedToken = window.sessionStorage.getItem(ACCESS_TOKEN_STORAGE_KEY);
+      const storedToken = readStoredAccessToken();
 
       if (storedToken) {
         setAccessTokenState(storedToken);
@@ -219,4 +214,24 @@ export function useAuth() {
   }
 
   return context;
+}
+
+function readStoredAccessToken() {
+  try {
+    return window.sessionStorage.getItem(ACCESS_TOKEN_STORAGE_KEY);
+  } catch {
+    return null;
+  }
+}
+
+function persistAccessToken(token: string | null) {
+  try {
+    if (token) {
+      window.sessionStorage.setItem(ACCESS_TOKEN_STORAGE_KEY, token);
+    } else {
+      window.sessionStorage.removeItem(ACCESS_TOKEN_STORAGE_KEY);
+    }
+  } catch {
+    // Refresh cookies still allow the session to work when web storage is unavailable.
+  }
 }
