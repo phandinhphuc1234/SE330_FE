@@ -43,7 +43,7 @@ export function AdminNavigation({ mobileActions }: { mobileActions: ReactNode })
   const mobileTriggerRef = useRef<HTMLButtonElement>(null);
   const isManagementActive = managementItems.some((item) => matchesDestination(pathname, item));
   const NavigationToggleIcon = openPanel === "mobile" ? X : Menu;
-  const linkClass = "flex min-h-11 items-center gap-2 rounded-lg px-3 py-2 text-sm font-semibold transition-colors hover:bg-[#F2F2F2] hover:text-black focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-black focus-visible:ring-offset-2";
+  const linkClass = "flex min-h-11 items-center gap-2 rounded-lg px-3 py-2 text-sm font-semibold transition-colors hover:bg-[#F7F3EA] hover:text-[#7A263A] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#7A263A] focus-visible:ring-offset-2";
 
   useEffect(() => {
     if (!openPanel) return;
@@ -83,7 +83,7 @@ export function AdminNavigation({ mobileActions }: { mobileActions: ReactNode })
         href={item.href}
         aria-current={active ? "page" : undefined}
         onClick={() => setOpenPanel(null)}
-        className={`${linkClass} ${active ? "bg-black text-white hover:bg-[#262626] hover:text-white" : "text-[#262626]"}`}
+        className={`${linkClass} ${active ? "bg-[#F3E5E8] text-[#7A263A]" : "text-[#2B2723]"}`}
       >
         <ItemIcon size={17} aria-hidden="true" className="shrink-0 xl:hidden" />
         <span>{t(item.labelKey)}</span>
@@ -108,7 +108,7 @@ export function AdminNavigation({ mobileActions }: { mobileActions: ReactNode })
             aria-expanded={openPanel === "management"}
             aria-controls="admin-management-navigation"
             onClick={() => setOpenPanel((current) => current === "management" ? null : "management")}
-            className={`${linkClass} ${isManagementActive || openPanel === "management" ? "bg-black text-white hover:bg-[#262626] hover:text-white" : "text-[#262626]"}`}
+            className={`${linkClass} ${isManagementActive || openPanel === "management" ? "bg-[#F3E5E8] text-[#7A263A]" : "text-[#2B2723]"}`}
           >
             <span>{t("nav.management")}</span>
             <ChevronDown size={15} aria-hidden="true" className={openPanel === "management" ? "rotate-180" : ""} />
@@ -118,7 +118,7 @@ export function AdminNavigation({ mobileActions }: { mobileActions: ReactNode })
               id="admin-management-navigation"
               role="group"
               aria-label={t("nav.management")}
-              className="absolute right-0 top-[calc(100%+12px)] z-50 w-60 space-y-1 rounded-xl border border-[#D4D4D4] bg-white p-2 shadow-[0_16px_40px_rgba(0,0,0,0.12)]"
+              className="absolute right-0 top-[calc(100%+12px)] z-50 w-60 space-y-1 rounded-xl border border-[#DED5C8] bg-[#FFFCF5] p-2 shadow-[0_16px_40px_rgba(23,20,18,0.12)]"
             >
               {managementItems.map((item) => renderLink(item))}
             </div>
@@ -133,7 +133,7 @@ export function AdminNavigation({ mobileActions }: { mobileActions: ReactNode })
         aria-expanded={openPanel === "mobile"}
         aria-controls="admin-mobile-navigation"
         onClick={() => setOpenPanel((current) => current === "mobile" ? null : "mobile")}
-        className="grid h-11 w-11 place-items-center rounded-xl border border-[#D4D4D4] text-[#262626] transition-colors hover:bg-[#F2F2F2] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-black focus-visible:ring-offset-2 xl:hidden"
+        className="grid h-11 w-11 place-items-center rounded-xl border border-[#DED5C8] text-[#2B2723] transition-colors hover:bg-[#F7F3EA] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#7A263A] focus-visible:ring-offset-2 xl:hidden"
       >
         <NavigationToggleIcon size={19} aria-hidden="true" />
       </button>
@@ -142,7 +142,7 @@ export function AdminNavigation({ mobileActions }: { mobileActions: ReactNode })
           id="admin-mobile-navigation"
           role="group"
           aria-label={t("nav.adminNavigation")}
-          className="absolute right-0 top-[calc(100%+12px)] z-50 max-h-[calc(100dvh-6rem)] w-80 max-w-[calc(100vw-2rem)] overflow-y-auto rounded-xl border border-[#D4D4D4] bg-white p-2 shadow-[0_16px_40px_rgba(0,0,0,0.12)] xl:hidden"
+          className="absolute right-0 top-[calc(100%+12px)] z-50 max-h-[calc(100dvh-6rem)] w-80 max-w-[calc(100vw-2rem)] overflow-y-auto rounded-xl border border-[#DED5C8] bg-[#FFFCF5] p-2 shadow-[0_16px_40px_rgba(23,20,18,0.12)] xl:hidden"
         >
           <div className="space-y-1">{primaryItems.map((item) => renderLink(item, true))}</div>
           <div className="mb-2 mt-3 border-t border-[#DED5C8] px-3 pt-3 text-xs font-bold uppercase tracking-wide text-[#6F675E]">

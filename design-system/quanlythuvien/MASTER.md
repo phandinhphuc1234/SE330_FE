@@ -53,41 +53,57 @@ The Athenaeum should feel like a contemporary academic library: curated, thought
 
 ## 3. Color Tokens
 
-The active product theme is monochrome. Black is the only action/accent color; white and neutral grays create surface hierarchy. Book covers and editorial photography remain in their original colors because they are content, not interface chrome.
+Use warm neutrals as the base and one restrained accent at a time. Burgundy is the primary brand accent. Navy, forest, and gold are supporting accents for status, links, or small editorial details.
 
 ### Core Palette
 
 | Token | Hex | Use |
 |---|---:|---|
-| `--athenaeum-bg` | `#F7F7F7` | Main app background |
-| `--athenaeum-bg-subtle` | `#FAFAFA` | Lighter page bands, hero background |
+| `--athenaeum-bg` | `#F7F3EA` | Main app background, warm off-white |
+| `--athenaeum-bg-subtle` | `#FBF8F1` | Lighter page bands, hero background |
 | `--athenaeum-surface` | `#FFFFFF` | Primary cards, forms, popovers |
-| `--athenaeum-surface-soft` | `#F0F0F0` | Selected rows, callouts, status backgrounds |
-| `--athenaeum-ink` | `#111111` | Primary text and primary actions |
-| `--athenaeum-charcoal` | `#262626` | Headings and strong labels |
-| `--athenaeum-muted` | `#525252` | Secondary metadata |
-| `--athenaeum-faint` | `#737373` | Tertiary text, placeholders |
-| `--athenaeum-border` | `#D4D4D4` | Default borders |
-| `--athenaeum-border-strong` | `#A3A3A3` | Card hover borders, section dividers |
+| `--athenaeum-surface-ivory` | `#FFFCF5` | Featured cards, book detail panels |
+| `--athenaeum-surface-parchment` | `#EFE6D6` | Subtle editorial blocks, callouts |
+| `--athenaeum-ink` | `#171412` | Primary text |
+| `--athenaeum-charcoal` | `#2B2723` | Headings and strong labels |
+| `--athenaeum-muted` | `#6F675E` | Secondary metadata |
+| `--athenaeum-faint` | `#9A9187` | Tertiary text, placeholders |
+| `--athenaeum-border` | `#DED5C8` | Default borders |
+| `--athenaeum-border-strong` | `#CBBEAE` | Card hover borders, section dividers |
+
+### Accent Palette
+
+| Token | Hex | Use |
+|---|---:|---|
+| `--athenaeum-burgundy` | `#7A263A` | Primary actions, active filters, key emphasis |
+| `--athenaeum-burgundy-dark` | `#5A1C2B` | Primary hover, pressed states |
+| `--athenaeum-burgundy-soft` | `#F3E5E8` | Subtle selected backgrounds |
+| `--athenaeum-navy` | `#243B53` | Links, secondary actions, academic contrast |
+| `--athenaeum-navy-soft` | `#E7EEF4` | Soft link/status backgrounds |
+| `--athenaeum-forest` | `#2F5D50` | Available/success states |
+| `--athenaeum-forest-soft` | `#E5F0EB` | Available/success backgrounds |
+| `--athenaeum-gold` | `#B8872B` | Premium highlights, ratings, small dividers |
+| `--athenaeum-gold-soft` | `#F4E8CC` | Highlight backgrounds |
 
 ### Semantic Tokens
 
 | Token | Hex | Use |
 |---|---:|---|
-| `--color-success` | `#404040` | Available, paid, completed; pair with success icon/text |
-| `--color-warning` | `#262626` | Limited copies, pending payment; pair with warning icon/text |
-| `--color-danger` | `#000000` | Error, unavailable, destructive; pair with explicit wording |
-| `--color-semantic-soft` | `#F0F0F0` | Shared semantic-state background |
-| `--color-info` | `#525252` | Informational notices |
-| `--focus-ring` | `#111111` | Keyboard focus ring |
+| `--color-success` | `#2F5D50` | Available, paid, completed |
+| `--color-warning` | `#B8872B` | Limited copies, pending payment |
+| `--color-danger` | `#A33A3A` | Error, unavailable, destructive |
+| `--color-danger-soft` | `#F6E4E1` | Error backgrounds |
+| `--color-info` | `#243B53` | Informational notices |
+| `--focus-ring` | `#7A263A` | Keyboard focus ring |
 
 ### Color Usage Rules
 
-- Use `#F7F7F7` for the page, white for primary surfaces, and `#F0F0F0` for selected or supporting surfaces.
-- Use black for primary actions and active navigation; use medium gray for secondary actions and metadata.
-- Keep body text at `#525252` or darker and meet WCAG AA contrast.
-- Do not introduce red, blue, green, burgundy, gold, beige, or saturated gradients into interface chrome.
-- Do not rely on shade alone to communicate availability, errors, or selected filters. Pair every state with text and a Lucide icon.
+- Use warm off-white or very light stone page backgrounds, never pure white as the only page color.
+- Keep primary text near-black. Body text must not be lighter than `#6F675E`.
+- Use burgundy sparingly for the most important action or selected state on a screen.
+- Use gold only as a small premium accent, not as large fills.
+- Avoid purple/orange dashboard palettes, neon accents, saturated gradients, and monochrome beige-only screens.
+- Do not rely on color alone to communicate availability, errors, or selected filters. Pair with text and Lucide icons.
 
 ---
 

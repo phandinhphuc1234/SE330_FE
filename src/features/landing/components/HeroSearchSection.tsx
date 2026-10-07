@@ -40,19 +40,19 @@ export function HeroSearchSection() {
   const searchTarget = hasAdminAccess ? "/admin/books" : hasStaffAccess ? "/staff/books" : "/books";
 
   return (
-    <section aria-labelledby="home-title" className="relative isolate overflow-hidden bg-black px-4 py-10 text-white sm:px-6 sm:py-16 lg:px-8 lg:py-20">
+    <section aria-labelledby="home-title" className="relative isolate overflow-hidden bg-[#27231F] px-4 py-10 text-[#FFFCF5] sm:px-6 sm:py-16 lg:px-8 lg:py-20">
       <div aria-hidden="true" className="absolute inset-0 -z-20 bg-[url('/image.png')] bg-cover bg-[center_42%]" />
-      <div aria-hidden="true" className="absolute inset-0 -z-10 bg-[linear-gradient(90deg,rgba(0,0,0,0.92)_0%,rgba(0,0,0,0.78)_45%,rgba(0,0,0,0.58)_100%)]" />
+      <div aria-hidden="true" className="absolute inset-0 -z-10 bg-[linear-gradient(90deg,rgba(23,20,18,0.9)_0%,rgba(23,20,18,0.76)_45%,rgba(23,20,18,0.52)_100%)]" />
       <div className="mx-auto w-full max-w-7xl">
         <div className="max-w-3xl">
-          <p className="flex items-center gap-3 text-[11px] font-semibold uppercase tracking-[0.18em] text-white sm:text-xs">
-            <span aria-hidden="true" className="h-px w-8 shrink-0 bg-white" />
+          <p className="flex items-center gap-3 text-[11px] font-semibold uppercase tracking-[0.18em] text-[#E1C38B] sm:text-xs">
+            <span aria-hidden="true" className="h-px w-8 shrink-0 bg-[#C6A367]" />
             {copy.eyebrow}
           </p>
           <h1 id="home-title" className={`${editorialSerif.className} mt-5 text-4xl font-medium leading-[1.12] sm:text-6xl lg:text-[4.25rem]`}>
             {copy.title}
           </h1>
-          <p className="mt-4 max-w-xl text-base leading-7 text-[#D4D4D4] sm:text-lg sm:leading-8">{copy.subtitle}</p>
+          <p className="mt-4 max-w-xl text-base leading-7 text-[#E8E0D4] sm:text-lg sm:leading-8">{copy.subtitle}</p>
 
           <form action={searchTarget} method="get" role="search" className="mt-6 flex flex-col gap-2 rounded-xl border border-[#E5DCD0] bg-[#FFFCF5] p-2 shadow-[0_12px_36px_rgba(0,0,0,0.15)] sm:mt-8 sm:flex-row">
             <label className="sr-only" htmlFor="library-search">{copy.searchLabel}</label>
@@ -72,7 +72,7 @@ export function HeroSearchSection() {
           </form>
 
           <div className="mt-4 flex flex-wrap items-center gap-x-4 gap-y-1 text-xs">
-            <span className="text-[#D4D4D4]">{copy.popularLabel}:</span>
+            <span className="text-[#D4C8B7]">{copy.popularLabel}:</span>
             {copy.popularSearches.map((term) => (
               <Link key={term} href={`${searchTarget}?q=${encodeURIComponent(term)}`} className="inline-flex min-h-11 items-center text-[#FFFCF5] underline decoration-[#BAA98E]/55 underline-offset-4 transition-colors hover:text-[#E1C38B] focus-visible:rounded-sm focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#E1C38B]">
                 {term}
@@ -80,7 +80,7 @@ export function HeroSearchSection() {
             ))}
           </div>
         </div>
-        <div className="mt-4 flex flex-wrap items-center justify-between gap-x-5 gap-y-2 border-t border-white/20 pt-4 text-xs text-[#D4D4D4] sm:mt-7">
+        <div className="mt-4 flex flex-wrap items-center justify-between gap-x-5 gap-y-2 border-t border-[#F7F3EA]/20 pt-4 text-xs text-[#D4C8B7] sm:mt-7">
           <span className="hidden sm:block">{copy.note}</span>
           <Link href="#new-books" className="inline-flex min-h-11 items-center gap-3 text-[#FFFCF5] transition-colors hover:text-[#E1C38B] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#E1C38B]">
             {copy.explore}<ArrowRight size={16} aria-hidden="true" />

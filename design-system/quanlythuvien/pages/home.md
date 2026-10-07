@@ -9,17 +9,17 @@
 ## Layout and hierarchy
 
 - Align all sections to the existing 1280px content width. Use 16px mobile and 24–32px desktop gutters.
-- Keep the photographic hero, with a neutral black overlay and prominent search. Aim for roughly 500–560px desktop height rather than a full viewport.
+- Keep the photographic hero, with a warm dark overlay and prominent search. Aim for roughly 500–560px desktop height rather than a full viewport.
 - Present services 01–06 as a compact library directory: small folio numbers, Lucide line icons, serif titles, concise descriptions, and links to existing routes. Use three desktop columns, two tablet columns, and one mobile column.
 - Preserve the interactive cover carousel and library photograph. Reduce its oversized spacing; place a readable ivory information panel alongside the books on desktop, below on mobile. Keep controls accessible and prevent cover overflow.
 - Treat the borrowing guidance as one quiet three-part band, and notices as a divided reading list rather than another repeated card grid.
-- Finish with a black-and-white footer aligned to the page. Provide existing catalogue, account, and information destinations; omit placeholder social links and nonfunctional subscription controls.
+- Finish with a charcoal, warm-ivory footer aligned to the page. Provide existing catalogue, account, and information destinations; omit placeholder social links and nonfunctional subscription controls.
 
 ## Visual treatment
 
-- Inherit the master black, white, and neutral gray palette. Preserve the existing sans-serif UI font; use Source Serif 4 for homepage editorial headings and the footer.
+- Inherit the master ivory, burgundy, charcoal, and restrained gold palette. Preserve the existing sans-serif UI font; use Source Serif 4 for homepage editorial headings and the footer.
 - Keep serif typography scoped to these components, avoiding global font changes.
-- Use fine gray rules, subtle white/gray paper surfaces, and modest 10–12px corner radii. Remove colored gradients, floating-card hover movement, and large number badges.
+- Use fine rules, subtle paper surfaces, and modest 10–12px corner radii. Remove bright red/cyan gradients, floating-card hover movement, and large number badges.
 - Keep images and book covers as the main visual accents; no additional stock imagery or generated assets are needed.
 
 ## States and verification
