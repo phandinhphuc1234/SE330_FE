@@ -2,129 +2,148 @@
 
 import Link from "next/link";
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { Area, AreaChart, CartesianGrid, Cell, Legend, Pie, PieChart, ResponsiveContainer, Tooltip as RechartsTooltip, XAxis, YAxis } from "recharts";
 import { Icon } from "@/components/ui/Icon";
 import { useAuth } from "@/features/auth/context/AuthContext";
 import { hasAdminAccessFromToken } from "@/features/auth/utils/authRoles";
 import { getStaffDashboardSummary } from "@/features/circulation/services/circulationService";
 import { StaffDashboardSummary } from "@/features/circulation/types/circulation.type";
-import { CatalogShell, Notice, SecondaryAction } from "@/features/catalog/components/CatalogShell";
+import { CatalogShell, Notice } from "@/features/catalog/components/CatalogShell";
 import { useLanguage } from "@/features/i18n/context/LanguageContext";
+
+type Locale = "en" | "vi";
 
 type Metric = {
   label: string;
   value: string;
-  helper: React.ReactNode;
-  tone: "blue" | "red" | "green" | "gold";
-  iconName: "book-open" | "alert-circle" | "check-circle" | "dollar-sign" | "arrow-down-right" | "arrow-up-right";
+  helper: string;
+  tone: "neutral" | "danger" | "success" | "gold";
+  iconName: "book-open" | "alert-circle" | "check-circle" | "banknote";
 };
 
-// --- Mock Data for Charts ---
-const MOCK_TREND_DATA = [
-  { name: "Mon", borrows: 45, returns: 30 },
-  { name: "Tue", borrows: 52, returns: 40 },
-  { name: "Wed", borrows: 38, returns: 45 },
-  { name: "Thu", borrows: 65, returns: 35 },
-  { name: "Fri", borrows: 80, returns: 60 },
-  { name: "Sat", borrows: 95, returns: 50 },
-  { name: "Sun", borrows: 30, returns: 85 },
-];
-// -----------------------------
-
-type ActionItem = {
+type WorkItem = {
   title: string;
   description: string;
-  value: number;
   href: string;
-  tone: "red" | "green" | "gold";
+  action: string;
+  iconName: "alert-circle" | "calendar" | "banknote";
+  tone: "danger" | "success" | "neutral";
+  active: boolean;
 };
 
 const copy = {
   en: {
-    loadError: "Could not load admin dashboard summary.",
-    accessDenied: "This dashboard requires ADMIN access.",
+    loadError: "We could not load the latest dashboard data. Please try again.",
+    accessDenied: "This dashboard requires administrator access.",
     eyebrow: "Admin dashboard",
-    title: "Library command center",
-    description: "A focused operations dashboard for circulation health, reservation pickup work, fines, and today's desk activity.",
-    actions: {
-      adminCatalog: "Admin catalog",
-      circulationDesk: "Circulation desk",
-      borrowers: "Borrowers",
-    },
-    breadcrumb: "Pages / Dashboard",
-    mainTitle: "Main Dashboard",
-    mainDescription: "Metrics first, then action items. This view keeps staff work visible without digging through tables.",
-    actionCenter: "Action Center",
-    attention: "What needs attention",
-    openLoanMonitor: "Open loan monitor >",
-    todayReport: "Today report",
-    deskActivity: "Desk activity",
-    live: "Live",
-    shortcutsTitle: "Admin shortcuts",
-    open: "Open >",
+    title: "Library overview",
+    description: "Monitor circulation and work through today's operational priorities.",
+    refresh: "Refresh",
+    retry: "Try again",
     waitingForData: "Waiting for data",
     metrics: {
-      activeLoans: ["Active loans/access", "Physical loans and ebook access currently active."],
-      overdueLoans: ["Overdue loans/access", "Records needing staff follow-up."],
-      readyHolds: ["Ready holds", "Reservations waiting at pickup."],
-      unpaidFines: ["Unpaid fines", "total outstanding."],
-      borrowedToday: ["Loans granted today", "Physical checkouts and ebook access granted today."],
-      returnedToday: ["Returned today", "Check-in activity for today."],
+      activeLoans: ["Active loans / access", "Physical loans and ebook access currently active."],
+      overdueLoans: ["Overdue", "Loans and ebook access that need follow-up."],
+      readyHolds: ["Ready for pickup", "Reservations waiting for members at the desk."],
+      unpaidFines: ["Unpaid fines", "{count} fine records still have an outstanding balance."],
     },
-    actionItems: {
-      overdue: ["Overdue follow-up", "Review overdue loans and contact borrowers before fines keep accumulating."],
-      holds: ["Ready reservations", "Prepare assigned copies and complete pickup checkout when members arrive."],
-      fines: ["Unpaid fine records", "Use borrower profiles to review balances and explain outstanding charges."],
+    work: {
+      eyebrow: "Priority queue",
+      title: "Work that needs attention",
+      overdue: {
+        activeTitle: (count: string) => `${count} overdue loans`,
+        activeDescription: "Review due dates and contact borrowers who need follow-up.",
+        emptyTitle: "No overdue loans",
+        emptyDescription: "There are no overdue physical or ebook loans right now.",
+        action: "View list",
+      },
+      holds: {
+        activeTitle: (count: string) => `${count} reservations ready for pickup`,
+        activeDescription: "Prepare assigned copies and complete checkout when members arrive.",
+        emptyTitle: "No reservations awaiting pickup",
+        emptyDescription: "There are no ready reservations to prepare at the moment.",
+        action: "Process holds",
+      },
+      fines: {
+        activeTitle: (count: string) => `${count} unpaid fine records`,
+        activeDescription: "Review borrower balances and outstanding payments.",
+        emptyTitle: "No outstanding fines",
+        emptyDescription: "There are no unpaid fine records at the moment.",
+        action: "Review borrowers",
+      },
     },
-    shortcuts: [
-      ["Manage catalog", "Edit metadata, inventory, and physical copies."],
-      ["Category taxonomy", "Maintain catalog classification."],
-      ["Borrower profiles", "Inspect loans, holds, fines, and account status."],
-      ["Import jobs", "Review CSV import progress and errors."],
-    ],
+    today: {
+      eyebrow: "Today",
+      title: "Desk activity",
+      borrowed: "Loans / access granted",
+      borrowedHelper: "New physical loans and ebook access granted today.",
+      returned: "Returned today",
+      returnedHelper: "Physical and ebook loans completed today.",
+      updated: "Updated",
+    },
+    trend: {
+      eyebrow: "Reporting",
+      title: "Circulation trend",
+      emptyTitle: "Daily statistics are not available yet",
+      emptyDescription: "This chart will appear after the backend provides a verified daily time series.",
+      action: "Open borrow statistics",
+    },
   },
   vi: {
-    loadError: "Không thể tải tóm tắt dashboard quản trị.",
-    accessDenied: "Dashboard này yêu cầu quyền ADMIN.",
+    loadError: "Không thể tải dữ liệu dashboard mới nhất. Vui lòng thử lại.",
+    accessDenied: "Dashboard này yêu cầu quyền quản trị viên.",
     eyebrow: "Dashboard quản trị",
-    title: "Trung tâm điều hành thư viện",
-    description: "Dashboard tập trung cho tình trạng lưu thông, lượt nhận sách đặt giữ, tiền phạt và hoạt động quầy trong ngày.",
-    actions: {
-      adminCatalog: "Quản trị sách",
-      circulationDesk: "Quầy lưu thông",
-      borrowers: "Người mượn",
-    },
-    breadcrumb: "Trang / Dashboard",
-    mainTitle: "Dashboard chính",
-    mainDescription: "Ưu tiên chỉ số và việc cần xử lý để staff nắm tình hình mà không phải đào qua nhiều bảng.",
-    actionCenter: "Trung tâm xử lý",
-    attention: "Việc cần chú ý",
-    openLoanMonitor: "Mở theo dõi lượt mượn >",
-    todayReport: "Báo cáo hôm nay",
-    deskActivity: "Hoạt động quầy",
-    live: "Trực tiếp",
-    shortcutsTitle: "Lối tắt quản trị",
-    open: "Mở >",
+    title: "Tổng quan thư viện",
+    description: "Theo dõi hoạt động lưu thông và xử lý các công việc ưu tiên trong ngày.",
+    refresh: "Làm mới",
+    retry: "Thử lại",
     waitingForData: "Đang chờ dữ liệu",
     metrics: {
-      activeLoans: ["Đang mượn/đọc", "Lượt mượn sách giấy và quyền đọc ebook đang hiệu lực."],
-      overdueLoans: ["Quá hạn", "Các bản ghi cần staff theo dõi."],
-      readyHolds: ["Sẵn sàng nhận", "Lượt đặt giữ đang chờ nhận tại quầy."],
-      unpaidFines: ["Phạt chưa trả", "tổng còn tồn."],
-      borrowedToday: ["Cấp lượt hôm nay", "Checkout sách giấy và quyền đọc ebook được cấp trong ngày."],
-      returnedToday: ["Trả hôm nay", "Hoạt động check-in trong ngày."],
+      activeLoans: ["Đang mượn / đọc", "Lượt mượn sách giấy và quyền đọc ebook đang hiệu lực."],
+      overdueLoans: ["Quá hạn", "Các lượt mượn hoặc đọc ebook cần được theo dõi."],
+      readyHolds: ["Chờ nhận sách", "Lượt đặt giữ đang chờ thành viên đến nhận."],
+      unpaidFines: ["Phạt chưa thanh toán", "{count} hồ sơ vẫn còn số dư tiền phạt."],
     },
-    actionItems: {
-      overdue: ["Theo dõi quá hạn", "Xem các lượt quá hạn và liên hệ người mượn trước khi phí phạt tiếp tục tăng."],
-      holds: ["Lượt đặt sẵn sàng", "Chuẩn bị bản sao đã gán và hoàn tất pickup checkout khi thành viên tới nhận."],
-      fines: ["Hồ sơ tiền phạt", "Dùng hồ sơ người mượn để xem số dư và giải thích các khoản còn tồn."],
+    work: {
+      eyebrow: "Hàng đợi ưu tiên",
+      title: "Việc cần xử lý",
+      overdue: {
+        activeTitle: (count: string) => `${count} lượt mượn quá hạn`,
+        activeDescription: "Kiểm tra hạn trả và liên hệ những người mượn cần được nhắc.",
+        emptyTitle: "Không có lượt mượn quá hạn",
+        emptyDescription: "Hiện không có lượt mượn sách giấy hoặc ebook nào quá hạn.",
+        action: "Xem danh sách",
+      },
+      holds: {
+        activeTitle: (count: string) => `${count} lượt đặt sẵn sàng nhận`,
+        activeDescription: "Chuẩn bị bản sao đã gán và hoàn tất checkout khi thành viên đến.",
+        emptyTitle: "Không có lượt đặt chờ nhận",
+        emptyDescription: "Hiện không có lượt đặt sẵn sàng cần chuẩn bị tại quầy.",
+        action: "Xử lý đặt giữ",
+      },
+      fines: {
+        activeTitle: (count: string) => `${count} hồ sơ chưa thanh toán phạt`,
+        activeDescription: "Kiểm tra số dư và các khoản thanh toán còn tồn của người mượn.",
+        emptyTitle: "Không có tiền phạt tồn đọng",
+        emptyDescription: "Hiện không có hồ sơ tiền phạt nào chưa thanh toán.",
+        action: "Xem người mượn",
+      },
     },
-    shortcuts: [
-      ["Quản lý danh mục sách", "Sửa metadata, tồn kho và bản sao vật lý."],
-      ["Phân loại danh mục", "Bảo trì hệ thống phân loại sách."],
-      ["Hồ sơ người mượn", "Kiểm tra lượt mượn, đặt giữ, tiền phạt và trạng thái tài khoản."],
-      ["Tác vụ import", "Xem tiến trình và lỗi import CSV."],
-    ],
+    today: {
+      eyebrow: "Hôm nay",
+      title: "Hoạt động tại quầy",
+      borrowed: "Cấp lượt mượn / đọc",
+      borrowedHelper: "Lượt mượn sách giấy và quyền đọc ebook được cấp hôm nay.",
+      returned: "Trả hôm nay",
+      returnedHelper: "Lượt mượn sách giấy và ebook đã kết thúc hôm nay.",
+      updated: "Cập nhật",
+    },
+    trend: {
+      eyebrow: "Báo cáo",
+      title: "Xu hướng lưu thông",
+      emptyTitle: "Chưa có dữ liệu thống kê theo ngày",
+      emptyDescription: "Biểu đồ sẽ xuất hiện khi backend cung cấp chuỗi dữ liệu theo ngày đã được kiểm chứng.",
+      action: "Mở thống kê mượn / trả",
+    },
   },
 };
 
@@ -133,8 +152,9 @@ export function AdminDashboardPage() {
   const text = copy[locale];
   const { accessToken, hasAdminAccess, refresh } = useAuth();
   const [summary, setSummary] = useState<StaffDashboardSummary | null>(null);
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState("");
+  const [refreshRequest, setRefreshRequest] = useState(0);
   const canUseAdminDashboard = hasAdminAccess || hasAdminAccessFromToken(accessToken);
   const refreshAccessToken = useCallback(async () => (await refresh())?.accessToken ?? null, [refresh]);
 
@@ -142,351 +162,186 @@ export function AdminDashboardPage() {
     if (!canUseAdminDashboard) return;
 
     let isMounted = true;
-    const loadingTimerId = window.setTimeout(() => {
-      if (isMounted) {
-        setIsLoading(true);
-      }
-    }, 0);
-
     getStaffDashboardSummary(accessToken, refreshAccessToken)
       .then((data) => {
         if (!isMounted) return;
         setSummary(data);
         setError("");
       })
-      .catch((fetchError) => {
+      .catch(() => {
         if (!isMounted) return;
-        setError(fetchError instanceof Error ? fetchError.message : text.loadError);
+        setError(text.loadError);
       })
       .finally(() => {
-        if (isMounted) {
-          setIsLoading(false);
-        }
+        if (isMounted) setIsLoading(false);
       });
 
     return () => {
       isMounted = false;
-      window.clearTimeout(loadingTimerId);
     };
-  }, [accessToken, canUseAdminDashboard, refreshAccessToken, text.loadError]);
+  }, [accessToken, canUseAdminDashboard, refreshAccessToken, refreshRequest, text.loadError]);
 
-  const metrics = useMemo<Metric[]>(
-    () => [
-      {
-        label: text.metrics.activeLoans[0],
-        value: formatNumber(summary?.activeLoans, locale),
-        helper: text.metrics.activeLoans[1],
-        tone: "blue",
-        iconName: "book-open",
-      },
-      {
-        label: text.metrics.overdueLoans[0],
-        value: formatNumber(summary?.overdueLoans, locale),
-        helper: text.metrics.overdueLoans[1],
-        tone: "red",
-        iconName: "alert-circle",
-      },
-      {
-        label: text.metrics.readyHolds[0],
-        value: formatNumber(summary?.holdsReadyForPickup, locale),
-        helper: text.metrics.readyHolds[1],
-        tone: "green",
-        iconName: "check-circle",
-      },
-      {
-        label: text.metrics.unpaidFines[0],
-        value: formatNumber(summary?.unpaidFineCount, locale),
-        helper: `${formatCurrency(summary?.unpaidFineTotal, locale)} ${text.metrics.unpaidFines[1]}`,
-        tone: "gold",
-        iconName: "dollar-sign",
-      },
-      {
-        label: text.metrics.borrowedToday[0],
-        value: formatNumber(summary?.borrowedToday, locale),
-        helper: text.metrics.borrowedToday[1],
-        tone: "blue",
-        iconName: "arrow-up-right",
-      },
-      {
-        label: text.metrics.returnedToday[0],
-        value: formatNumber(summary?.returnedToday, locale),
-        helper: text.metrics.returnedToday[1],
-        tone: "green",
-        iconName: "arrow-down-right",
-      },
-    ],
-    [locale, summary, text.metrics],
-  );
+  const metrics = useMemo<Metric[]>(() => {
+    const fineCount = formatNumber(summary?.unpaidFineCount, locale);
 
-  const actions = useMemo<ActionItem[]>(
-    () => [
-      {
-        title: text.actionItems.overdue[0],
-        description: text.actionItems.overdue[1],
-        value: numberOf(summary?.overdueLoans),
-        href: "/staff/loans",
-        tone: "red",
-      },
-      {
-        title: text.actionItems.holds[0],
-        description: text.actionItems.holds[1],
-        value: numberOf(summary?.holdsReadyForPickup),
-        href: "/staff/holds",
-        tone: "green",
-      },
-      {
-        title: text.actionItems.fines[0],
-        description: text.actionItems.fines[1],
-        value: numberOf(summary?.unpaidFineCount),
-        href: "/staff/members",
-        tone: "gold",
-      },
-    ],
-    [summary, text.actionItems],
-  );
+    return [
+      { label: text.metrics.activeLoans[0], value: formatNumber(summary?.activeLoans, locale), helper: text.metrics.activeLoans[1], tone: "neutral", iconName: "book-open" },
+      { label: text.metrics.overdueLoans[0], value: formatNumber(summary?.overdueLoans, locale), helper: text.metrics.overdueLoans[1], tone: "danger", iconName: "alert-circle" },
+      { label: text.metrics.readyHolds[0], value: formatNumber(summary?.holdsReadyForPickup, locale), helper: text.metrics.readyHolds[1], tone: "success", iconName: "check-circle" },
+      { label: text.metrics.unpaidFines[0], value: formatCurrency(summary?.unpaidFineTotal, locale), helper: text.metrics.unpaidFines[1].replace("{count}", fineCount), tone: "gold", iconName: "banknote" },
+    ];
+  }, [locale, summary, text.metrics]);
+
+  const workItems = useMemo<WorkItem[]>(() => {
+    return [
+      buildWorkItem(numberOf(summary?.overdueLoans), locale, text.work.overdue, "/staff/loans", "alert-circle", "danger"),
+      buildWorkItem(numberOf(summary?.holdsReadyForPickup), locale, text.work.holds, "/staff/holds", "calendar", "success"),
+      buildWorkItem(numberOf(summary?.unpaidFineCount), locale, text.work.fines, "/staff/members", "banknote", "neutral"),
+    ];
+  }, [locale, summary, text.work]);
+
+  const requestRefresh = () => {
+    setIsLoading(true);
+    setRefreshRequest((value) => value + 1);
+  };
+  const isInitialLoading = isLoading && !summary;
 
   return (
     <CatalogShell
       protectedPage
       wide
+      frameless
+      warm
       eyebrow={text.eyebrow}
       title={text.title}
       description={text.description}
-      actions={
-        <>
-          <SecondaryAction href="/admin/books">{text.actions.adminCatalog}</SecondaryAction>
-          <SecondaryAction href="/staff/circulation">{text.actions.circulationDesk}</SecondaryAction>
-          <SecondaryAction href="/staff/members">{text.actions.borrowers}</SecondaryAction>
-        </>
-      }
+      actions={canUseAdminDashboard ? <DashboardActions generatedAt={summary?.generatedAt} isLoading={isLoading} locale={locale} onRefresh={requestRefresh} refreshLabel={text.refresh} waitingLabel={text.waitingForData} /> : undefined}
     >
-      {!canUseAdminDashboard ? <Notice tone="error" message={text.accessDenied} /> : null}
-      {error ? <div className="mb-5"><Notice tone="error" message={error} /></div> : null}
+      {!canUseAdminDashboard ? (
+        <Notice tone="error" message={text.accessDenied} />
+      ) : (
+        <div className="space-y-6" aria-busy={isInitialLoading}>
+          {error ? (
+            <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
+              <div className="min-w-0 flex-1"><Notice tone="error" message={error} /></div>
+              <button type="button" onClick={requestRefresh} disabled={isLoading} className="inline-flex min-h-11 items-center justify-center gap-2 rounded-[10px] border border-[#CBBEAE] bg-white px-4 text-sm font-semibold text-[#5A1C2B] transition-colors hover:bg-[#FBF8F1] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#7A263A] focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-60">
+                <Icon name="refresh-cw" size={16} animate={isLoading ? "spin" : "none"} aria-hidden="true" />
+                {text.retry}
+              </button>
+            </div>
+          ) : null}
 
-      <section className="rounded-3xl border border-[#DDE5F4] bg-[#F4F7FB] p-4 shadow-[0_24px_60px_rgba(7,7,88,0.10)] md:p-6">
-        <div className="rounded-2xl border border-white bg-white p-5 shadow-sm">
-          <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
-            <div>
-              <p className="text-xs font-bold uppercase tracking-wide text-[#337AB7]">{text.breadcrumb}</p>
-              <h2 className="mt-2 font-serif text-3xl font-bold text-[#000054]">{text.mainTitle}</h2>
-              <p className="mt-2 max-w-3xl text-sm leading-6 text-[#333333]">
-                {text.mainDescription}
+          <section aria-label={locale === "vi" ? "Chỉ số chính" : "Key metrics"} aria-live="polite" className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+            {metrics.map((metric) => <MetricCard key={metric.label} metric={metric} isLoading={isInitialLoading} />)}
+          </section>
+
+          <div className="grid gap-6 xl:grid-cols-[minmax(0,1.45fr)_minmax(320px,0.75fr)]">
+            <section className="rounded-xl border border-[#DED5C8] bg-white p-5 shadow-[0_8px_24px_rgba(23,20,18,0.06)] md:p-6">
+              <SectionHeading eyebrow={text.work.eyebrow} title={text.work.title} />
+              <div className="mt-5 divide-y divide-[#E8E0D5]">
+                {isInitialLoading ? Array.from({ length: 3 }).map((_, index) => <WorkItemSkeleton key={index} />) : workItems.map((item) => <WorkItemRow key={item.href} item={item} />)}
+              </div>
+            </section>
+
+            <section className="rounded-xl border border-[#DED5C8] bg-[#FFFCF5] p-5 shadow-[0_8px_24px_rgba(23,20,18,0.06)] md:p-6">
+              <SectionHeading eyebrow={text.today.eyebrow} title={text.today.title} />
+              <div className="mt-5 grid gap-3 sm:grid-cols-2 xl:grid-cols-1 2xl:grid-cols-2">
+                <TodayMetric helper={text.today.borrowedHelper} iconName="book-open" isLoading={isInitialLoading} label={text.today.borrowed} value={formatNumber(summary?.borrowedToday, locale)} />
+                <TodayMetric helper={text.today.returnedHelper} iconName="arrow-down-right" isLoading={isInitialLoading} label={text.today.returned} value={formatNumber(summary?.returnedToday, locale)} />
+              </div>
+              <p className="mt-5 border-t border-[#E8E0D5] pt-4 text-xs font-medium text-[#6F675E]">
+                {text.today.updated}: {summary?.generatedAt ? formatDateTime(summary.generatedAt, locale) : text.waitingForData}
               </p>
-            </div>
-            <GeneratedAt value={summary?.generatedAt} locale={locale} waitingLabel={text.waitingForData} />
+            </section>
           </div>
-        </div>
 
-        <div className="mt-5 grid gap-4 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-6">
-          {metrics.map((metric) => (
-            <MetricCard key={metric.label} metric={metric} isLoading={isLoading} />
-          ))}
-        </div>
-
-        <div className="mt-5 grid gap-5 xl:grid-cols-[1fr_1fr]">
-          {/* Analytics Chart */}
-          <section className="rounded-2xl border border-[#EDEDF2] bg-white p-6 shadow-sm flex flex-col">
-            <div className="flex items-start justify-between gap-4 mb-6">
-              <div>
-                <p className="text-xs font-bold uppercase tracking-wide text-[#337AB7]">Analytics</p>
-                <h3 className="mt-2 text-xl font-bold text-[#000054]">7-Day Circulation Trend</h3>
-              </div>
-              <span className="rounded-full border border-[#DDE5F4] bg-[#F8FAFC] px-3 py-1 text-[10px] font-bold uppercase tracking-wide text-[#337AB7]">
-                Last 7 Days
-              </span>
-            </div>
-            
-            <div className="flex-1 min-h-[300px] w-full">
-              <ResponsiveContainer width="100%" height="100%">
-                <AreaChart data={MOCK_TREND_DATA} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
-                  <defs>
-                    <linearGradient id="colorBorrows" x1="0" y1="0" x2="0" y2="1">
-                      <stop offset="5%" stopColor="#337AB7" stopOpacity={0.3} />
-                      <stop offset="95%" stopColor="#337AB7" stopOpacity={0} />
-                    </linearGradient>
-                    <linearGradient id="colorReturns" x1="0" y1="0" x2="0" y2="1">
-                      <stop offset="5%" stopColor="#28A745" stopOpacity={0.3} />
-                      <stop offset="95%" stopColor="#28A745" stopOpacity={0} />
-                    </linearGradient>
-                  </defs>
-                  <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#E1E6F0" />
-                  <XAxis dataKey="name" axisLine={false} tickLine={false} tick={{ fontSize: 12, fill: "#8A94AD", fontWeight: 600 }} dy={10} />
-                  <YAxis axisLine={false} tickLine={false} tick={{ fontSize: 12, fill: "#8A94AD", fontWeight: 600 }} />
-                  <RechartsTooltip 
-                    contentStyle={{ borderRadius: '12px', border: 'none', boxShadow: '0 10px 30px rgba(0,0,0,0.1)', fontWeight: 'bold', color: '#000054' }}
-                    itemStyle={{ fontWeight: 600 }}
-                  />
-                  <Legend iconType="circle" wrapperStyle={{ fontSize: '12px', fontWeight: 600, color: '#59637A', paddingTop: '20px' }} />
-                  <Area type="monotone" dataKey="borrows" name="Books Borrowed" stroke="#337AB7" strokeWidth={3} fillOpacity={1} fill="url(#colorBorrows)" />
-                  <Area type="monotone" dataKey="returns" name="Books Returned" stroke="#28A745" strokeWidth={3} fillOpacity={1} fill="url(#colorReturns)" />
-                </AreaChart>
-              </ResponsiveContainer>
-            </div>
-          </section>
-
-          {/* Status Donut Chart */}
-          <section className="rounded-2xl border border-[#EDEDF2] bg-white p-6 shadow-sm flex flex-col">
-            <div className="flex items-start justify-between gap-4 mb-6">
-              <div>
-                <p className="text-xs font-bold uppercase tracking-wide text-[#337AB7]">Distribution</p>
-                <h3 className="mt-2 text-xl font-bold text-[#000054]">Current Loan Status</h3>
-              </div>
-              <span className="rounded-full border border-emerald-200 bg-emerald-50 px-3 py-1 text-[10px] font-bold uppercase tracking-wide text-emerald-700 flex items-center gap-1.5">
-                <span className="h-1.5 w-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
-                {text.live}
-              </span>
-            </div>
-
-            <div className="flex-1 min-h-[300px] w-full flex items-center justify-center relative">
-              <ResponsiveContainer width="100%" height="100%">
-                <PieChart>
-                  <Pie
-                    data={getMockStatusData(summary)}
-                    cx="50%"
-                    cy="50%"
-                    innerRadius={80}
-                    outerRadius={110}
-                    paddingAngle={5}
-                    dataKey="value"
-                    stroke="none"
-                  >
-                    {getMockStatusData(summary).map((entry, index) => (
-                      <Cell key={`cell-${index}`} fill={entry.color} />
-                    ))}
-                  </Pie>
-                  <RechartsTooltip 
-                    contentStyle={{ borderRadius: '12px', border: 'none', boxShadow: '0 10px 30px rgba(0,0,0,0.1)', fontWeight: 'bold', color: '#000054' }}
-                    itemStyle={{ fontWeight: 600, color: '#333333' }}
-                  />
-                  <Legend 
-                    layout="vertical" 
-                    verticalAlign="middle" 
-                    align="right"
-                    iconType="circle"
-                    wrapperStyle={{ fontSize: '13px', fontWeight: 600, color: '#59637A', paddingLeft: '20px' }}
-                  />
-                </PieChart>
-              </ResponsiveContainer>
-              {/* Inner total counter */}
-              <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none pr-[120px]">
-                 <span className="text-[#8A94AD] text-[10px] font-black uppercase tracking-wider">Total Active</span>
-                 <span className="text-3xl font-serif font-bold text-[#000054] mt-1">{summary?.activeLoans ?? 0}</span>
-              </div>
+          <section className="rounded-xl border border-[#DED5C8] bg-white p-5 shadow-[0_8px_24px_rgba(23,20,18,0.06)] md:p-6">
+            <SectionHeading eyebrow={text.trend.eyebrow} title={text.trend.title} />
+            <div className="mt-5 flex min-h-56 flex-col items-center justify-center rounded-[10px] border border-dashed border-[#CBBEAE] bg-[#FFFCF5] px-5 py-10 text-center">
+              <span className="grid h-12 w-12 place-items-center rounded-full bg-[#EFE6D6] text-[#7A263A]"><Icon name="trending-up" size={22} aria-hidden="true" /></span>
+              <h3 className="mt-4 font-serif text-xl font-semibold text-[#2B2723]">{text.trend.emptyTitle}</h3>
+              <p className="mt-2 max-w-xl text-sm leading-6 text-[#6F675E]">{text.trend.emptyDescription}</p>
+              <Link href="/admin/statistics/borrows" className="mt-5 inline-flex min-h-11 items-center gap-2 rounded-[10px] border border-[#CBBEAE] bg-white px-4 text-sm font-semibold text-[#5A1C2B] transition-colors hover:bg-[#F3E5E8] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#7A263A] focus-visible:ring-offset-2">
+                {text.trend.action}<Icon name="arrow-right" size={16} aria-hidden="true" />
+              </Link>
             </div>
           </section>
         </div>
-
-        <section className="mt-5 rounded-2xl border border-[#EDEDF2] bg-white p-5 shadow-sm">
-          <div className="flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between">
-            <div>
-              <p className="text-xs font-bold uppercase tracking-wide text-[#337AB7]">{text.actionCenter}</p>
-              <h3 className="mt-2 text-xl font-bold text-[#000054]">{text.attention}</h3>
-            </div>
-            <Link href="/staff/loans" className="text-sm font-bold text-[#E60028] transition hover:text-[#000054]">
-              {text.openLoanMonitor}
-            </Link>
-          </div>
-          <div className="mt-5 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
-            {actions.map((item) => (
-              <ActionCard key={item.title} item={item} />
-            ))}
-          </div>
-        </section>
-      </section>
+      )}
     </CatalogShell>
   );
 }
 
-function MetricCard({ metric, isLoading }: { metric: Metric; isLoading: boolean }) {
-  const toneClass = {
-    blue: "text-[#337AB7] bg-[#337AB7]/10",
-    red: "text-rose-700 bg-rose-50",
-    green: "text-emerald-700 bg-emerald-50",
-    gold: "text-yellow-700 bg-yellow-50",
-  }[metric.tone];
-
+function DashboardActions({ generatedAt, isLoading, locale, onRefresh, refreshLabel, waitingLabel }: { generatedAt?: string; isLoading: boolean; locale: Locale; onRefresh: () => void; refreshLabel: string; waitingLabel: string }) {
   return (
-    <article className="group rounded-2xl border border-[#EDEDF2] bg-white p-5 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-lg">
-      <div className="flex items-start justify-between gap-3">
-        <div>
-          <p className="text-xs font-bold uppercase tracking-wide text-[#8A94AD]">{metric.label}</p>
-          <p className="mt-2 font-serif text-3xl font-bold text-[#000054]">{isLoading ? "..." : metric.value}</p>
-        </div>
-        <span className={`grid h-12 w-12 shrink-0 place-items-center rounded-2xl shadow-sm ${toneClass}`}>
-          <Icon name={metric.iconName} size={24} />
-        </span>
-      </div>
-      <p className="mt-4 text-xs font-semibold leading-5 text-[#333333]/75">{metric.helper}</p>
+    <div className="flex flex-wrap items-center gap-3">
+      <span className="inline-flex min-h-11 items-center gap-2 rounded-[10px] border border-[#DED5C8] bg-white px-4 text-sm font-medium text-[#2B2723]"><Icon name="calendar" size={16} aria-hidden="true" />{generatedAt ? formatDate(generatedAt, locale) : waitingLabel}</span>
+      <button type="button" onClick={onRefresh} disabled={isLoading} className="inline-flex min-h-11 items-center justify-center gap-2 rounded-[10px] bg-[#7A263A] px-4 text-sm font-semibold text-white shadow-[0_6px_16px_rgba(122,38,58,0.18)] transition-colors hover:bg-[#5A1C2B] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#7A263A] focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-60">
+        <Icon name="refresh-cw" size={16} animate={isLoading ? "spin" : "none"} aria-hidden="true" />{refreshLabel}
+      </button>
+    </div>
+  );
+}
+
+function MetricCard({ metric, isLoading }: { metric: Metric; isLoading: boolean }) {
+  const tones = { neutral: "bg-[#EFE6D6] text-[#5A1C2B]", danger: "bg-[#F6E4E1] text-[#A33A3A]", success: "bg-[#E5F0EB] text-[#2F5D50]", gold: "bg-[#F4E8CC] text-[#8A641F]" }[metric.tone];
+  return (
+    <article className={`rounded-xl border bg-white p-5 shadow-[0_8px_24px_rgba(23,20,18,0.06)] ${metric.tone === "danger" ? "border-[#E2B8B2] bg-[#FFF9F8]" : "border-[#DED5C8]"}`}>
+      <div className="flex items-start justify-between gap-4"><div className="min-w-0"><p className="text-xs font-semibold uppercase tracking-[0.08em] text-[#6F675E]">{metric.label}</p>{isLoading ? <div className="mt-3 h-9 w-24 animate-pulse rounded bg-[#EFE6D6]" /> : <p className="mt-2 font-serif text-3xl font-semibold text-[#171412]">{metric.value}</p>}</div><span className={`grid h-11 w-11 shrink-0 place-items-center rounded-full ${tones}`}><Icon name={metric.iconName} size={21} aria-hidden="true" /></span></div>
+      <p className="mt-4 text-sm leading-6 text-[#6F675E]">{metric.helper}</p>
     </article>
   );
 }
 
-function ActionCard({ item }: { item: ActionItem }) {
-  const toneClass = {
-    red: "border-l-[#E60028] bg-rose-50",
-    green: "border-l-emerald-500 bg-emerald-50",
-    gold: "border-l-yellow-500 bg-yellow-50",
-  }[item.tone];
+function SectionHeading({ eyebrow, title }: { eyebrow: string; title: string }) {
+  return <div><p className="text-xs font-semibold uppercase tracking-[0.12em] text-[#7A263A]">{eyebrow}</p><h2 className="mt-2 font-serif text-2xl font-semibold text-[#2B2723]">{title}</h2></div>;
+}
 
+function WorkItemRow({ item }: { item: WorkItem }) {
+  const iconTone = { danger: "bg-[#F6E4E1] text-[#A33A3A]", success: "bg-[#E5F0EB] text-[#2F5D50]", neutral: "bg-[#EFE6D6] text-[#6F675E]" }[item.tone];
   return (
-    <Link
-      href={item.href}
-      className={`group block rounded-2xl border border-[#E6ECF6] border-l-4 p-4 transition-all duration-300 hover:-translate-y-1 hover:bg-white hover:shadow-md ${toneClass}`}
-    >
-      <div className="flex items-start justify-between gap-4">
-        <div>
-          <h4 className="font-bold text-[#000054] transition group-hover:text-[#337AB7]">{item.title}</h4>
-          <p className="mt-1 text-sm leading-6 text-[#333333]">{item.description}</p>
-        </div>
-        <span className="rounded-full bg-white px-3 py-1 text-sm font-bold text-[#000054] shadow-sm">{item.value}</span>
-      </div>
-    </Link>
+    <article className="flex flex-col gap-4 py-5 first:pt-0 last:pb-0 sm:flex-row sm:items-center">
+      <div className="flex min-w-0 flex-1 items-start gap-4"><span className={`grid h-11 w-11 shrink-0 place-items-center rounded-full ${iconTone}`}><Icon name={item.iconName} size={20} aria-hidden="true" /></span><div className="min-w-0"><h3 className="font-semibold text-[#2B2723]">{item.title}</h3><p className="mt-1 text-sm leading-6 text-[#6F675E]">{item.description}</p></div></div>
+      {item.active ? <Link href={item.href} className="inline-flex min-h-11 shrink-0 items-center justify-center gap-2 self-start rounded-[10px] bg-[#7A263A] px-4 text-sm font-semibold text-white transition-colors hover:bg-[#5A1C2B] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#7A263A] focus-visible:ring-offset-2 sm:self-center">{item.action}<Icon name="arrow-right" size={16} aria-hidden="true" /></Link> : null}
+    </article>
   );
 }
 
-function GeneratedAt({ value, locale, waitingLabel }: { value?: string; locale: "en" | "vi"; waitingLabel: string }) {
-  if (!value) {
-    return <span className="rounded-full border border-[#DDE5F4] bg-white px-4 py-2 text-xs font-bold uppercase tracking-wide text-[#333333]/70">{waitingLabel}</span>;
-  }
+function WorkItemSkeleton() {
+  return <div className="flex animate-pulse items-center gap-4 py-5 first:pt-0 last:pb-0" aria-hidden="true"><div className="h-11 w-11 shrink-0 rounded-full bg-[#EFE6D6]" /><div className="flex-1 space-y-2"><div className="h-4 w-2/5 rounded bg-[#EFE6D6]" /><div className="h-3 w-4/5 rounded bg-[#F3EEE5]" /></div></div>;
+}
 
-  return <span className="rounded-full border border-[#DDE5F4] bg-white px-4 py-2 text-xs font-bold uppercase tracking-wide text-[#337AB7]">{formatDateTime(value, locale)}</span>;
+function TodayMetric({ helper, iconName, isLoading, label, value }: { helper: string; iconName: "book-open" | "arrow-down-right"; isLoading: boolean; label: string; value: string }) {
+  return (
+    <article className="rounded-[10px] border border-[#E5DCD0] bg-white p-4"><span className="grid h-10 w-10 place-items-center rounded-full bg-[#EFE6D6] text-[#7A263A]"><Icon name={iconName} size={19} aria-hidden="true" /></span><p className="mt-4 text-sm font-semibold text-[#2B2723]">{label}</p>{isLoading ? <div className="mt-2 h-8 w-16 animate-pulse rounded bg-[#EFE6D6]" /> : <p className="mt-1 font-serif text-3xl font-semibold text-[#171412]">{value}</p>}<p className="mt-2 text-xs leading-5 text-[#6F675E]">{helper}</p></article>
+  );
+}
+
+function buildWorkItem(count: number, locale: Locale, itemCopy: { activeTitle: (count: string) => string; activeDescription: string; emptyTitle: string; emptyDescription: string; action: string }, href: string, iconName: WorkItem["iconName"], activeTone: WorkItem["tone"]): WorkItem {
+  const active = count > 0;
+  return { title: active ? itemCopy.activeTitle(formatNumber(count, locale)) : itemCopy.emptyTitle, description: active ? itemCopy.activeDescription : itemCopy.emptyDescription, href, action: itemCopy.action, iconName, tone: active ? activeTone : "neutral", active };
 }
 
 function numberOf(value?: number) {
   return typeof value === "number" && Number.isFinite(value) ? value : 0;
 }
 
-function formatNumber(value?: number, locale: "en" | "vi" = "en") {
+function formatNumber(value?: number, locale: Locale = "en") {
   return numberOf(value).toLocaleString(locale === "vi" ? "vi-VN" : "en-US");
 }
 
-function formatCurrency(value?: number, locale: "en" | "vi" = "en") {
-  return typeof value === "number" ? (
-    <>
-      {value.toLocaleString(locale === "vi" ? "vi-VN" : "en-US")} <span className="text-[0.7em] opacity-80 font-bold">VND</span>
-    </>
-  ) : (
-    <>0 <span className="text-[0.7em] opacity-80 font-bold">VND</span></>
-  );
+function formatCurrency(value?: number, locale: Locale = "en") {
+  return new Intl.NumberFormat(locale === "vi" ? "vi-VN" : "en-US", { style: "currency", currency: "VND", maximumFractionDigits: 0 }).format(numberOf(value));
 }
 
-function formatDateTime(value: string, locale: "en" | "vi") {
+function formatDate(value: string, locale: Locale) {
   const date = new Date(value);
   if (Number.isNaN(date.getTime())) return value;
-
-  return date.toLocaleString(locale === "vi" ? "vi-VN" : "en-US", {
-    day: "2-digit",
-    month: "short",
-    year: "numeric",
-    hour: "2-digit",
-    minute: "2-digit",
-  });
+  return date.toLocaleDateString(locale === "vi" ? "vi-VN" : "en-US", { day: "2-digit", month: "long", year: "numeric" });
 }
 
-function getMockStatusData(summary: StaffDashboardSummary | null) {
-  return [
-    { name: "Active Loans", value: numberOf(summary?.activeLoans), color: "#337AB7" },
-    { name: "Overdue", value: numberOf(summary?.overdueLoans), color: "#E60028" },
-    { name: "Holds Ready", value: numberOf(summary?.holdsReadyForPickup), color: "#28A745" },
-  ];
+function formatDateTime(value: string, locale: Locale) {
+  const date = new Date(value);
+  if (Number.isNaN(date.getTime())) return value;
+  return date.toLocaleString(locale === "vi" ? "vi-VN" : "en-US", { day: "2-digit", month: "short", year: "numeric", hour: "2-digit", minute: "2-digit" });
 }
