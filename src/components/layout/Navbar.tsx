@@ -63,7 +63,7 @@ export function Navbar() {
         {hasAdminAccess ? (
           <AdminNavigation key={pathname} mobileActions={<LanguageToggle />} />
         ) : (
-          <div className="hidden min-w-0 lg:block">
+          <div className="hidden min-w-0 lg:col-start-2 lg:row-start-1 lg:block">
             <div className="flex items-center justify-center gap-0.5">
               {topNavItems.map((item) => {
                 const originalHref = item.originalHref ?? item.href;
@@ -92,7 +92,7 @@ export function Navbar() {
             </div>
           </div>
         )}
-        <div className={`ml-auto flex shrink-0 items-center gap-1.5 text-sm ${hasAdminAccess ? "col-start-2 row-start-1 xl:col-start-3" : "col-start-2 row-start-1"}`}>
+        <div className={`ml-auto flex shrink-0 items-center gap-1.5 text-sm ${hasAdminAccess ? "col-start-2 row-start-1 xl:col-start-3" : "col-start-2 row-start-1 lg:col-start-3"}`}>
           <div className={hasAdminAccess ? "hidden xl:block" : "hidden lg:block"}>
             <LanguageToggle />
           </div>
