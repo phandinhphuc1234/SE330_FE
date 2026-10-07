@@ -127,18 +127,18 @@ export function FeaturedBooksSection() {
 
   return (
     <section id="new-books" aria-labelledby="new-books-title" className="relative isolate flex min-h-[calc(100svh-9.2rem)] snap-start items-center overflow-hidden bg-[#E9E3DA] px-4 py-10 text-[#24211E] sm:min-h-[calc(100svh-7.05rem)] sm:px-6 sm:py-12 lg:snap-always lg:px-8 xl:min-h-[calc(100svh-4.3rem)]">
-      <div aria-hidden="true" className="absolute -inset-3 -z-20 scale-[1.04] bg-[url('/new-books-library-bg.png')] bg-cover bg-center blur-[3px] [filter:saturate(.58)_brightness(1.16)]" />
-      <div aria-hidden="true" className="absolute inset-0 -z-10 bg-[linear-gradient(90deg,rgba(250,248,243,0.98)_0%,rgba(247,243,236,0.94)_27%,rgba(241,234,225,0.66)_55%,rgba(225,214,202,0.38)_100%)]" />
+      <div aria-hidden="true" className="absolute inset-0 -z-20 bg-[url('/new-books-library-bg.png')] bg-cover bg-center [filter:saturate(.9)_brightness(.82)]" />
+      <div aria-hidden="true" className="absolute inset-0 -z-10 bg-[linear-gradient(90deg,rgba(22,17,13,0.68)_0%,rgba(22,17,13,0.38)_24%,rgba(22,17,13,0.08)_48%,rgba(10,8,6,0.12)_100%)]" />
       <div className="mx-auto grid w-full max-w-[106rem] gap-10 lg:grid-cols-[260px_minmax(0,1fr)] lg:items-center lg:gap-12 xl:grid-cols-[300px_minmax(0,1fr)] xl:gap-14">
         <div>
-          <p className="flex items-center gap-4 text-xs font-semibold uppercase tracking-[0.22em] text-[#292622] sm:text-sm">
-            <span aria-hidden="true" className="h-px w-9 bg-[#B58C5B]" />{copy.eyebrow}
+          <p className="flex items-center gap-4 text-xs font-semibold uppercase tracking-[0.22em] text-[#F0D39C] sm:text-sm">
+            <span aria-hidden="true" className="h-px w-9 bg-[#E1B570]" />{copy.eyebrow}
           </p>
           <h2 id="new-books-title" className="mt-7 text-6xl font-black leading-[0.88] tracking-[-0.055em] sm:text-7xl xl:text-[5.7rem]">
-            <span className="block text-[#202020]">{copy.titleLead}</span>
-            <span className="block text-[#B58C5B]">{copy.titleAccent}</span>
+            <span className="block text-[#FFFDF8]">{copy.titleLead}</span>
+            <span className="block text-[#E1B570]">{copy.titleAccent}</span>
           </h2>
-          <p className="mt-7 max-w-sm text-base leading-8 text-[#625E58] sm:text-lg">{copy.description}</p>
+          <p className="mt-7 max-w-sm text-base leading-8 text-[#E7DED2] sm:text-lg">{copy.description}</p>
           <Link href="/books" className="mt-7 inline-flex min-h-14 items-center gap-8 rounded-xl bg-[#222222] px-7 text-base font-semibold text-white shadow-[0_12px_26px_rgba(0,0,0,0.16)] transition-[background-color,transform] hover:-translate-y-0.5 hover:bg-[#080808] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#7A263A]">
             {copy.viewAll}<ArrowRight size={18} aria-hidden="true" />
           </Link>
@@ -149,8 +149,8 @@ export function FeaturedBooksSection() {
             <button type="button" onClick={() => rotate(1)} disabled={books.length < 2} aria-label={copy.next} className="grid h-14 w-14 place-items-center rounded-full border border-white/90 bg-white/85 text-[#27231F] shadow-[0_10px_24px_rgba(49,39,31,0.12)] backdrop-blur-sm transition-[background-color,transform] hover:-translate-y-0.5 hover:bg-white focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#7A263A] disabled:opacity-40">
               <ArrowRight size={19} aria-hidden="true" />
             </button>
-            <span aria-hidden="true" className="ml-2 h-0.5 w-12 bg-[#26231F]" />
-            <span aria-live="polite" className="ml-1 text-sm font-medium tabular-nums text-[#625E58]">
+            <span aria-hidden="true" className="ml-2 h-0.5 w-12 bg-[#E1B570]" />
+            <span aria-live="polite" className="ml-1 text-sm font-medium tabular-nums text-[#F2E9DE]">
               {String(books.length ? activeIndex + 1 : 0).padStart(2, "0")} / {String(books.length).padStart(2, "0")}
             </span>
           </div>
