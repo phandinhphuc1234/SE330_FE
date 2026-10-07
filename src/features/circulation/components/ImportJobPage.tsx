@@ -80,29 +80,29 @@ export function ImportJobPage() {
       actions={<SecondaryAction href="/staff/books/import">Upload CSV</SecondaryAction>}
     >
       {!canUseStaffApi ? <Notice tone="error" message="This workspace requires LIBRARIAN or ADMIN access." /> : null}
-      <form onSubmit={handleSubmit} className="max-w-xl rounded-xl border border-[#EDEDF2] bg-[#F8F9FA] p-5">
-        <span className="text-xs font-bold uppercase tracking-wide text-[#000054]">Job ID</span>
-        <input name="jobId" className="mt-2 w-full rounded-xl border border-[#D9DCE8] bg-white px-4 py-3 outline-none focus:border-[#337AB7]" />
-        <button type="submit" disabled={!canUseStaffApi} className="mt-5 rounded-full bg-[#E60028] px-5 py-3 text-sm font-bold text-white disabled:opacity-50">Track job</button>
+      <form onSubmit={handleSubmit} className="max-w-xl rounded-xl border border-[#DED5C8] bg-[#F7F3EA] p-5">
+        <span className="text-xs font-bold uppercase tracking-wide text-[#2B2723]">Job ID</span>
+        <input name="jobId" className="mt-2 w-full rounded-xl border border-[#D8CCBC] bg-white px-4 py-3 outline-none focus:border-[#7A263A]" />
+        <button type="submit" disabled={!canUseStaffApi} className="mt-5 rounded-full bg-[#7A263A] px-5 py-3 text-sm font-bold text-white disabled:opacity-50">Track job</button>
       </form>
       {connectionStatus !== "idle" ? (
-        <div className="mt-5 rounded-xl border border-[#D9DCE8] bg-white px-4 py-3 text-sm font-bold text-[#000054]">
-          Event stream: <span className="text-[#337AB7]">{getConnectionLabel(connectionStatus)}</span>
+        <div className="mt-5 rounded-xl border border-[#D8CCBC] bg-white px-4 py-3 text-sm font-bold text-[#2B2723]">
+          Event stream: <span className="text-[#7A263A]">{getConnectionLabel(connectionStatus)}</span>
         </div>
       ) : null}
       {error ? <div className="mt-5"><Notice tone="error" message={error} /></div> : null}
       {job ? (
-        <section className="mt-6 rounded-xl border border-[#EDEDF2] bg-white p-5">
+        <section className="mt-6 rounded-xl border border-[#DED5C8] bg-white p-5">
           <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
             <div>
-              <h2 className="text-xl font-bold text-[#000054]">{job.originalFilename ?? job.filename ?? `Job ${job.jobId ?? job.id ?? jobId}`}</h2>
-              <p className="mt-1 text-sm font-semibold text-[#337AB7]">{job.status ?? "UNKNOWN"}</p>
+              <h2 className="text-xl font-bold text-[#2B2723]">{job.originalFilename ?? job.filename ?? `Job ${job.jobId ?? job.id ?? jobId}`}</h2>
+              <p className="mt-1 text-sm font-semibold text-[#7A263A]">{job.status ?? "UNKNOWN"}</p>
             </div>
-            <p className="text-2xl font-bold text-[#000054]">{progress}%</p>
+            <p className="text-2xl font-bold text-[#2B2723]">{progress}%</p>
           </div>
           {job.errorMessage ? <div className="mt-5"><Notice tone="error" message={job.errorMessage} /></div> : null}
-          <div className="mt-5 h-3 overflow-hidden rounded-full bg-[#EDEDF2]">
-            <div className="h-full rounded-full bg-[#E60028]" style={{ width: `${progress}%` }} />
+          <div className="mt-5 h-3 overflow-hidden rounded-full bg-[#DED5C8]">
+            <div className="h-full rounded-full bg-[#7A263A]" style={{ width: `${progress}%` }} />
           </div>
           <div className="mt-5 grid gap-3 sm:grid-cols-2 lg:grid-cols-5">
             {[
@@ -112,9 +112,9 @@ export function ImportJobPage() {
               ["Failed", job.failedRows ?? 0],
               ["Copies", job.createdCopies ?? 0],
             ].map(([label, value]) => (
-              <div key={label} className="rounded-lg border border-[#EDEDF2] bg-[#F8F9FA] p-4">
-                <p className="text-xs font-bold uppercase tracking-wide text-[#337AB7]">{label}</p>
-                <p className="mt-2 text-2xl font-bold text-[#000054]">{value}</p>
+              <div key={label} className="rounded-lg border border-[#DED5C8] bg-[#F7F3EA] p-4">
+                <p className="text-xs font-bold uppercase tracking-wide text-[#7A263A]">{label}</p>
+                <p className="mt-2 text-2xl font-bold text-[#2B2723]">{value}</p>
               </div>
             ))}
           </div>
@@ -192,18 +192,18 @@ function ImportJobErrorTable({
     <div className="mt-6">
       <div className="mb-3 flex flex-col gap-1 sm:flex-row sm:items-end sm:justify-between">
         <div>
-          <p className="text-sm font-bold text-[#000054]">Row-level errors</p>
+          <p className="text-sm font-bold text-[#2B2723]">Row-level errors</p>
           <p className="text-xs font-semibold text-[#6F675E]">
             {isComplete ? "Showing all returned row errors." : "Showing the first 5 errors while the import is running."}
           </p>
         </div>
         {!isComplete && totalErrors > errors.length ? (
-          <p className="text-xs font-bold text-[#337AB7]">{totalErrors - errors.length} more will be available when the job finishes.</p>
+          <p className="text-xs font-bold text-[#7A263A]">{totalErrors - errors.length} more will be available when the job finishes.</p>
         ) : null}
       </div>
-      <div className="max-w-full overflow-x-auto rounded-xl border border-[#EDEDF2]">
+      <div className="max-w-full overflow-x-auto rounded-xl border border-[#DED5C8]">
         <table className="w-full min-w-[640px] border-collapse text-left text-sm">
-          <thead className="bg-[#000054] text-white">
+          <thead className="bg-[#2B2723] text-white">
             <tr>
               {["Row", "ISBN", "Barcode", "Code", "Message"].map((heading) => (
                 <th key={heading} className="px-4 py-3 font-bold">
@@ -214,11 +214,11 @@ function ImportJobErrorTable({
           </thead>
           <tbody>
             {errors.map((row, index) => (
-              <tr key={`${row.rowNumber}-${index}`} className="border-t border-[#EDEDF2]">
+              <tr key={`${row.rowNumber}-${index}`} className="border-t border-[#DED5C8]">
                 <td className="px-4 py-3">{row.rowNumber ?? "-"}</td>
                 <td className="px-4 py-3">{row.isbn ?? "-"}</td>
                 <td className="px-4 py-3">{row.barcode ?? "-"}</td>
-                <td className="px-4 py-3 font-bold text-[#E60028]">{row.code ?? "-"}</td>
+                <td className="px-4 py-3 font-bold text-[#7A263A]">{row.code ?? "-"}</td>
                 <td className="px-4 py-3">{row.message ?? "-"}</td>
               </tr>
             ))}

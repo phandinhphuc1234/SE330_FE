@@ -132,7 +132,7 @@ export function BookReviewSection({ bookId }: { bookId: string }) {
     >
       {/* Section title */}
       <div className="flex items-center gap-4">
-        <h3 className="text-xl font-black text-[#111827]">{text.sectionTitle}</h3>
+        <h3 className="text-xl font-black text-[#2B2723]">{text.sectionTitle}</h3>
         <div className="h-px flex-1 bg-gradient-to-r from-[#E1E6F0] to-transparent" />
       </div>
 
@@ -160,11 +160,11 @@ export function BookReviewSection({ bookId }: { bookId: string }) {
           {/* Login prompt */}
           {!isAuthenticated && (
             <div className="rounded-xl border border-dashed border-[#D1D5DB] bg-[#F9FAFB] px-5 py-4 text-center">
-              <p className="text-sm text-[#6B7280]">
+              <p className="text-sm text-[#776D63]">
                 {text.loginPrompt}{" "}
                 <a
                   href="/login"
-                  className="font-bold text-[#E60028] transition-colors hover:text-[#111827]"
+                  className="font-bold text-[#7A263A] transition-colors hover:text-[#2B2723]"
                 >
                   {text.loginLink}
                 </a>

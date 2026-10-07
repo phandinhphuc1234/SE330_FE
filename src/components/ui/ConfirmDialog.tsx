@@ -76,7 +76,7 @@ export function ConfirmDialog({
         <h3 className="mt-4 text-xl font-bold text-black">{title}</h3>
 
         {/* Message */}
-        <p className="mt-3 text-sm leading-relaxed text-[#6B7280]">{message}</p>
+        <p className="mt-3 text-sm leading-relaxed text-[#776D63]">{message}</p>
 
         {/* Actions */}
         <div className="mt-6 flex gap-3">

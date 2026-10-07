@@ -18,7 +18,7 @@ export function ProgressBar({
   className = "",
 }: ProgressBarProps) {
   const colorClasses = {
-    primary: "bg-[#E60028]",
+    primary: "bg-[#7A263A]",
     secondary: "bg-black",
     success: "bg-[#28A745]",
     error: "bg-[#DC3545]",
@@ -40,7 +40,7 @@ export function ProgressBar({
           <span>{clampedValue}%</span>
         </div>
       )}
-      <div className={`overflow-hidden rounded-full bg-[#EDEDF2] ${sizeClasses[size]}`}>
+      <div className={`overflow-hidden rounded-full bg-[#DED5C8] ${sizeClasses[size]}`}>
         {indeterminate ? (
           <div className="relative h-full w-full">
             <div

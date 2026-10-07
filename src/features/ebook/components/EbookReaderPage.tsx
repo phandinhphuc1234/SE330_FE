@@ -362,8 +362,8 @@ export function EbookReaderPage() {
               <Icon name="book-open" size={24} aria-hidden="true" />
             </span>
             <div className="min-w-0">
-              <p className="text-xs font-black uppercase tracking-wide text-[#6B7280]">{stageLabel(stage)}</p>
-              <h2 className="truncate font-serif text-2xl font-bold text-[#0B1026]">Book #{numericBookId}</h2>
+              <p className="text-xs font-black uppercase tracking-wide text-[#776D63]">{stageLabel(stage)}</p>
+              <h2 className="truncate font-serif text-2xl font-bold text-[#171412]">Book #{numericBookId}</h2>
               <p className="mt-1 text-sm font-semibold text-[#59637A]">
                 Session expires {session?.sessionExpiresAt ? formatDateTime(session.sessionExpiresAt) : "after inactivity"}
               </p>
@@ -375,19 +375,19 @@ export function EbookReaderPage() {
               type="button"
               onClick={() => setPage((current) => Math.max(1, current - 1))}
               disabled={page <= 1}
-              className="inline-flex h-10 items-center justify-center gap-2 rounded-xl border border-[#D8DEE8] px-3 text-xs font-black text-[#0B1026] transition hover:border-[#B30D2D] hover:text-[#B30D2D] disabled:opacity-50"
+              className="inline-flex h-10 items-center justify-center gap-2 rounded-xl border border-[#D8DEE8] px-3 text-xs font-black text-[#171412] transition hover:border-[#B30D2D] hover:text-[#B30D2D] disabled:opacity-50"
             >
               <Icon name="chevron-left" size={16} aria-hidden="true" />
               Prev
             </button>
-            <span className="grid h-10 min-w-16 place-items-center rounded-xl bg-[#F8FAFC] px-3 text-xs font-black text-[#0B1026]">
+            <span className="grid h-10 min-w-16 place-items-center rounded-xl bg-[#FBF8F1] px-3 text-xs font-black text-[#171412]">
               {page} / {totalPages || "-"}
             </span>
             <button
               type="button"
               onClick={() => setPage((current) => (totalPages && current < totalPages ? current + 1 : current))}
               disabled={totalPages > 0 && page >= totalPages}
-              className="inline-flex h-10 items-center justify-center gap-2 rounded-xl border border-[#D8DEE8] px-3 text-xs font-black text-[#0B1026] transition hover:border-[#B30D2D] hover:text-[#B30D2D] disabled:opacity-50"
+              className="inline-flex h-10 items-center justify-center gap-2 rounded-xl border border-[#D8DEE8] px-3 text-xs font-black text-[#171412] transition hover:border-[#B30D2D] hover:text-[#B30D2D] disabled:opacity-50"
             >
               Next
               <Icon name="chevron-right" size={16} aria-hidden="true" />
@@ -395,16 +395,16 @@ export function EbookReaderPage() {
             <button
               type="button"
               onClick={() => setZoom((current) => Math.max(60, current - 10))}
-              className="grid h-10 w-10 place-items-center rounded-xl border border-[#D8DEE8] text-sm font-black text-[#0B1026] transition hover:border-[#B30D2D] hover:text-[#B30D2D]"
+              className="grid h-10 w-10 place-items-center rounded-xl border border-[#D8DEE8] text-sm font-black text-[#171412] transition hover:border-[#B30D2D] hover:text-[#B30D2D]"
               aria-label="Zoom out"
             >
               -
             </button>
-            <span className="grid h-10 min-w-16 place-items-center rounded-xl bg-[#F8FAFC] px-3 text-xs font-black text-[#0B1026]">{zoom}%</span>
+            <span className="grid h-10 min-w-16 place-items-center rounded-xl bg-[#FBF8F1] px-3 text-xs font-black text-[#171412]">{zoom}%</span>
             <button
               type="button"
               onClick={() => setZoom((current) => Math.min(200, current + 10))}
-              className="grid h-10 w-10 place-items-center rounded-xl border border-[#D8DEE8] text-sm font-black text-[#0B1026] transition hover:border-[#B30D2D] hover:text-[#B30D2D]"
+              className="grid h-10 w-10 place-items-center rounded-xl border border-[#D8DEE8] text-sm font-black text-[#171412] transition hover:border-[#B30D2D] hover:text-[#B30D2D]"
               aria-label="Zoom in"
             >
               +
@@ -412,7 +412,7 @@ export function EbookReaderPage() {
             <button
               type="button"
               onClick={toggleFullscreen}
-              className="grid h-10 w-10 place-items-center rounded-xl border border-[#D8DEE8] text-sm font-black text-[#0B1026] transition hover:border-[#B30D2D] hover:text-[#B30D2D]"
+              className="grid h-10 w-10 place-items-center rounded-xl border border-[#D8DEE8] text-sm font-black text-[#171412] transition hover:border-[#B30D2D] hover:text-[#B30D2D]"
               title={isFullscreen ? "Exit Fullscreen" : "Fullscreen"}
               aria-label={isFullscreen ? "Exit fullscreen" : "Enter fullscreen"}
             >
@@ -427,7 +427,7 @@ export function EbookReaderPage() {
               className={`inline-flex h-10 items-center justify-center gap-2 rounded-xl border px-4 text-xs font-black outline-none transition focus-visible:ring-2 focus-visible:ring-[#7A263A] focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 ${
                 isAiPanelOpen
                   ? "border-[#CFA9B3] bg-[#F3E5E8] text-[#5A1C2B]"
-                  : "border-[#D8DEE8] bg-white text-[#0B1026] hover:border-[#7A263A] hover:text-[#7A263A]"
+                  : "border-[#D8DEE8] bg-white text-[#171412] hover:border-[#7A263A] hover:text-[#7A263A]"
               }`}
             >
               <Icon name="sparkles" size={16} aria-hidden="true" />
@@ -437,7 +437,7 @@ export function EbookReaderPage() {
               type="button"
               onClick={() => void closeReader()}
               disabled={stage === "closing"}
-              className="inline-flex h-10 items-center justify-center gap-2 rounded-xl bg-[#111827] px-4 text-xs font-black text-white transition hover:-translate-y-0.5 hover:bg-black disabled:cursor-not-allowed disabled:opacity-50"
+              className="inline-flex h-10 items-center justify-center gap-2 rounded-xl bg-[#2B2723] px-4 text-xs font-black text-white transition hover:-translate-y-0.5 hover:bg-black disabled:cursor-not-allowed disabled:opacity-50"
             >
               <Icon name="x" size={16} aria-hidden="true" />
               Close
@@ -459,7 +459,7 @@ export function EbookReaderPage() {
               </button>
               <Link
                 href={bookHref}
-                className="inline-flex h-11 items-center justify-center gap-2 rounded-xl border border-[#D8DEE8] px-4 text-sm font-black text-[#0B1026] transition hover:border-[#B30D2D] hover:text-[#B30D2D]"
+                className="inline-flex h-11 items-center justify-center gap-2 rounded-xl border border-[#D8DEE8] px-4 text-sm font-black text-[#171412] transition hover:border-[#B30D2D] hover:text-[#B30D2D]"
               >
                 <Icon name="arrow-left" size={17} aria-hidden="true" />
                 Back to book
@@ -673,7 +673,7 @@ function ReaderBackButton({ disabled, onClick }: { disabled: boolean; onClick: (
       type="button"
       onClick={onClick}
       disabled={disabled}
-      className="group inline-flex items-center justify-center gap-2 rounded-full border border-[#D9DCE8] px-5 py-3 text-sm font-bold text-[#000054] outline-none transition-all duration-200 hover:-translate-y-0.5 hover:border-[#337AB7] hover:bg-white hover:text-[#E60028] hover:shadow-lg hover:shadow-[#000054]/10 disabled:cursor-not-allowed disabled:opacity-55"
+      className="group inline-flex items-center justify-center gap-2 rounded-full border border-[#D8CCBC] px-5 py-3 text-sm font-bold text-[#2B2723] outline-none transition-all duration-200 hover:-translate-y-0.5 hover:border-[#7A263A] hover:bg-white hover:text-[#7A263A] hover:shadow-lg hover:shadow-[#2B2723]/10 disabled:cursor-not-allowed disabled:opacity-55"
     >
       <Icon name="arrow-left" size={17} aria-hidden="true" className="transition-transform duration-200 group-hover:-translate-x-1" />
       Back to book

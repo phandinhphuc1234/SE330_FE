@@ -244,7 +244,7 @@ export function BooksExplorer({ initialQuery = "" }: BooksExplorerProps) {
         <div className="books-filter-fields flex w-full flex-wrap gap-3">
           <label className="books-filter-search relative w-full min-w-0">
             <span className="sr-only">{copy.searchLabel}</span>
-            <Icon name="search" size={20} aria-hidden="true" className="pointer-events-none absolute left-5 top-1/2 -translate-y-1/2 text-[#333333]" />
+            <Icon name="search" size={20} aria-hidden="true" className="pointer-events-none absolute left-5 top-1/2 -translate-y-1/2 text-[#5F574F]" />
             <input
               name="q"
               defaultValue={normalizedInitialQuery}
@@ -332,7 +332,7 @@ export function BooksExplorer({ initialQuery = "" }: BooksExplorerProps) {
                 </span>
               ))}
             </div>
-            <button type="button" onClick={handleResetFilters} className="inline-flex items-center gap-1 rounded-full px-3 py-1.5 text-xs font-bold text-[#E60028] transition hover:bg-[#E60028]/8">
+            <button type="button" onClick={handleResetFilters} className="inline-flex items-center gap-1 rounded-full px-3 py-1.5 text-xs font-bold text-[#7A263A] transition hover:bg-[#7A263A]/8">
               <Icon name="x" size={14} aria-hidden="true" />
               {copy.clearFilters}
             </button>
@@ -404,7 +404,7 @@ function BookShelfCard({ book, copy }: { book: Book; copy: typeof booksExplorerC
       className="group block outline-none"
     >
       <article
-        className="h-full rounded-lg border bg-white/88 p-3 shadow-[0_14px_34px_rgba(17,24,39,0.06)] transition duration-300 group-hover:-translate-y-1 group-hover:shadow-[0_24px_52px_rgba(17,24,39,0.10)] group-focus-visible:ring-4 group-focus-visible:ring-[#E60028]/25"
+        className="h-full rounded-lg border bg-white/88 p-3 shadow-[0_14px_34px_rgba(17,24,39,0.06)] transition duration-300 group-hover:-translate-y-1 group-hover:shadow-[0_24px_52px_rgba(17,24,39,0.10)] group-focus-visible:ring-4 group-focus-visible:ring-[#7A263A]/25"
         style={{ borderColor: "#E8E5DF" }}
       >
         <div className="relative aspect-[3/4] overflow-hidden rounded-md bg-[#F2F1EE] ring-1 ring-black/5">
@@ -419,7 +419,7 @@ function BookShelfCard({ book, copy }: { book: Book; copy: typeof booksExplorerC
               loading="lazy"
             />
           ) : (
-            <div className="flex h-full w-full flex-col justify-between bg-[linear-gradient(135deg,#111827_0%,#3f3f46_52%,#000000_100%)] p-4 text-white">
+            <div className="flex h-full w-full flex-col justify-between bg-[linear-gradient(135deg,#2B2723_0%,#3f3f46_52%,#000000_100%)] p-4 text-white">
               <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-white/70">{categoryLabel(book.category)}</span>
               <h2 className="line-clamp-4 text-lg font-black leading-tight text-white">{book.title}</h2>
               <span className="text-[10px] font-semibold uppercase tracking-wide text-white/60">The Athenaeum</span>
@@ -427,7 +427,7 @@ function BookShelfCard({ book, copy }: { book: Book; copy: typeof booksExplorerC
           )}
         </div>
         <div className="px-0.5 pb-1 pt-4">
-          <h2 className="line-clamp-2 min-h-10 text-base font-bold leading-tight text-[#151515] transition group-hover:text-[#E60028]">
+          <h2 className="line-clamp-2 min-h-10 text-base font-bold leading-tight text-[#151515] transition group-hover:text-[#7A263A]">
             {book.title}
           </h2>
           <p className="mt-1 line-clamp-1 text-sm font-medium text-[#666666]">
@@ -455,7 +455,7 @@ function BookShelfCard({ book, copy }: { book: Book; copy: typeof booksExplorerC
             <span className="rounded-full bg-[#F1F1EF] px-3 py-1.5 text-xs font-bold text-[#151515]">
               {availabilityText}
             </span>
-            <span className="rounded-full bg-[#F1F1EF] px-3 py-1.5 text-xs font-medium text-[#333333]">
+            <span className="rounded-full bg-[#F1F1EF] px-3 py-1.5 text-xs font-medium text-[#5F574F]">
               {categoryLabel(book.category)}
             </span>
           </div>
@@ -502,13 +502,13 @@ function PaginationBar({
   copy: typeof booksExplorerCopy.en;
 }) {
   return (
-    <nav className="mt-8 flex justify-center rounded-2xl border border-[#EDEDF2] bg-white px-5 py-4 shadow-sm" aria-label="Books pagination">
+    <nav className="mt-8 flex justify-center rounded-2xl border border-[#DED5C8] bg-white px-5 py-4 shadow-sm" aria-label="Books pagination">
       <div className="flex flex-wrap items-center justify-center gap-2">
         <button
           type="button"
           onClick={() => onPageChange(currentPage - 1)}
           disabled={currentPage <= 0}
-          className="rounded-full border border-[#D9DCE8] px-4 py-2 text-sm font-bold text-[#000054] transition hover:border-[#337AB7] disabled:cursor-not-allowed disabled:opacity-45"
+          className="rounded-full border border-[#D8CCBC] px-4 py-2 text-sm font-bold text-[#2B2723] transition hover:border-[#7A263A] disabled:cursor-not-allowed disabled:opacity-45"
         >
           {copy.previous}
         </button>
@@ -520,8 +520,8 @@ function PaginationBar({
             aria-current={page === currentPage ? "page" : undefined}
             className={`grid h-10 w-10 place-items-center rounded-full text-sm font-bold transition ${
               page === currentPage
-                ? "bg-[#E60028] text-white shadow-lg shadow-[#E60028]/20"
-                : "border border-[#D9DCE8] text-[#000054] hover:border-[#337AB7]"
+                ? "bg-[#7A263A] text-white shadow-lg shadow-[#7A263A]/20"
+                : "border border-[#D8CCBC] text-[#2B2723] hover:border-[#7A263A]"
             }`}
           >
             {page + 1}
@@ -531,7 +531,7 @@ function PaginationBar({
           type="button"
           onClick={() => onPageChange(currentPage + 1)}
           disabled={currentPage >= totalPages - 1}
-          className="rounded-full border border-[#D9DCE8] px-4 py-2 text-sm font-bold text-[#000054] transition hover:border-[#337AB7] disabled:cursor-not-allowed disabled:opacity-45"
+          className="rounded-full border border-[#D8CCBC] px-4 py-2 text-sm font-bold text-[#2B2723] transition hover:border-[#7A263A] disabled:cursor-not-allowed disabled:opacity-45"
         >
           {copy.next}
         </button>

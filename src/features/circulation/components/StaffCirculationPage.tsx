@@ -137,7 +137,7 @@ export function StaffCirculationPage() {
             key={id}
             type="button"
             onClick={() => setActiveTab(id as "checkout" | "checkin" | "renew")}
-            className={`rounded-full px-4 py-2 text-sm font-bold transition ${activeTab === id ? "bg-[#000054] text-white" : "border border-[#D9DCE8] text-[#000054]"}`}
+            className={`rounded-full px-4 py-2 text-sm font-bold transition ${activeTab === id ? "bg-[#2B2723] text-white" : "border border-[#D8CCBC] text-[#2B2723]"}`}
           >
             {label}
           </button>
@@ -150,14 +150,14 @@ export function StaffCirculationPage() {
 
       {activeTab === "checkout" ? (
         <div className="mt-6 grid gap-6 lg:grid-cols-[0.8fr_1.2fr]">
-          <form onSubmit={handlePreview} className="rounded-xl border border-[#EDEDF2] bg-[#F8F9FA] p-5">
-            <h2 className="text-lg font-bold text-[#000054]">Checkout preview</h2>
+          <form onSubmit={handlePreview} className="rounded-xl border border-[#DED5C8] bg-[#F7F3EA] p-5">
+            <h2 className="text-lg font-bold text-[#2B2723]">Checkout preview</h2>
             <Input name="memberId" label="Member ID" type="number" />
             <Input name="itemBarcode" label="Item Barcode" />
-            <button type="submit" disabled={!canUseStaffApi || submittingAction !== null} className="mt-5 w-full rounded-full bg-[#000054] px-5 py-3 text-sm font-bold text-white disabled:opacity-50">
+            <button type="submit" disabled={!canUseStaffApi || submittingAction !== null} className="mt-5 w-full rounded-full bg-[#2B2723] px-5 py-3 text-sm font-bold text-white disabled:opacity-50">
               {submittingAction === "preview" ? "Previewing..." : "Preview"}
             </button>
-            <button type="button" onClick={handleConfirmCheckout} disabled={!canUseStaffApi || !preview?.allowed || submittingAction !== null} className="mt-3 w-full rounded-full bg-[#E60028] px-5 py-3 text-sm font-bold text-white disabled:opacity-50">
+            <button type="button" onClick={handleConfirmCheckout} disabled={!canUseStaffApi || !preview?.allowed || submittingAction !== null} className="mt-3 w-full rounded-full bg-[#7A263A] px-5 py-3 text-sm font-bold text-white disabled:opacity-50">
               {submittingAction === "checkout" ? "Processing checkout..." : "Confirm Checkout"}
             </button>
           </form>
@@ -166,7 +166,7 @@ export function StaffCirculationPage() {
             {checkoutResult ? (
               <div className="mt-4 space-y-3">
                 <Notice tone="success" message={`Borrow ${checkoutResult.borrowId ?? checkoutResult.id ?? ""} created.`} />
-                <button type="button" onClick={() => window.print()} className="w-full rounded-full border border-[#D9DCE8] bg-white px-5 py-3 text-sm font-bold text-[#000054] hover:bg-gray-50">
+                <button type="button" onClick={() => window.print()} className="w-full rounded-full border border-[#D8CCBC] bg-white px-5 py-3 text-sm font-bold text-[#2B2723] hover:bg-gray-50">
                   Print Receipt
                 </button>
               </div>
@@ -177,10 +177,10 @@ export function StaffCirculationPage() {
 
       {activeTab === "checkin" ? (
         <div className="mt-6 grid gap-6 lg:grid-cols-[0.8fr_1.2fr]">
-          <form onSubmit={handleCheckin} className="rounded-xl border border-[#EDEDF2] bg-[#F8F9FA] p-5">
-            <h2 className="text-lg font-bold text-[#000054]">Return a copy</h2>
+          <form onSubmit={handleCheckin} className="rounded-xl border border-[#DED5C8] bg-[#F7F3EA] p-5">
+            <h2 className="text-lg font-bold text-[#2B2723]">Return a copy</h2>
             <Input name="barcode" label="Barcode" />
-            <button type="submit" disabled={!canUseStaffApi || submittingAction !== null} className="mt-5 w-full rounded-full bg-[#E60028] px-5 py-3 text-sm font-bold text-white disabled:opacity-50">
+            <button type="submit" disabled={!canUseStaffApi || submittingAction !== null} className="mt-5 w-full rounded-full bg-[#7A263A] px-5 py-3 text-sm font-bold text-white disabled:opacity-50">
               {submittingAction === "checkin" ? "Processing return..." : "Return Book"}
             </button>
           </form>
@@ -201,10 +201,10 @@ export function StaffCirculationPage() {
       ) : null}
 
       {activeTab === "renew" ? (
-        <form onSubmit={handleStaffRenew} className="mt-6 max-w-xl rounded-xl border border-[#EDEDF2] bg-[#F8F9FA] p-5">
-          <h2 className="text-lg font-bold text-[#000054]">Staff-assisted renewal</h2>
+        <form onSubmit={handleStaffRenew} className="mt-6 max-w-xl rounded-xl border border-[#DED5C8] bg-[#F7F3EA] p-5">
+          <h2 className="text-lg font-bold text-[#2B2723]">Staff-assisted renewal</h2>
           <Input name="borrowId" label="Borrow ID" />
-          <button type="submit" disabled={!canUseStaffApi || submittingAction !== null} className="mt-5 rounded-full bg-[#E60028] px-5 py-3 text-sm font-bold text-white disabled:opacity-50">
+          <button type="submit" disabled={!canUseStaffApi || submittingAction !== null} className="mt-5 rounded-full bg-[#7A263A] px-5 py-3 text-sm font-bold text-white disabled:opacity-50">
             {submittingAction === "renew" ? "Renewing..." : "Staff Renew"}
           </button>
         </form>
@@ -221,14 +221,14 @@ export function StaffCirculationPage() {
 function Input({ label, name, type = "text" }: { label: string; name: string; type?: string }) {
   return (
     <label className="mt-4 block">
-      <span className="text-xs font-bold uppercase tracking-wide text-[#000054]">{label}</span>
-      <input name={name} type={type} className="mt-2 w-full rounded-xl border border-[#D9DCE8] bg-white px-4 py-3 outline-none focus:border-[#337AB7]" />
+      <span className="text-xs font-bold uppercase tracking-wide text-[#2B2723]">{label}</span>
+      <input name={name} type={type} className="mt-2 w-full rounded-xl border border-[#D8CCBC] bg-white px-4 py-3 outline-none focus:border-[#7A263A]" />
     </label>
   );
 }
 
 function ResultCard({ children, title }: { children: React.ReactNode; title: string }) {
-  return <section className="rounded-xl border border-[#EDEDF2] bg-white p-5"><h2 className="text-lg font-bold text-[#000054]">{title}</h2><div className="mt-4">{children}</div></section>;
+  return <section className="rounded-xl border border-[#DED5C8] bg-white p-5"><h2 className="text-lg font-bold text-[#2B2723]">{title}</h2><div className="mt-4">{children}</div></section>;
 }
 
 function CheckoutPreviewPanel({ fallbackBarcode, preview }: { fallbackBarcode?: string; preview: CheckoutPreviewResponse }) {
@@ -243,7 +243,7 @@ function CheckoutPreviewPanel({ fallbackBarcode, preview }: { fallbackBarcode?: 
         <p className={`text-xs font-bold uppercase tracking-wide ${allowed ? "text-emerald-700" : "text-rose-700"}`}>
           {allowed ? "Checkout allowed" : "Checkout blocked"}
         </p>
-        <p className="mt-1 text-sm font-semibold text-[#111827]">
+        <p className="mt-1 text-sm font-semibold text-[#2B2723]">
           {allowed
             ? "This member and item copy meet the borrowing rules. You can confirm checkout."
             : "Review the reason below before trying again."}
@@ -251,7 +251,7 @@ function CheckoutPreviewPanel({ fallbackBarcode, preview }: { fallbackBarcode?: 
       </div>
 
       <section>
-        <h3 className="text-xs font-bold uppercase tracking-wide text-[#000054]">Member</h3>
+        <h3 className="text-xs font-bold uppercase tracking-wide text-[#2B2723]">Member</h3>
         <dl className="mt-3 grid gap-3 sm:grid-cols-2">
           <Metric label="Name" value={preview.memberName ?? "-"} />
           <Metric label="Member ID" value={String(preview.memberId ?? "-")} />
@@ -260,7 +260,7 @@ function CheckoutPreviewPanel({ fallbackBarcode, preview }: { fallbackBarcode?: 
       </section>
 
       <section>
-        <h3 className="text-xs font-bold uppercase tracking-wide text-[#000054]">Book copy</h3>
+        <h3 className="text-xs font-bold uppercase tracking-wide text-[#2B2723]">Book copy</h3>
         <dl className="mt-3 grid gap-3 sm:grid-cols-2">
           <Metric label="Title" value={preview.bookTitle ?? preview.title ?? "-"} />
           <Metric label="Book ID" value={String(preview.bookId ?? "-")} />
@@ -271,7 +271,7 @@ function CheckoutPreviewPanel({ fallbackBarcode, preview }: { fallbackBarcode?: 
       </section>
 
       <section>
-        <h3 className="text-xs font-bold uppercase tracking-wide text-[#000054]">Loan policy</h3>
+        <h3 className="text-xs font-bold uppercase tracking-wide text-[#2B2723]">Loan policy</h3>
         <dl className="mt-3 grid gap-3 sm:grid-cols-3">
           <Metric label="Loan period" value={preview.loanPeriodDays ? `${preview.loanPeriodDays} days` : "-"} />
           <Metric label="Max renewals" value={String(preview.maxRenewals ?? "-")} />
@@ -347,5 +347,5 @@ function extractFirstNumber(value: string) {
 }
 
 function Metric({ className = "", label, value }: { className?: string; label: string; value: string }) {
-  return <div className={`rounded-lg border border-[#EDEDF2] bg-[#F8F9FA] p-4 ${className}`}><dt className="text-xs font-bold uppercase tracking-wide text-[#337AB7]">{label}</dt><dd className="mt-2 break-words font-semibold text-[#111827]">{value}</dd></div>;
+  return <div className={`rounded-lg border border-[#DED5C8] bg-[#F7F3EA] p-4 ${className}`}><dt className="text-xs font-bold uppercase tracking-wide text-[#7A263A]">{label}</dt><dd className="mt-2 break-words font-semibold text-[#2B2723]">{value}</dd></div>;
 }

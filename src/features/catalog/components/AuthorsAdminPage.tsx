@@ -234,14 +234,14 @@ export function AuthorsAdminPage() {
             <button
               type="button"
               onClick={exportAuthors}
-              className="inline-flex h-14 cursor-pointer items-center justify-center gap-3 rounded-xl bg-[#E60028] px-8 text-sm font-black text-white shadow-[0_16px_30px_rgba(230,0,40,0.20)] transition hover:bg-[#C90024]"
+              className="inline-flex h-14 cursor-pointer items-center justify-center gap-3 rounded-xl bg-[#7A263A] px-8 text-sm font-black text-white shadow-[0_16px_30px_rgba(230,0,40,0.20)] transition hover:bg-[#C90024]"
             >
               <Icon name="download" size={18} />
               Export authors
             </button>
             <Link
               href="/staff/books"
-              className="inline-flex h-14 items-center justify-center gap-3 rounded-xl border border-[#D9E1EE] bg-white px-8 text-sm font-black text-[#071330] shadow-[0_10px_22px_rgba(15,23,42,0.04)] transition hover:border-[#AAB7CA] hover:text-[#E60028]"
+              className="inline-flex h-14 items-center justify-center gap-3 rounded-xl border border-[#D9E1EE] bg-white px-8 text-sm font-black text-[#071330] shadow-[0_10px_22px_rgba(15,23,42,0.04)] transition hover:border-[#AAB7CA] hover:text-[#7A263A]"
             >
               <Icon name="arrow-left" size={18} />
               Back to staff books
@@ -356,7 +356,7 @@ function AuthorEditorCard({
 
       <label className="mt-7 block">
         <span className="text-sm font-black text-[#071330]">Portrait image (optional)</span>
-        <span className="mt-3 flex min-h-[225px] cursor-pointer flex-col items-center justify-center rounded-xl border border-dashed border-[#CAD5E7] bg-white px-5 py-7 text-center transition hover:border-[#E60028] hover:bg-[#FFF8F9]">
+        <span className="mt-3 flex min-h-[225px] cursor-pointer flex-col items-center justify-center rounded-xl border border-dashed border-[#CAD5E7] bg-white px-5 py-7 text-center transition hover:border-[#7A263A] hover:bg-[#FFF8F9]">
           <AuthorImagePreview
             authorName={editing?.name || formValues.name || "Author"}
             currentImageUrl={editing?.imageUrl ?? ""}
@@ -406,7 +406,7 @@ function AuthorEditorCard({
         <button
           type="submit"
           disabled={isSubmitting}
-          className="inline-flex h-14 cursor-pointer items-center justify-center gap-3 rounded-xl bg-[#E60028] px-8 text-sm font-black text-white shadow-[0_16px_30px_rgba(230,0,40,0.20)] transition hover:bg-[#C90024] disabled:cursor-not-allowed disabled:opacity-60"
+          className="inline-flex h-14 cursor-pointer items-center justify-center gap-3 rounded-xl bg-[#7A263A] px-8 text-sm font-black text-white shadow-[0_16px_30px_rgba(230,0,40,0.20)] transition hover:bg-[#C90024] disabled:cursor-not-allowed disabled:opacity-60"
         >
           <Icon name={isSubmitting ? "upload" : "plus"} size={18} animate={isSubmitting ? "pulse" : "none"} />
           {editing ? "Save author" : "Create author"}
@@ -554,7 +554,7 @@ function AuthorTable({
                         <button
                           type="button"
                           onClick={() => onOpenForm(author)}
-                          className="h-11 cursor-pointer rounded-xl border border-[#D9E1EE] bg-white px-6 text-sm font-black text-[#071330] shadow-[0_8px_18px_rgba(15,23,42,0.04)] transition hover:border-[#AAB7CA] hover:text-[#E60028]"
+                          className="h-11 cursor-pointer rounded-xl border border-[#D9E1EE] bg-white px-6 text-sm font-black text-[#071330] shadow-[0_8px_18px_rgba(15,23,42,0.04)] transition hover:border-[#AAB7CA] hover:text-[#7A263A]"
                         >
                           Open form
                         </button>
@@ -592,7 +592,7 @@ function AuthorTable({
           <button type="button" aria-label="Previous page" className="grid h-9 w-9 cursor-pointer place-items-center rounded-lg border border-[#D9E1EE] text-[#51617E] transition hover:border-[#AAB7CA]">
             <Icon name="chevron-left" size={17} />
           </button>
-          <span className="grid h-9 w-9 place-items-center rounded-lg bg-[#E60028] text-sm font-black text-white">1</span>
+          <span className="grid h-9 w-9 place-items-center rounded-lg bg-[#7A263A] text-sm font-black text-white">1</span>
           <button type="button" aria-label="Next page" className="grid h-9 w-9 cursor-pointer place-items-center rounded-lg border border-[#D9E1EE] text-[#51617E] transition hover:border-[#AAB7CA]">
             <Icon name="chevron-right" size={17} />
           </button>

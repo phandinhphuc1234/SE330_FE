@@ -177,7 +177,7 @@ export function PaymentReturnPage() {
       actions={<ReturnAction href="/books">{text.backToBooks}</ReturnAction>}
     >
       <section className="rounded-[28px] border border-[#D8DEE8] bg-white p-6 shadow-[0_26px_80px_rgba(15,23,42,0.08)] md:p-8">
-        <div className="rounded-2xl border border-[#E1E6F0] bg-[#F8FAFC] p-5 md:p-6">
+        <div className="rounded-2xl border border-[#E1E6F0] bg-[#FBF8F1] p-5 md:p-6">
           <div className="flex flex-col gap-5 md:flex-row md:items-center md:justify-between">
             <div className="flex min-w-0 items-start gap-4">
               <span className={`grid h-14 w-14 shrink-0 place-items-center rounded-2xl ${stateCopy.iconClass}`}>
@@ -188,10 +188,10 @@ export function PaymentReturnPage() {
                   <span className="h-2 w-2 rounded-full bg-current" />
                   {stateCopy.label}
                 </span>
-                <h2 className="mt-3 font-serif text-4xl font-bold text-[#0B1026]">{stateCopy.title}</h2>
+                <h2 className="mt-3 font-serif text-4xl font-bold text-[#171412]">{stateCopy.title}</h2>
                 <p className="mt-2 max-w-2xl text-sm leading-6 text-[#59637A]">{stateCopy.body}</p>
                 {paymentCode ? (
-                  <p className="mt-3 break-all text-xs font-black uppercase tracking-wide text-[#6B7280]">
+                  <p className="mt-3 break-all text-xs font-black uppercase tracking-wide text-[#776D63]">
                     {paymentCode}
                   </p>
                 ) : null}
@@ -215,7 +215,7 @@ export function PaymentReturnPage() {
           {statusHref ? (
             <Link
               href={statusHref}
-              className="inline-flex h-11 items-center justify-center gap-2 rounded-xl bg-[#111827] px-4 text-sm font-black text-white transition hover:-translate-y-0.5 hover:bg-black"
+              className="inline-flex h-11 items-center justify-center gap-2 rounded-xl bg-[#2B2723] px-4 text-sm font-black text-white transition hover:-translate-y-0.5 hover:bg-black"
             >
               <Icon name="file" size={17} aria-hidden="true" />
               {text.viewStatus}
@@ -223,14 +223,14 @@ export function PaymentReturnPage() {
           ) : null}
           <Link
             href="/ebook-loans"
-            className="inline-flex h-11 items-center justify-center gap-2 rounded-xl border border-[#D8DEE8] bg-white px-4 text-sm font-black text-[#0B1026] transition hover:-translate-y-0.5 hover:border-[#B30D2D] hover:text-[#B30D2D]"
+            className="inline-flex h-11 items-center justify-center gap-2 rounded-xl border border-[#D8DEE8] bg-white px-4 text-sm font-black text-[#171412] transition hover:-translate-y-0.5 hover:border-[#B30D2D] hover:text-[#B30D2D]"
           >
             <Icon name="book-open" size={17} aria-hidden="true" />
             {text.myEbooks}
           </Link>
           <Link
             href="/books"
-            className="inline-flex h-11 items-center justify-center gap-2 rounded-xl border border-[#D8DEE8] bg-white px-4 text-sm font-black text-[#0B1026] transition hover:-translate-y-0.5 hover:border-[#B30D2D] hover:text-[#B30D2D]"
+            className="inline-flex h-11 items-center justify-center gap-2 rounded-xl border border-[#D8DEE8] bg-white px-4 text-sm font-black text-[#171412] transition hover:-translate-y-0.5 hover:border-[#B30D2D] hover:text-[#B30D2D]"
           >
             <Icon name="arrow-left" size={17} aria-hidden="true" />
             {text.backToBooks}
@@ -331,7 +331,7 @@ function ReturnAction({ href, children }: { href: string; children: string }) {
   return (
     <Link
       href={href}
-      className="group inline-flex items-center justify-center gap-2 rounded-full border border-[#D9DCE8] px-5 py-3 text-sm font-bold text-[#000054] outline-none transition-all duration-200 hover:-translate-y-0.5 hover:border-[#337AB7] hover:bg-white hover:text-[#E60028] hover:shadow-lg hover:shadow-[#000054]/10"
+      className="group inline-flex items-center justify-center gap-2 rounded-full border border-[#D8CCBC] px-5 py-3 text-sm font-bold text-[#2B2723] outline-none transition-all duration-200 hover:-translate-y-0.5 hover:border-[#7A263A] hover:bg-white hover:text-[#7A263A] hover:shadow-lg hover:shadow-[#2B2723]/10"
     >
       <Icon name="arrow-left" size={17} aria-hidden="true" className="transition-transform duration-200 group-hover:-translate-x-1" />
       {children}

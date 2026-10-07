@@ -18,10 +18,10 @@ interface StatsCardProps {
 
 const colorStyles = {
   primary: {
-    bg: "bg-gradient-to-br from-[#E60028]/10 to-[#E60028]/5",
-    border: "border-[#E60028]/20",
+    bg: "bg-gradient-to-br from-[#7A263A]/10 to-[#7A263A]/5",
+    border: "border-[#7A263A]/20",
     icon: "bg-gradient-primary text-white",
-    text: "text-[#E60028]",
+    text: "text-[#7A263A]",
   },
   secondary: {
     bg: "bg-gradient-to-br from-black/[0.06] to-black/[0.03]",

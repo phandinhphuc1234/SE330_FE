@@ -489,7 +489,7 @@ export function BookFormPage({ mode }: { mode: "create" | "edit" }) {
             type="submit"
             form="book-metadata-form"
             disabled={isLoading || isSaving}
-            className="inline-flex h-11 items-center justify-center gap-2 rounded-xl bg-[#111827] px-5 text-sm font-black text-white transition hover:bg-black disabled:cursor-not-allowed disabled:opacity-55"
+            className="inline-flex h-11 items-center justify-center gap-2 rounded-xl bg-[#2B2723] px-5 text-sm font-black text-white transition hover:bg-black disabled:cursor-not-allowed disabled:opacity-55"
           >
             <Icon name="check" size={16} aria-hidden="true" />
             {isSaving ? "Saving..." : isEdit ? "Save changes" : "Create book"}
@@ -511,7 +511,7 @@ export function BookFormPage({ mode }: { mode: "create" | "edit" }) {
       >
         <div className="flex flex-col gap-6 lg:flex-row">
           <section className="min-w-0 rounded-2xl border border-[#E1E6F0] bg-white p-6 shadow-[0_20px_50px_rgba(15,23,42,0.05)] lg:flex-1">
-            <h2 className="text-lg font-black text-[#0B1026]">Bibliographic details</h2>
+            <h2 className="text-lg font-black text-[#171412]">Bibliographic details</h2>
             <div className="mt-6 grid gap-5 md:grid-cols-2">
               <Field label="Title" name="title" defaultValue={book?.title} required />
               {isEdit ? (
@@ -544,10 +544,10 @@ export function BookFormPage({ mode }: { mode: "create" | "edit" }) {
             <section className="mt-8">
               <div className="flex items-center justify-between gap-4">
                 <div>
-                  <h2 className="text-lg font-black text-[#0B1026]">Authors</h2>
+                  <h2 className="text-lg font-black text-[#171412]">Authors</h2>
                   <p className="mt-1 text-sm text-[#59637A]">Select the catalog authors attached to this title.</p>
                 </div>
-                <Link href="/staff/authors" className="inline-flex items-center gap-2 text-sm font-black text-[#E60028] transition hover:text-[#0B1026]">
+                <Link href="/staff/authors" className="inline-flex items-center gap-2 text-sm font-black text-[#7A263A] transition hover:text-[#171412]">
                   Manage authors
                   <Icon name="chevron-right" size={17} aria-hidden="true" />
                 </Link>
@@ -556,15 +556,15 @@ export function BookFormPage({ mode }: { mode: "create" | "edit" }) {
               <div className="mt-4 rounded-2xl border border-[#E1E6F0] bg-white p-4">
                 <div className="flex flex-col gap-3 sm:flex-row sm:items-end">
                   <label className="min-w-0 flex-1">
-                    <span className="text-xs font-black uppercase tracking-[0.12em] text-[#0B1026]">Search author name</span>
+                    <span className="text-xs font-black uppercase tracking-[0.12em] text-[#171412]">Search author name</span>
                     <input
                       value={authorSearch}
                       onChange={(event) => setAuthorSearch(event.target.value)}
                       placeholder="Filter author choices..."
-                      className="mt-2 h-12 w-full rounded-xl border border-[#D5DBE8] bg-white px-4 text-sm outline-none transition focus:border-[#111827] focus:shadow-[0_0_0_4px_rgba(15,23,42,0.08)]"
+                      className="mt-2 h-12 w-full rounded-xl border border-[#D5DBE8] bg-white px-4 text-sm outline-none transition focus:border-[#2B2723] focus:shadow-[0_0_0_4px_rgba(15,23,42,0.08)]"
                     />
                   </label>
-                  <button type="button" onClick={() => setAuthorSearch("")} className="h-12 rounded-xl border border-[#D5DBE8] px-5 text-sm font-black text-[#0B1026] transition hover:border-[#111827]">
+                  <button type="button" onClick={() => setAuthorSearch("")} className="h-12 rounded-xl border border-[#D5DBE8] px-5 text-sm font-black text-[#171412] transition hover:border-[#2B2723]">
                     Clear
                   </button>
                 </div>
@@ -574,7 +574,7 @@ export function BookFormPage({ mode }: { mode: "create" | "edit" }) {
                     if (!id) return null;
 
                     return (
-                      <label key={id} className="flex items-center gap-3 rounded-xl border border-[#E1E6F0] bg-white px-3 py-3 text-sm font-semibold text-[#111827]">
+                      <label key={id} className="flex items-center gap-3 rounded-xl border border-[#E1E6F0] bg-white px-3 py-3 text-sm font-semibold text-[#2B2723]">
                         <span className="grid h-8 w-8 place-items-center rounded-lg bg-[#F6F8FC] text-[#61708F]">
                           <Icon name="menu" size={15} aria-hidden="true" />
                         </span>
@@ -584,7 +584,7 @@ export function BookFormPage({ mode }: { mode: "create" | "edit" }) {
                           type="checkbox"
                           checked={selectedAuthorIds.has(id)}
                           onChange={(event) => handleAuthorToggle(id, event.target.checked)}
-                          className="h-4 w-4 accent-[#E60028]"
+                          className="h-4 w-4 accent-[#7A263A]"
                         />
                         <span className="min-w-0">
                           <span className="block truncate font-bold">{authorLabel(author)}</span>
@@ -632,7 +632,7 @@ export function BookFormPage({ mode }: { mode: "create" | "edit" }) {
 
 function BackToStaffBooks() {
   return (
-    <Link href="/staff/books" className="inline-flex h-12 items-center gap-3 rounded-xl border border-[#D5DBE8] bg-white px-5 text-sm font-black text-[#0B1026] transition hover:border-[#111827]">
+    <Link href="/staff/books" className="inline-flex h-12 items-center gap-3 rounded-xl border border-[#D5DBE8] bg-white px-5 text-sm font-black text-[#171412] transition hover:border-[#2B2723]">
       <Icon name="arrow-left" size={18} aria-hidden="true" />
       Back to staff books
     </Link>
@@ -709,7 +709,7 @@ function BookCoverPanel({
       />
       <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
         <div>
-          <h2 className="text-lg font-black text-[#0B1026]">Book media</h2>
+          <h2 className="text-lg font-black text-[#171412]">Book media</h2>
           <p className="mt-2 text-sm text-[#59637A]">Manage the primary cover and protected ebook PDF for this catalog record.</p>
           {permissionNotice ? (
             <p className="mt-3 rounded-xl border border-rose-200 bg-rose-50 px-3 py-2 text-sm font-bold text-rose-700">
@@ -726,19 +726,19 @@ function BookCoverPanel({
               <CoverPreview book={book} coverUrl={coverUrl} />
               <div className="min-w-0 flex-1">
                 <div className="flex flex-wrap items-center gap-2">
-                  <p className="truncate text-sm font-black text-[#0B1026]">{coverName}</p>
+                  <p className="truncate text-sm font-black text-[#171412]">{coverName}</p>
                   <StatusPill status={coverImage?.status ?? "ACTIVE"} />
                 </div>
                 <p className="mt-2 text-sm font-medium text-[#59637A]">
                   {formatProvider(coverImage?.provider)} <span aria-hidden="true">·</span> Primary cover
                 </p>
                 <label className="mt-5 block">
-                  <span className="text-xs font-black uppercase tracking-[0.12em] text-[#0B1026]">Alt text / caption</span>
+                  <span className="text-xs font-black uppercase tracking-[0.12em] text-[#171412]">Alt text / caption</span>
                   <textarea
                     value={coverImage?.altText ?? bookCoverAlt(book)}
                     readOnly
                     rows={3}
-                    className="mt-2 w-full resize-none rounded-xl border border-[#D5DBE8] bg-[#F8FAFC] px-4 py-3 text-sm text-[#334155] outline-none"
+                    className="mt-2 w-full resize-none rounded-xl border border-[#D5DBE8] bg-[#FBF8F1] px-4 py-3 text-sm text-[#334155] outline-none"
                   />
                 </label>
               </div>
@@ -775,7 +775,7 @@ function BookCoverPanel({
       />
 
       <div className="mt-6">
-        <p className="text-sm font-black text-[#0B1026]">Image gallery</p>
+        <p className="text-sm font-black text-[#171412]">Image gallery</p>
         <div className="mt-3 grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
           <GalleryCard book={book} coverUrl={coverUrl} isPrimary />
           <GalleryPlaceholder label="Back cover" />
@@ -784,7 +784,7 @@ function BookCoverPanel({
             type="button"
             onClick={onOpenFilePicker}
             disabled={!isEdit || isCoverUploading || Boolean(permissionNotice)}
-            className="flex min-h-48 flex-col items-center justify-center gap-3 rounded-2xl border border-dashed border-[#C9D1DE] bg-white p-4 text-sm font-black text-[#0B1026] transition hover:border-[#111827] disabled:cursor-not-allowed disabled:opacity-55"
+            className="flex min-h-48 flex-col items-center justify-center gap-3 rounded-2xl border border-dashed border-[#C9D1DE] bg-white p-4 text-sm font-black text-[#171412] transition hover:border-[#2B2723] disabled:cursor-not-allowed disabled:opacity-55"
           >
             <Icon name="plus" size={28} aria-hidden="true" />
             Add more images
@@ -799,24 +799,24 @@ function CoverPreview({ book, coverUrl }: { book: Book; coverUrl: string }) {
   return (
     <div className="relative h-64 w-36 shrink-0 overflow-hidden rounded-lg bg-[#EEF1F6] ring-1 ring-black/5">
       <Image src={coverUrl} alt={bookCoverAlt(book)} fill unoptimized sizes="144px" className="object-cover" />
-      <span className="absolute left-2 top-2 rounded-full bg-[#E60028] px-2 py-1 text-[11px] font-black text-white">Primary</span>
+      <span className="absolute left-2 top-2 rounded-full bg-[#7A263A] px-2 py-1 text-[11px] font-black text-white">Primary</span>
     </div>
   );
 }
 
 function EmptyCoverState({ disabled, onOpenFilePicker }: { disabled: boolean; onOpenFilePicker: () => void }) {
   return (
-    <div className="flex min-h-64 flex-col items-center justify-center rounded-xl bg-[#F8FAFC] p-6 text-center">
+    <div className="flex min-h-64 flex-col items-center justify-center rounded-xl bg-[#FBF8F1] p-6 text-center">
       <span className="grid h-14 w-14 place-items-center rounded-2xl bg-white text-[#61708F] shadow-sm">
         <Icon name="book-open" size={25} aria-hidden="true" />
       </span>
-      <p className="mt-4 text-base font-black text-[#0B1026]">No cover image</p>
+      <p className="mt-4 text-base font-black text-[#171412]">No cover image</p>
       <p className="mt-2 max-w-xs text-sm text-[#59637A]">Upload a JPG, PNG, or WEBP image for the primary catalog cover.</p>
       <button
         type="button"
         onClick={onOpenFilePicker}
         disabled={disabled}
-        className="mt-4 inline-flex h-11 items-center gap-2 rounded-xl border border-[#D5DBE8] px-5 text-sm font-black text-[#0B1026] transition hover:border-[#111827] disabled:cursor-not-allowed disabled:opacity-55"
+        className="mt-4 inline-flex h-11 items-center gap-2 rounded-xl border border-[#D5DBE8] px-5 text-sm font-black text-[#171412] transition hover:border-[#2B2723] disabled:cursor-not-allowed disabled:opacity-55"
       >
         <Icon name="upload" size={16} aria-hidden="true" />
         Upload cover
@@ -850,14 +850,14 @@ function DropZone({
       onDragOver={(event) => event.preventDefault()}
       onPaste={(event) => onFile(event.clipboardData.files.item(0))}
       disabled={disabled}
-      className="flex min-h-64 flex-col items-center justify-center rounded-2xl border border-dashed border-[#C9D1DE] bg-white p-6 text-center text-sm transition hover:border-[#111827] disabled:cursor-not-allowed disabled:opacity-55"
+      className="flex min-h-64 flex-col items-center justify-center rounded-2xl border border-dashed border-[#C9D1DE] bg-white p-6 text-center text-sm transition hover:border-[#2B2723] disabled:cursor-not-allowed disabled:opacity-55"
     >
       <span className="grid h-12 w-12 place-items-center rounded-2xl bg-[#F6F8FC] text-[#61708F]">
         <Icon name="upload" size={23} aria-hidden="true" />
       </span>
-      <span className="mt-4 font-black text-[#0B1026]">{heading}</span>
+      <span className="mt-4 font-black text-[#171412]">{heading}</span>
       <span className="mt-2 font-semibold text-[#334155]">{hint}</span>
-      <span className="font-black text-[#E60028]">or browse files</span>
+      <span className="font-black text-[#7A263A]">or browse files</span>
       <span className="mt-2 text-xs font-medium text-[#61708F]">{meta}</span>
     </button>
   );
@@ -899,12 +899,12 @@ function EbookUploadPanel({
       <div className="min-w-0 rounded-2xl border border-[#E1E6F0] bg-white p-4">
         <div className="flex flex-col gap-4">
           <div className="flex min-w-0 items-start gap-3">
-            <span className="grid h-12 w-12 shrink-0 place-items-center rounded-xl bg-[#FFF1F3] text-[#E60028]">
+            <span className="grid h-12 w-12 shrink-0 place-items-center rounded-xl bg-[#FFF1F3] text-[#7A263A]">
               <span className="text-[10px] font-black uppercase leading-none">PDF</span>
             </span>
             <div className="min-w-0">
               <div className="flex min-w-0 flex-wrap items-center gap-2">
-                <p className="truncate text-sm font-black text-[#0B1026]">
+                <p className="truncate text-sm font-black text-[#171412]">
                   {hasEbook ? ebookFileName(book, ebook) : "No ebook PDF uploaded"}
                 </p>
                 {hasEbook ? (
@@ -927,7 +927,7 @@ function EbookUploadPanel({
                 type="button"
                 onClick={() => setIsPolicyOpen(true)}
                 disabled={disabled || isPolicySaving}
-                className="inline-flex h-10 items-center justify-center gap-2 rounded-xl border border-[#D5DBE8] bg-white px-3 text-xs font-black text-[#0B1026] transition hover:border-[#111827] disabled:cursor-not-allowed disabled:opacity-55"
+                className="inline-flex h-10 items-center justify-center gap-2 rounded-xl border border-[#D5DBE8] bg-white px-3 text-xs font-black text-[#171412] transition hover:border-[#2B2723] disabled:cursor-not-allowed disabled:opacity-55"
               >
                 <Icon name="settings" size={15} aria-hidden="true" />
                 Change policy
@@ -949,7 +949,7 @@ function EbookUploadPanel({
               type="button"
               onClick={onOpenFilePicker}
               disabled={disabled}
-              className="inline-flex h-10 items-center justify-center gap-2 rounded-xl border border-[#D5DBE8] bg-white px-3 text-xs font-black text-[#0B1026] transition hover:border-[#111827] disabled:cursor-not-allowed disabled:opacity-55"
+              className="inline-flex h-10 items-center justify-center gap-2 rounded-xl border border-[#D5DBE8] bg-white px-3 text-xs font-black text-[#171412] transition hover:border-[#2B2723] disabled:cursor-not-allowed disabled:opacity-55"
             >
               <Icon name="upload" size={15} aria-hidden="true" />
               {isUploading ? "Uploading..." : hasEbook ? "Replace PDF" : "Upload PDF"}
@@ -969,7 +969,7 @@ function EbookUploadPanel({
             <MediaMeta label="Updated" value={formatDateTime(ebook?.updatedAt)} />
           </div>
         ) : (
-          <div className="mt-4 rounded-xl border border-dashed border-[#D5DBE8] bg-[#F8FAFC] px-4 py-3 text-sm font-bold text-[#61708F]">
+          <div className="mt-4 rounded-xl border border-dashed border-[#D5DBE8] bg-[#FBF8F1] px-4 py-3 text-sm font-bold text-[#61708F]">
             Upload a protected PDF to enable ebook loans, pricing, and access policy controls.
           </div>
         )}
@@ -990,14 +990,14 @@ function EbookUploadPanel({
         onDragOver={(event) => event.preventDefault()}
         onPaste={(event) => onFile(event.clipboardData.files.item(0))}
         disabled={disabled}
-        className="flex min-h-52 flex-col items-center justify-center rounded-2xl border border-dashed border-[#C9D1DE] bg-white p-5 text-center text-sm transition hover:border-[#111827] disabled:cursor-not-allowed disabled:opacity-55"
+        className="flex min-h-52 flex-col items-center justify-center rounded-2xl border border-dashed border-[#C9D1DE] bg-white p-5 text-center text-sm transition hover:border-[#2B2723] disabled:cursor-not-allowed disabled:opacity-55"
       >
         <span className="grid h-12 w-12 place-items-center rounded-2xl bg-[#F6F8FC] text-[#61708F]">
           <Icon name="upload" size={23} aria-hidden="true" />
         </span>
-        <span className="mt-4 font-black text-[#0B1026]">Upload new PDF</span>
+        <span className="mt-4 font-black text-[#171412]">Upload new PDF</span>
         <span className="mt-2 font-semibold text-[#334155]">Drag & drop PDF here</span>
-        <span className="font-black text-[#E60028]">or browse files</span>
+        <span className="font-black text-[#7A263A]">or browse files</span>
         <span className="mt-2 text-xs font-medium text-[#61708F]">PDF up to 100MB</span>
       </button>
 
@@ -1045,7 +1045,7 @@ function EbookPolicyModal({
         aria-label="Close ebook policy dialog"
         onClick={onClose}
         disabled={isSaving}
-        className="absolute inset-0 bg-[#0B1026]/55 backdrop-blur-[2px] disabled:cursor-wait"
+        className="absolute inset-0 bg-[#171412]/55 backdrop-blur-[2px] disabled:cursor-wait"
       />
       <section
         role="dialog"
@@ -1055,8 +1055,8 @@ function EbookPolicyModal({
       >
         <div className="flex items-start justify-between gap-4">
           <div>
-            <p className="text-xs font-black uppercase tracking-[0.16em] text-[#E60028]">Ebook settings</p>
-            <h2 id="ebook-policy-title" className="mt-2 text-2xl font-black text-[#0B1026]">
+            <p className="text-xs font-black uppercase tracking-[0.16em] text-[#7A263A]">Ebook settings</p>
+            <h2 id="ebook-policy-title" className="mt-2 text-2xl font-black text-[#171412]">
               Change ebook policy
             </h2>
             <p className="mt-1 max-w-xl text-sm font-medium text-[#59637A]">
@@ -1067,7 +1067,7 @@ function EbookPolicyModal({
             type="button"
             onClick={onClose}
             disabled={isSaving}
-            className="grid h-10 w-10 shrink-0 place-items-center rounded-xl border border-[#D5DBE8] text-[#0B1026] transition hover:border-[#111827] disabled:cursor-not-allowed disabled:opacity-55"
+            className="grid h-10 w-10 shrink-0 place-items-center rounded-xl border border-[#D5DBE8] text-[#171412] transition hover:border-[#2B2723] disabled:cursor-not-allowed disabled:opacity-55"
             aria-label="Close"
           >
             <Icon name="x" size={18} aria-hidden="true" />
@@ -1130,10 +1130,10 @@ function EbookPolicyEditor({
   }
 
   return (
-    <section className="mt-5 rounded-2xl border border-[#E1E6F0] bg-[#F8FAFC] p-4">
+    <section className="mt-5 rounded-2xl border border-[#E1E6F0] bg-[#FBF8F1] p-4">
       <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
         <div>
-          <h3 className="text-sm font-black text-[#0B1026]">Ebook policy & pricing</h3>
+          <h3 className="text-sm font-black text-[#171412]">Ebook policy & pricing</h3>
           <p className="mt-1 text-xs font-medium text-[#61708F]">
             Set FREE/PAID access, price, license limit, and reading duration.
           </p>
@@ -1142,7 +1142,7 @@ function EbookPolicyEditor({
           type="button"
           onClick={handleSave}
           disabled={disabled || isSaving}
-          className="inline-flex h-10 shrink-0 items-center justify-center gap-2 rounded-xl bg-[#111827] px-4 text-xs font-black text-white transition hover:-translate-y-0.5 hover:bg-black disabled:cursor-not-allowed disabled:opacity-55"
+          className="inline-flex h-10 shrink-0 items-center justify-center gap-2 rounded-xl bg-[#2B2723] px-4 text-xs font-black text-white transition hover:-translate-y-0.5 hover:bg-black disabled:cursor-not-allowed disabled:opacity-55"
         >
           <Icon name="check" size={15} aria-hidden="true" />
           {isSaving ? "Saving..." : "Save policy"}
@@ -1248,7 +1248,7 @@ function PolicyInput({
         value={value}
         disabled={disabled}
         onChange={(event) => onChange(event.target.value)}
-        className="mt-2 h-11 w-full rounded-xl border border-[#D5DBE8] bg-white px-3 text-sm font-bold text-[#0B1026] outline-none transition focus:border-[#111827] focus:shadow-[0_0_0_4px_rgba(15,23,42,0.08)] disabled:cursor-not-allowed disabled:bg-[#EEF1F6] disabled:text-[#8A94A6]"
+        className="mt-2 h-11 w-full rounded-xl border border-[#D5DBE8] bg-white px-3 text-sm font-bold text-[#171412] outline-none transition focus:border-[#2B2723] focus:shadow-[0_0_0_4px_rgba(15,23,42,0.08)] disabled:cursor-not-allowed disabled:bg-[#EEF1F6] disabled:text-[#8A94A6]"
       />
     </label>
   );
@@ -1274,7 +1274,7 @@ function PolicySelect({
         value={value}
         disabled={disabled}
         onChange={(event) => onChange(event.target.value)}
-        className="mt-2 h-11 w-full rounded-xl border border-[#D5DBE8] bg-white px-3 text-sm font-bold text-[#0B1026] outline-none transition focus:border-[#111827] focus:shadow-[0_0_0_4px_rgba(15,23,42,0.08)] disabled:cursor-not-allowed disabled:bg-[#EEF1F6] disabled:text-[#8A94A6]"
+        className="mt-2 h-11 w-full rounded-xl border border-[#D5DBE8] bg-white px-3 text-sm font-bold text-[#171412] outline-none transition focus:border-[#2B2723] focus:shadow-[0_0_0_4px_rgba(15,23,42,0.08)] disabled:cursor-not-allowed disabled:bg-[#EEF1F6] disabled:text-[#8A94A6]"
       >
         {children}
       </select>
@@ -1284,9 +1284,9 @@ function PolicySelect({
 
 function MediaMeta({ label, value }: { label: string; value: string }) {
   return (
-    <div className="min-w-0 rounded-xl bg-[#F8FAFC] px-3 py-2">
+    <div className="min-w-0 rounded-xl bg-[#FBF8F1] px-3 py-2">
       <p className="text-[11px] font-black uppercase tracking-[0.12em] text-[#61708F]">{label}</p>
-      <p className="mt-1 truncate text-sm font-bold text-[#0B1026]">{value}</p>
+      <p className="mt-1 truncate text-sm font-bold text-[#171412]">{value}</p>
     </div>
   );
 }
@@ -1350,9 +1350,9 @@ function GalleryCard({ book, coverUrl, isPrimary }: { book: Book | null; coverUr
     <article className="rounded-2xl border border-[#E1E6F0] bg-white p-3">
       <div className="relative aspect-[3/4] overflow-hidden rounded-xl bg-[#EEF1F6]">
         <Image src={coverUrl} alt={bookCoverAlt(book)} fill unoptimized sizes="180px" className="object-cover" />
-        {isPrimary ? <span className="absolute left-2 top-2 rounded-full bg-[#E60028] px-2 py-1 text-[11px] font-black text-white">Primary</span> : null}
+        {isPrimary ? <span className="absolute left-2 top-2 rounded-full bg-[#7A263A] px-2 py-1 text-[11px] font-black text-white">Primary</span> : null}
       </div>
-      <p className="mt-3 truncate text-xs font-black text-[#0B1026]">{coverFileName(book, book.coverImage ?? null)}</p>
+      <p className="mt-3 truncate text-xs font-black text-[#171412]">{coverFileName(book, book.coverImage ?? null)}</p>
       <p className="mt-1 text-xs text-[#61708F]">{formatProvider(book.coverImage?.provider)}</p>
       <StatusPill status={book.coverImage?.status ?? "ACTIVE"} />
     </article>
@@ -1365,7 +1365,7 @@ function GalleryPlaceholder({ label }: { label: string }) {
       <div className="flex aspect-[3/4] items-center justify-center rounded-xl bg-[#F6F8FC] text-[#94A3B8]">
         <Icon name="file" size={28} aria-hidden="true" />
       </div>
-      <p className="mt-3 text-xs font-black text-[#0B1026]">{label}</p>
+      <p className="mt-3 text-xs font-black text-[#171412]">{label}</p>
       <p className="mt-1 text-xs text-[#61708F]">Pending</p>
     </article>
   );
@@ -1388,9 +1388,9 @@ function Field({
 }) {
   return (
     <label>
-      <span className="text-xs font-black uppercase tracking-[0.12em] text-[#0B1026]">
+      <span className="text-xs font-black uppercase tracking-[0.12em] text-[#171412]">
         {label}
-        {required ? <span className="text-[#E60028]"> *</span> : null}
+        {required ? <span className="text-[#7A263A]"> *</span> : null}
       </span>
       <input
         name={name}
@@ -1398,7 +1398,7 @@ function Field({
         defaultValue={defaultValue ?? ""}
         required={required}
         placeholder={placeholder}
-        className="mt-2 h-12 w-full rounded-xl border border-[#D5DBE8] bg-white px-4 text-sm text-[#0B1026] outline-none transition placeholder:text-[#8A94A6] focus:border-[#111827] focus:shadow-[0_0_0_4px_rgba(15,23,42,0.08)]"
+        className="mt-2 h-12 w-full rounded-xl border border-[#D5DBE8] bg-white px-4 text-sm text-[#171412] outline-none transition placeholder:text-[#8A94A6] focus:border-[#2B2723] focus:shadow-[0_0_0_4px_rgba(15,23,42,0.08)]"
       />
     </label>
   );
@@ -1407,8 +1407,8 @@ function Field({
 function ReadonlyField({ label, value }: { label: string; value: string }) {
   return (
     <div>
-      <p className="text-xs font-black uppercase tracking-[0.12em] text-[#0B1026]">{label}</p>
-      <div className="mt-2 flex h-12 items-center rounded-xl border border-[#D5DBE8] bg-[#F8FAFC] px-4 text-sm font-semibold text-[#334155]">
+      <p className="text-xs font-black uppercase tracking-[0.12em] text-[#171412]">{label}</p>
+      <div className="mt-2 flex h-12 items-center rounded-xl border border-[#D5DBE8] bg-[#FBF8F1] px-4 text-sm font-semibold text-[#334155]">
         {value}
       </div>
     </div>
@@ -1428,15 +1428,15 @@ function SelectField({
 }) {
   return (
     <label className="relative">
-      <span className="text-xs font-black uppercase tracking-[0.12em] text-[#0B1026]">{label}</span>
+      <span className="text-xs font-black uppercase tracking-[0.12em] text-[#171412]">{label}</span>
       <select
         name={name}
         defaultValue={defaultValue ?? ""}
-        className="mt-2 h-12 w-full appearance-none rounded-xl border border-[#D5DBE8] bg-white px-4 pr-10 text-sm font-semibold text-[#0B1026] outline-none transition focus:border-[#111827] focus:shadow-[0_0_0_4px_rgba(15,23,42,0.08)]"
+        className="mt-2 h-12 w-full appearance-none rounded-xl border border-[#D5DBE8] bg-white px-4 pr-10 text-sm font-semibold text-[#171412] outline-none transition focus:border-[#2B2723] focus:shadow-[0_0_0_4px_rgba(15,23,42,0.08)]"
       >
         {children}
       </select>
-      <Icon name="chevron-down" size={17} aria-hidden="true" className="pointer-events-none absolute bottom-4 right-4 text-[#0B1026]" />
+      <Icon name="chevron-down" size={17} aria-hidden="true" className="pointer-events-none absolute bottom-4 right-4 text-[#171412]" />
     </label>
   );
 }

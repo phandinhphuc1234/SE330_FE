@@ -2,7 +2,7 @@ import { Skeleton } from "./Skeleton";
 
 export function BookCardSkeleton() {
   return (
-    <div className="overflow-hidden rounded-xl border border-[#EDEDF2] bg-white p-4 shadow-sm">
+    <div className="overflow-hidden rounded-xl border border-[#DED5C8] bg-white p-4 shadow-sm">
       {/* Book cover skeleton */}
       <Skeleton variant="rectangular" className="aspect-[3/4] w-full" />
 

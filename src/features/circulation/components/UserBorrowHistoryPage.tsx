@@ -79,9 +79,9 @@ export function UserBorrowHistoryPage() {
         <div className="mt-6 overflow-x-auto rounded-2xl border border-[#D8DEE8] bg-white shadow-sm">
           <table className="w-full min-w-[860px] border-collapse text-left text-sm">
             <thead>
-              <tr className="bg-[#F8FAFC] border-b border-[#D8DEE8]">
+              <tr className="bg-[#FBF8F1] border-b border-[#D8DEE8]">
                 {text.headings.map((heading) => (
-                  <th key={heading} className="px-6 py-4 font-black uppercase tracking-wider text-[#6B7280] text-[10px]">
+                  <th key={heading} className="px-6 py-4 font-black uppercase tracking-wider text-[#776D63] text-[10px]">
                     {heading}
                   </th>
                 ))}
@@ -102,7 +102,7 @@ export function UserBorrowHistoryPage() {
                   return (
                     <tr 
                       key={`${id}-${loan.loanType || 'PHYSICAL'}-${index}`} 
-                      className="hover:bg-[#F8FAFC] transition-colors group"
+                      className="hover:bg-[#FBF8F1] transition-colors group"
                     >
                       <td className="px-6 py-4">
                         <div className="flex items-start gap-3">
@@ -110,7 +110,7 @@ export function UserBorrowHistoryPage() {
                             <Icon name={isEbook ? "smartphone" : "book"} size={16} />
                           </div>
                           <div>
-                            <div className="font-bold text-[#0B1026] line-clamp-2 max-w-[280px]" title={titleOf(loan)}>
+                            <div className="font-bold text-[#171412] line-clamp-2 max-w-[280px]" title={titleOf(loan)}>
                               {titleOf(loan)}
                             </div>
                             <div className="mt-1 flex items-center gap-2">
@@ -135,7 +135,7 @@ export function UserBorrowHistoryPage() {
                           {statusLabel(loan.status, locale)}
                         </span>
                       </td>
-                      <td className="px-6 py-4 whitespace-nowrap font-black text-[#0B1026]">
+                      <td className="px-6 py-4 whitespace-nowrap font-black text-[#171412]">
                         {typeof loan.fineAmount === "number" || typeof loan.fine === "number" ? (
                           <>
                             {(loan.fineAmount ?? loan.fine ?? 0).toLocaleString("vi-VN")} <span className="text-[0.7em] text-slate-400 font-bold italic">VND</span>

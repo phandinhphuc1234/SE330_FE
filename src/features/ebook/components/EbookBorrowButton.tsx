@@ -55,7 +55,7 @@ export function EbookBorrowButton({ bookId, hasEbook }: Props) {
             href={loan.ebookReadUrl}
             target="_blank"
             rel="noopener noreferrer"
-            className="group inline-flex items-center justify-center gap-2 rounded-full bg-[#000054] px-5 py-3 text-sm font-bold text-white outline-none transition-all duration-200 hover:-translate-y-0.5 hover:bg-[#000080] hover:shadow-lg active:translate-y-0 active:scale-[0.98]"
+            className="group inline-flex items-center justify-center gap-2 rounded-full bg-[#2B2723] px-5 py-3 text-sm font-bold text-white outline-none transition-all duration-200 hover:-translate-y-0.5 hover:bg-[#000080] hover:shadow-lg active:translate-y-0 active:scale-[0.98]"
           >
             Read ebook
             <span aria-hidden="true" className="transition-transform duration-200 group-hover:translate-x-1">→</span>
@@ -71,7 +71,7 @@ export function EbookBorrowButton({ bookId, hasEbook }: Props) {
         )}
         <p className="text-xs text-gray-500 text-center">
           Expires {expiresAt ? new Date(expiresAt).toLocaleDateString("en-US") : "–"} ·{" "}
-          <Link href="/user/ebook-loans" className="text-[#337AB7] hover:underline">Manage</Link>
+          <Link href="/user/ebook-loans" className="text-[#7A263A] hover:underline">Manage</Link>
         </p>
       </div>
     );
@@ -86,21 +86,21 @@ export function EbookBorrowButton({ bookId, hasEbook }: Props) {
             className="fixed inset-0 z-40"
             onClick={() => setShowLoginModal(false)}
           />
-          <div className="absolute bottom-full mb-2 left-1/2 -translate-x-1/2 z-50 w-64 rounded-xl border border-[#EDEDF2] bg-white p-4 shadow-xl">
-            <p className="text-sm font-semibold text-[#000054]">Sign in required</p>
+          <div className="absolute bottom-full mb-2 left-1/2 -translate-x-1/2 z-50 w-64 rounded-xl border border-[#DED5C8] bg-white p-4 shadow-xl">
+            <p className="text-sm font-semibold text-[#2B2723]">Sign in required</p>
             <p className="mt-1 text-xs text-gray-500">
               You need to log in to borrow ebooks.
             </p>
             <div className="mt-3 flex gap-2">
               <Link
                 href="/login"
-                className="flex-1 rounded-full bg-[#000054] px-3 py-2 text-center text-xs font-bold text-white hover:bg-[#000080] transition-colors"
+                className="flex-1 rounded-full bg-[#2B2723] px-3 py-2 text-center text-xs font-bold text-white hover:bg-[#000080] transition-colors"
               >
                 Log in
               </Link>
               <button
                 onClick={() => setShowLoginModal(false)}
-                className="flex-1 rounded-full border border-[#EDEDF2] px-3 py-2 text-xs font-bold text-gray-500 hover:bg-gray-50 transition-colors"
+                className="flex-1 rounded-full border border-[#DED5C8] px-3 py-2 text-xs font-bold text-gray-500 hover:bg-gray-50 transition-colors"
               >
                 Cancel
               </button>
@@ -114,7 +114,7 @@ export function EbookBorrowButton({ bookId, hasEbook }: Props) {
       <button
         onClick={handleBorrow}
         disabled={loading}
-        className="group inline-flex items-center justify-center gap-2 rounded-full border border-[#D9DCE8] bg-white px-5 py-3 text-sm font-bold text-[#000054] outline-none transition-all duration-200 hover:-translate-y-0.5 hover:border-[#337AB7] hover:text-[#E60028] hover:shadow-lg hover:shadow-[#000054]/10 active:translate-y-0 active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-50"
+        className="group inline-flex items-center justify-center gap-2 rounded-full border border-[#D8CCBC] bg-white px-5 py-3 text-sm font-bold text-[#2B2723] outline-none transition-all duration-200 hover:-translate-y-0.5 hover:border-[#7A263A] hover:text-[#7A263A] hover:shadow-lg hover:shadow-[#2B2723]/10 active:translate-y-0 active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-50"
       >
         {loading ? (
           <>

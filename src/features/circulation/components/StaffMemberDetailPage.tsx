@@ -214,19 +214,19 @@ export function StaffMemberDetailPage({ memberId }: StaffMemberDetailPageProps) 
       {isLoadingMember ? (
         <div className="grid gap-4 md:grid-cols-4">
           {Array.from({ length: 4 }).map((_, index) => (
-            <div key={index} className="h-28 animate-skeleton rounded-xl bg-[#EDEDF2]" />
+            <div key={index} className="h-28 animate-skeleton rounded-xl bg-[#DED5C8]" />
           ))}
         </div>
       ) : member ? (
         <>
           <section className="grid gap-4 lg:grid-cols-[1.2fr_1fr]">
-            <div className="rounded-2xl border border-[#EDEDF2] bg-[#F8F9FA] p-5">
+            <div className="rounded-2xl border border-[#DED5C8] bg-[#F7F3EA] p-5">
               <div className="flex flex-col justify-between gap-4 md:flex-row md:items-start">
                 <div>
-                  <p className="text-xs font-bold uppercase tracking-wide text-[#337AB7]">Member identity</p>
-                  <h2 className="mt-2 text-2xl font-bold text-[#000054]">{member.fullName || `Member ${memberId}`}</h2>
-                  <p className="mt-2 text-sm font-semibold text-[#333333]">{member.email || "-"}</p>
-                  <p className="mt-1 text-sm text-[#333333]/75">{member.phone || "-"}</p>
+                  <p className="text-xs font-bold uppercase tracking-wide text-[#7A263A]">Member identity</p>
+                  <h2 className="mt-2 text-2xl font-bold text-[#2B2723]">{member.fullName || `Member ${memberId}`}</h2>
+                  <p className="mt-2 text-sm font-semibold text-[#5F574F]">{member.email || "-"}</p>
+                  <p className="mt-1 text-sm text-[#5F574F]/75">{member.phone || "-"}</p>
                 </div>
                 <StatusBadge status={member.status} />
               </div>
@@ -245,14 +245,14 @@ export function StaffMemberDetailPage({ memberId }: StaffMemberDetailPageProps) 
             </div>
           </section>
 
-          <form ref={filterFormRef} onSubmit={handleSubmit} onChange={handleFilterChange} className="mt-6 rounded-2xl border border-[#EDEDF2] bg-[#F8F9FA] p-4 shadow-sm">
+          <form ref={filterFormRef} onSubmit={handleSubmit} onChange={handleFilterChange} className="mt-6 rounded-2xl border border-[#DED5C8] bg-[#F7F3EA] p-4 shadow-sm">
             <div className="grid gap-3 md:grid-cols-2 xl:grid-cols-[minmax(180px,0.8fr)_minmax(180px,0.8fr)]">
-              <select name="scope" defaultValue="open" className="h-14 rounded-xl border border-[#D9DCE8] bg-white px-4 text-sm font-semibold text-[#111827] outline-none transition focus:border-[#337AB7]">
+              <select name="scope" defaultValue="open" className="h-14 rounded-xl border border-[#D8CCBC] bg-white px-4 text-sm font-semibold text-[#2B2723] outline-none transition focus:border-[#7A263A]">
                 <option value="open">Open loans</option>
                 <option value="overdue">Overdue only</option>
                 <option value="history">All loan records</option>
               </select>
-              <select name="status" className="h-14 rounded-xl border border-[#D9DCE8] bg-white px-4 text-sm font-semibold text-[#111827] outline-none transition focus:border-[#337AB7]">
+              <select name="status" className="h-14 rounded-xl border border-[#D8CCBC] bg-white px-4 text-sm font-semibold text-[#2B2723] outline-none transition focus:border-[#7A263A]">
                 <option value="">Any status</option>
                 <option value="BORROWED">Borrowed</option>
                 <option value="OVERDUE">Overdue</option>
@@ -286,18 +286,18 @@ export function StaffMemberDetailPage({ memberId }: StaffMemberDetailPageProps) 
 
 function Metric({ label, value }: { label: string; value: string }) {
   return (
-    <div className="rounded-xl border border-[#EDEDF2] bg-white p-4">
-      <dt className="text-xs font-bold uppercase tracking-wide text-[#337AB7]">{label}</dt>
-      <dd className="mt-2 font-semibold text-[#111827]">{value}</dd>
+    <div className="rounded-xl border border-[#DED5C8] bg-white p-4">
+      <dt className="text-xs font-bold uppercase tracking-wide text-[#7A263A]">{label}</dt>
+      <dd className="mt-2 font-semibold text-[#2B2723]">{value}</dd>
     </div>
   );
 }
 
 function SummaryCard({ danger = false, label, value }: { danger?: boolean; label: string; value: string }) {
   return (
-    <div className={`rounded-xl border p-4 ${danger ? "border-rose-200 bg-rose-50" : "border-[#EDEDF2] bg-white"}`}>
-      <p className={`text-xs font-bold uppercase tracking-wide ${danger ? "text-rose-700" : "text-[#337AB7]"}`}>{label}</p>
-      <p className="mt-2 text-2xl font-bold text-[#000054]">{value}</p>
+    <div className={`rounded-xl border p-4 ${danger ? "border-rose-200 bg-rose-50" : "border-[#DED5C8] bg-white"}`}>
+      <p className={`text-xs font-bold uppercase tracking-wide ${danger ? "text-rose-700" : "text-[#7A263A]"}`}>{label}</p>
+      <p className="mt-2 text-2xl font-bold text-[#2B2723]">{value}</p>
     </div>
   );
 }

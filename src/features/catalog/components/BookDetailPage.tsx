@@ -294,8 +294,8 @@ export function BookDetailPage() {
       <div className="mx-auto w-full max-w-[1296px]">
         <section className="mb-2 flex flex-col justify-between gap-4 px-1 py-1 lg:flex-row lg:items-start">
           <div className="min-w-0">
-            <p className="text-sm font-black text-[#E60028]">‹ {text.eyebrow}</p>
-            <h1 className="mt-2 break-words font-serif text-4xl font-bold leading-tight text-[#0B1026] md:text-5xl">{book?.title ?? text.fallbackTitle}</h1>
+            <p className="text-sm font-black text-[#7A263A]">‹ {text.eyebrow}</p>
+            <h1 className="mt-2 break-words font-serif text-4xl font-bold leading-tight text-[#171412] md:text-5xl">{book?.title ?? text.fallbackTitle}</h1>
             <p className="mt-2 text-sm font-medium text-[#59637A]">{text.description}</p>
           </div>
           <AnimatedActionLink href="/books">{text.back}</AnimatedActionLink>
@@ -490,7 +490,7 @@ function BookDetailContent({
                   className="object-cover"
                 />
               ) : (
-                <div className="flex h-full w-full flex-col justify-between bg-[linear-gradient(135deg,#111827_0%,#3f3f46_52%,#000000_100%)] p-6 text-white">
+                <div className="flex h-full w-full flex-col justify-between bg-[linear-gradient(135deg,#2B2723_0%,#3f3f46_52%,#000000_100%)] p-6 text-white">
                   <span className="text-xs font-bold uppercase tracking-[0.22em] text-white/70">{categoryLabel(book.category)}</span>
                   <h2 className="text-3xl font-black leading-tight text-white">{book.title}</h2>
                   <span className="text-xs font-semibold uppercase tracking-wide text-white/60">The Athenaeum</span>
@@ -503,19 +503,19 @@ function BookDetailContent({
           <div className="min-w-0">
             <div className="min-w-0">
               <div className="flex flex-wrap items-center gap-2">
-                <span className="rounded-full bg-[#111827] px-3 py-1 text-[11px] font-black uppercase tracking-wide text-white">
+                <span className="rounded-full bg-[#2B2723] px-3 py-1 text-[11px] font-black uppercase tracking-wide text-white">
                   {categoryLabel(book.category)}
                 </span>
-                <span className="rounded-full border border-[#D8DEE8] bg-white px-3 py-1 text-[11px] font-black uppercase tracking-wide text-[#6B7280]">
+                <span className="rounded-full border border-[#D8DEE8] bg-white px-3 py-1 text-[11px] font-black uppercase tracking-wide text-[#776D63]">
                   {text.original}
                 </span>
               </div>
 
-              <h2 className="mt-2 max-w-4xl break-words font-serif text-4xl font-bold leading-tight text-[#0B1026] md:text-[2.75rem] xl:text-[3rem]">
+              <h2 className="mt-2 max-w-4xl break-words font-serif text-4xl font-bold leading-tight text-[#171412] md:text-[2.75rem] xl:text-[3rem]">
                 {book.title}
               </h2>
               <p className="mt-2 text-sm font-semibold text-[#59637A]">
-                {text.by}: <span className="text-[#111827]">{authorNames}</span>
+                {text.by}: <span className="text-[#2B2723]">{authorNames}</span>
                 {book.publishedDate ? <span> | {text.published}: {book.publishedDate}</span> : null}
               </p>
             </div>
@@ -574,8 +574,8 @@ function BookDetailContent({
       {relatedBooks.length ? (
         <section className="rounded-2xl border border-[#D8DEE8] bg-white p-5 shadow-[0_18px_50px_rgba(15,23,42,0.06)]">
           <div className="flex items-center justify-between gap-4">
-            <h3 className="text-xl font-black text-[#111827]">{text.relatedBooks}</h3>
-            <Link href={`/books?categoryId=${categoryIdOf(book)}`} className="text-sm font-black text-[#E60028] transition hover:text-[#111827]">
+            <h3 className="text-xl font-black text-[#2B2723]">{text.relatedBooks}</h3>
+            <Link href={`/books?categoryId=${categoryIdOf(book)}`} className="text-sm font-black text-[#7A263A] transition hover:text-[#2B2723]">
               {text.viewAll}
             </Link>
           </div>
@@ -593,8 +593,8 @@ function BookDetailContent({
 function InfoPanel({ title, children }: { title: string; children: ReactNode }) {
   return (
     <section className="relative min-h-[205px] overflow-hidden rounded-2xl border border-[#D8DEE8] bg-white p-5 shadow-[0_18px_46px_rgba(15,23,42,0.055)]">
-      <h3 className="text-base font-black text-[#0B1026]">{title}</h3>
-      <div className="mt-3 h-0.5 w-28 bg-[#E60028]" />
+      <h3 className="text-base font-black text-[#171412]">{title}</h3>
+      <div className="mt-3 h-0.5 w-28 bg-[#7A263A]" />
       <div className="mt-4 max-w-4xl space-y-2 text-[13px] font-medium leading-6 text-[#59637A]">{children}</div>
     </section>
   );
@@ -615,10 +615,10 @@ function AuthorPanel({
 
   return (
     <section className="min-h-[205px] rounded-2xl border border-[#D8DEE8] bg-white p-5 shadow-[0_18px_46px_rgba(15,23,42,0.055)]">
-      <h3 className="text-base font-black text-[#0B1026]">{text.aboutAuthor}</h3>
-      <div className="mt-3 h-0.5 w-28 bg-[#E60028]" />
+      <h3 className="text-base font-black text-[#171412]">{text.aboutAuthor}</h3>
+      <div className="mt-3 h-0.5 w-28 bg-[#7A263A]" />
       <div className="mt-4 flex gap-4">
-        <div className="relative grid h-16 w-16 shrink-0 place-items-center overflow-hidden rounded-full bg-[#EEF2F7] text-lg font-black text-[#0B1026] ring-1 ring-[#D8DEE8]">
+        <div className="relative grid h-16 w-16 shrink-0 place-items-center overflow-hidden rounded-full bg-[#EEF2F7] text-lg font-black text-[#171412] ring-1 ring-[#D8DEE8]">
           {authorImageUrl ? (
             <Image src={authorImageUrl} alt={`${authorNames} portrait`} fill unoptimized sizes="64px" className="object-cover" />
           ) : (
@@ -626,7 +626,7 @@ function AuthorPanel({
           )}
         </div>
         <div className="min-w-0">
-          <h4 className="text-sm font-black text-[#0B1026]">{authorNames}</h4>
+          <h4 className="text-sm font-black text-[#171412]">{authorNames}</h4>
           <p className="mt-1 line-clamp-4 text-[13px] font-medium leading-5 text-[#59637A]">{authorBio}</p>
           <div className="mt-4 flex flex-wrap gap-2">
             {tags.map((tag) => (
@@ -719,7 +719,7 @@ function DetailActionButton({ icon, label }: { icon: "heart" | "arrow-right" | "
   return (
     <button
       type="button"
-      className="inline-flex h-8 items-center justify-center gap-1.5 rounded-full border border-[#D8DEE8] bg-white px-3 text-[11px] font-black leading-none text-[#0B1026] shadow-[0_6px_14px_rgba(15,23,42,0.04)] transition hover:-translate-y-0.5 hover:border-[#B30D2D] hover:text-[#B30D2D]"
+      className="inline-flex h-8 items-center justify-center gap-1.5 rounded-full border border-[#D8DEE8] bg-white px-3 text-[11px] font-black leading-none text-[#171412] shadow-[0_6px_14px_rgba(15,23,42,0.04)] transition hover:-translate-y-0.5 hover:border-[#B30D2D] hover:text-[#B30D2D]"
     >
       <Icon name={icon} size={14} aria-hidden="true" className="shrink-0" />
       <span className="whitespace-nowrap">{label}</span>
@@ -743,7 +743,7 @@ function BookMetaPill({
       ? "bg-[#FDF0F3] text-[#B30D2D]"
       : tone === "amber"
         ? "bg-[#FFF7ED] text-[#D97706]"
-        : "bg-[#F4F6FA] text-[#0B1026]";
+        : "bg-[#F4F6FA] text-[#171412]";
 
   return (
     <div className="flex min-h-[66px] items-center gap-3 rounded-xl border border-[#E1E6F0] bg-white px-4 py-3 shadow-[0_10px_28px_rgba(15,23,42,0.045)]">
@@ -751,8 +751,8 @@ function BookMetaPill({
         <Icon name={icon} size={20} aria-hidden="true" />
       </span>
       <div className="min-w-0">
-        <p className="text-[10px] font-black uppercase tracking-wide text-[#6B7280]">{label}</p>
-        <p className="mt-1 truncate text-base font-black text-[#111827]">{value}</p>
+        <p className="text-[10px] font-black uppercase tracking-wide text-[#776D63]">{label}</p>
+        <p className="mt-1 truncate text-base font-black text-[#2B2723]">{value}</p>
       </div>
     </div>
   );
@@ -798,7 +798,7 @@ function EbookAccessPanel({
               <Icon name="book-open" size={19} aria-hidden="true" />
             </span>
             <div>
-              <h3 className="font-serif text-xl font-bold leading-tight text-[#0B1026]">{text.ebookAccess}</h3>
+              <h3 className="font-serif text-xl font-bold leading-tight text-[#171412]">{text.ebookAccess}</h3>
               {ebookInfo?.updatedAt ? (
                 <p className="mt-0.5 text-xs font-semibold text-[#61708F]">
                   {text.lastUpdated}: {formatDateValue(ebookInfo.updatedAt, text)}
@@ -901,10 +901,10 @@ function EbookInfoRow({ icon, label, value }: { icon: "check" | "users" | "clock
   return (
     <div className="flex items-center justify-between gap-4 py-1 text-xs leading-4">
       <div className="flex min-w-0 items-center gap-3 text-[#59637A]">
-        <Icon name={icon} size={14} aria-hidden="true" className="shrink-0 text-[#0B1026]" />
+        <Icon name={icon} size={14} aria-hidden="true" className="shrink-0 text-[#171412]" />
         <span className="truncate font-medium">{label}</span>
       </div>
-      <span className="min-w-0 max-w-[65%] truncate text-right font-black text-[#0B1026]" title={value}>{value}</span>
+      <span className="min-w-0 max-w-[65%] truncate text-right font-black text-[#171412]" title={value}>{value}</span>
     </div>
   );
 }
@@ -1001,7 +1001,7 @@ function RelatedBookCard({ book }: { book: Book }) {
 
   return (
     <Link href={`/books/${bookIdOf(book)}`} className="group block outline-none">
-      <div className="relative aspect-[2/3] overflow-hidden rounded-sm bg-[#F3F4F6] shadow-[0_10px_24px_rgba(17,24,39,0.14)] transition duration-300 group-hover:-translate-y-1 group-hover:shadow-[0_16px_30px_rgba(17,24,39,0.2)] group-focus-visible:ring-4 group-focus-visible:ring-[#E60028]/25">
+      <div className="relative aspect-[2/3] overflow-hidden rounded-sm bg-[#F3F4F6] shadow-[0_10px_24px_rgba(17,24,39,0.14)] transition duration-300 group-hover:-translate-y-1 group-hover:shadow-[0_16px_30px_rgba(17,24,39,0.2)] group-focus-visible:ring-4 group-focus-visible:ring-[#7A263A]/25">
         {coverUrl ? (
           <Image
             src={coverUrl}
@@ -1012,12 +1012,12 @@ function RelatedBookCard({ book }: { book: Book }) {
             className="object-cover"
           />
         ) : (
-          <div className="flex h-full w-full items-end bg-[linear-gradient(135deg,#111827,#000000)] p-3">
+          <div className="flex h-full w-full items-end bg-[linear-gradient(135deg,#2B2723,#000000)] p-3">
             <p className="line-clamp-4 text-sm font-black text-white">{book.title}</p>
           </div>
         )}
       </div>
-      <h4 className="mt-3 line-clamp-2 text-sm font-black leading-snug text-[#111827] transition group-hover:text-[#E60028]">
+      <h4 className="mt-3 line-clamp-2 text-sm font-black leading-snug text-[#2B2723] transition group-hover:text-[#7A263A]">
         {book.title}
       </h4>
       {/* Star rating */}
@@ -1033,7 +1033,7 @@ function RelatedBookCard({ book }: { book: Book }) {
           </span>
         )}
       </div>
-      <p className="mt-1.5 line-clamp-1 text-xs font-medium text-[#6B7280]">
+      <p className="mt-1.5 line-clamp-1 text-xs font-medium text-[#776D63]">
         {(book.authors ?? []).map(authorLabel).join(", ")}
       </p>
     </Link>
@@ -1044,7 +1044,7 @@ function AnimatedActionLink({ href, children }: { href: string; children: string
   return (
     <Link
       href={href}
-      className="group inline-flex items-center justify-center gap-2 rounded-full border border-[#D9DCE8] px-5 py-3 text-sm font-bold text-[#000054] outline-none transition-all duration-200 hover:-translate-y-0.5 hover:border-[#337AB7] hover:bg-white hover:text-[#E60028] hover:shadow-lg hover:shadow-[#000054]/10 active:translate-y-0 active:scale-[0.98] focus-visible:ring-4 focus-visible:ring-[#337AB7]/20"
+      className="group inline-flex items-center justify-center gap-2 rounded-full border border-[#D8CCBC] px-5 py-3 text-sm font-bold text-[#2B2723] outline-none transition-all duration-200 hover:-translate-y-0.5 hover:border-[#7A263A] hover:bg-white hover:text-[#7A263A] hover:shadow-lg hover:shadow-[#2B2723]/10 active:translate-y-0 active:scale-[0.98] focus-visible:ring-4 focus-visible:ring-[#7A263A]/20"
     >
       <span aria-hidden="true" className="transition-transform duration-200 group-hover:-translate-x-1">
         ←
@@ -1093,7 +1093,7 @@ function PhysicalAvailabilityPanel({
               <Icon name={isOutOfStock ? "clock" : "check"} size={19} aria-hidden="true" />
             </span>
             <div>
-              <h3 className="text-base font-black text-[#0B1026]">
+              <h3 className="text-base font-black text-[#171412]">
                 {isOutOfStock ? text.unavailableTitle : text.availableTitle}
               </h3>
               <p className="mt-0.5 text-xs font-medium leading-5 text-[#61708F]">
@@ -1160,25 +1160,25 @@ function PhysicalAvailabilityPanel({
 function BookDetailSkeleton() {
   return (
     <div className="grid gap-6 lg:grid-cols-[1.1fr_0.9fr]">
-      <section className="border border-[#EDEDF2] bg-[#F8F9FA] p-6">
+      <section className="border border-[#DED5C8] bg-[#F7F3EA] p-6">
         <Skeleton variant="rectangular" className="h-6 w-32 rounded-full" />
         <Skeleton variant="text" className="mt-5 h-9 w-3/4" />
         <Skeleton variant="text" className="mt-3 h-5 w-1/2" />
         <Skeleton variant="rectangular" className="mt-6 h-8 w-40 rounded-full" />
       </section>
 
-      <section className="border border-[#EDEDF2] bg-white p-6">
+      <section className="border border-[#DED5C8] bg-white p-6">
         <Skeleton variant="text" className="h-6 w-32" />
         <Skeleton variant="rectangular" className="mt-4 h-8 w-40 rounded-full" />
         <Skeleton variant="rectangular" className="mt-5 h-12 w-full rounded-full" />
         <Skeleton variant="rectangular" className="mt-3 h-12 w-full rounded-full" />
       </section>
 
-      <section className="border border-[#EDEDF2] bg-white p-6 lg:col-span-2">
+      <section className="border border-[#DED5C8] bg-white p-6 lg:col-span-2">
         <Skeleton variant="text" className="h-6 w-48" />
         <div className="mt-5 grid gap-4 md:grid-cols-2">
           {Array.from({ length: 6 }).map((_, index) => (
-            <div key={index} className="rounded-lg border border-[#EDEDF2] bg-[#F8F9FA] p-4">
+            <div key={index} className="rounded-lg border border-[#DED5C8] bg-[#F7F3EA] p-4">
               <Skeleton variant="text" className="h-3 w-24" />
               <Skeleton variant="text" className="mt-2 h-5 w-32" />
             </div>

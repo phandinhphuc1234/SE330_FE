@@ -140,14 +140,14 @@ export function PaymentStatusPage() {
         ) : payment ? (
           <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_360px]">
             <div>
-              <div className="flex flex-col gap-5 rounded-2xl border border-[#E1E6F0] bg-[#F8FAFC] p-5 md:flex-row md:items-center md:justify-between">
+              <div className="flex flex-col gap-5 rounded-2xl border border-[#E1E6F0] bg-[#FBF8F1] p-5 md:flex-row md:items-center md:justify-between">
                 <div className="flex min-w-0 items-start gap-4">
                   <span className={`grid h-14 w-14 shrink-0 place-items-center rounded-2xl ${statusTone.iconClass}`}>
                     <Icon name={statusTone.icon} size={26} aria-hidden="true" />
                   </span>
                   <div className="min-w-0">
                     <StatusPill status={payment.status} text={text} />
-                    <h2 className="mt-3 font-serif text-4xl font-bold text-[#0B1026]">
+                    <h2 className="mt-3 font-serif text-4xl font-bold text-[#171412]">
                       {statusTitle(payment.status, text)}
                     </h2>
                     <p className="mt-2 max-w-2xl text-sm leading-6 text-[#59637A]">
@@ -183,7 +183,7 @@ export function PaymentStatusPage() {
             </div>
 
             <aside className="rounded-2xl border border-[#E1E6F0] bg-white p-5 shadow-[0_18px_50px_rgba(15,23,42,0.06)]">
-              <h3 className="font-serif text-2xl font-bold text-[#0B1026]">{text.updatedAt}</h3>
+              <h3 className="font-serif text-2xl font-bold text-[#171412]">{text.updatedAt}</h3>
               <div className="mt-5 divide-y divide-[#E1E6F0]">
                 <TimelineRow label={text.createdAt} value={formatDate(payment.createdAt, text)} />
                 <TimelineRow label={text.expiredAt} value={formatDate(payment.expiredAt, text)} />
@@ -204,7 +204,7 @@ export function PaymentStatusPage() {
                 {payment.purpose === "EBOOK_PAYMENT" && (
                   <Link
                     href="/user/ebook-loans"
-                    className="inline-flex h-11 items-center justify-center gap-2 rounded-xl bg-[#111827] px-4 text-sm font-black text-white transition hover:-translate-y-0.5 hover:bg-black"
+                    className="inline-flex h-11 items-center justify-center gap-2 rounded-xl bg-[#2B2723] px-4 text-sm font-black text-white transition hover:-translate-y-0.5 hover:bg-black"
                   >
                     <Icon name="book-open" size={17} aria-hidden="true" />
                     {text.myEbooks}
@@ -213,7 +213,7 @@ export function PaymentStatusPage() {
                 {payment.purpose === "OVERDUE_FINE" && (
                   <Link
                     href="/user/fines"
-                    className="inline-flex h-11 items-center justify-center gap-2 rounded-xl bg-[#111827] px-4 text-sm font-black text-white transition hover:-translate-y-0.5 hover:bg-black"
+                    className="inline-flex h-11 items-center justify-center gap-2 rounded-xl bg-[#2B2723] px-4 text-sm font-black text-white transition hover:-translate-y-0.5 hover:bg-black"
                   >
                     <Icon name="alert-circle" size={17} aria-hidden="true" />
                     My fines
@@ -221,7 +221,7 @@ export function PaymentStatusPage() {
                 )}
                 <Link
                   href="/books"
-                  className="inline-flex h-11 items-center justify-center gap-2 rounded-xl border border-[#D8DEE8] bg-white px-4 text-sm font-black text-[#0B1026] transition hover:-translate-y-0.5 hover:border-[#B30D2D] hover:text-[#B30D2D]"
+                  className="inline-flex h-11 items-center justify-center gap-2 rounded-xl border border-[#D8DEE8] bg-white px-4 text-sm font-black text-[#171412] transition hover:-translate-y-0.5 hover:border-[#B30D2D] hover:text-[#B30D2D]"
                 >
                   <Icon name="arrow-left" size={17} aria-hidden="true" />
                   {text.backToBooks}
@@ -245,7 +245,7 @@ function PaymentStatusSkeleton({ text }: { text: typeof copy.en }) {
   return (
     <div>
       <Notice message={text.loading} />
-      <div className="mt-5 rounded-2xl border border-[#E1E6F0] bg-[#F8FAFC] p-5">
+      <div className="mt-5 rounded-2xl border border-[#E1E6F0] bg-[#FBF8F1] p-5">
         <Skeleton variant="rectangular" className="h-10 w-36 rounded-full" />
         <Skeleton variant="text" className="mt-5 h-10 w-80 max-w-full" />
         <Skeleton variant="text" className="mt-3 h-5 w-[520px] max-w-full" />
@@ -273,8 +273,8 @@ function StatusPill({ status, text }: { status?: string; text: typeof copy.en })
 function PaymentInfoCard({ label, value }: { label: string; value: string }) {
   return (
     <div className="rounded-2xl border border-[#E1E6F0] bg-white p-5 shadow-[0_12px_32px_rgba(15,23,42,0.05)]">
-      <p className="text-[11px] font-black uppercase tracking-wide text-[#6B7280]">{label}</p>
-      <p className="mt-2 break-words text-base font-black text-[#0B1026]">{value}</p>
+      <p className="text-[11px] font-black uppercase tracking-wide text-[#776D63]">{label}</p>
+      <p className="mt-2 break-words text-base font-black text-[#171412]">{value}</p>
     </div>
   );
 }
@@ -283,7 +283,7 @@ function TimelineRow({ label, value }: { label: string; value: string }) {
   return (
     <div className="flex items-center justify-between gap-4 py-3 text-sm">
       <span className="font-semibold text-[#59637A]">{label}</span>
-      <span className="text-right font-black text-[#0B1026]">{value}</span>
+      <span className="text-right font-black text-[#171412]">{value}</span>
     </div>
   );
 }
@@ -292,7 +292,7 @@ function StatusBackLink({ href, children }: { href: string; children: string }) 
   return (
     <Link
       href={href}
-      className="group inline-flex items-center justify-center gap-2 rounded-full border border-[#D9DCE8] px-5 py-3 text-sm font-bold text-[#000054] outline-none transition-all duration-200 hover:-translate-y-0.5 hover:border-[#337AB7] hover:bg-white hover:text-[#E60028] hover:shadow-lg hover:shadow-[#000054]/10"
+      className="group inline-flex items-center justify-center gap-2 rounded-full border border-[#D8CCBC] px-5 py-3 text-sm font-bold text-[#2B2723] outline-none transition-all duration-200 hover:-translate-y-0.5 hover:border-[#7A263A] hover:bg-white hover:text-[#7A263A] hover:shadow-lg hover:shadow-[#2B2723]/10"
     >
       <Icon name="arrow-left" size={17} aria-hidden="true" className="transition-transform duration-200 group-hover:-translate-x-1" />
       {children}

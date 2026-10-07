@@ -97,7 +97,7 @@ export function ReviewForm({ bookId, existingReview, onSubmitted, onCancelled }:
 
   return (
     <div className="rounded-xl border border-[#E1E6F0] bg-white p-6">
-      <h4 className="text-base font-black text-[#111827]">
+      <h4 className="text-base font-black text-[#2B2723]">
         {isEditMode ? text.editReview : text.writeReview}
       </h4>
 

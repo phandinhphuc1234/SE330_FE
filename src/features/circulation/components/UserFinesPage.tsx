@@ -115,10 +115,10 @@ export function UserFinesPage() {
       {!isLoading && (
         <div className="mt-6 overflow-x-auto rounded-2xl border border-[#D8DEE8] bg-white shadow-sm">
           <table className="w-full min-w-[900px] border-collapse text-left text-sm">
-            <thead className="bg-[#F8FAFC]">
+            <thead className="bg-[#FBF8F1]">
               <tr>
                 {text.headings.map((heading) => (
-                  <th key={heading} className="px-6 py-4 font-black uppercase tracking-wider text-[#6B7280] text-[10px]">
+                  <th key={heading} className="px-6 py-4 font-black uppercase tracking-wider text-[#776D63] text-[10px]">
                     {heading}
                   </th>
                 ))}
@@ -133,7 +133,7 @@ export function UserFinesPage() {
                 </tr>
               ) : (
                 fines.map((fine, idx) => (
-                  <tr key={`${fine.borrowId}-${idx}`} className="hover:bg-[#F8FAFC] transition-colors group">
+                  <tr key={`${fine.borrowId}-${idx}`} className="hover:bg-[#FBF8F1] transition-colors group">
                     {/* Book Column */}
                     <td className="px-6 py-4">
                       <div className="flex items-start gap-3">
@@ -141,7 +141,7 @@ export function UserFinesPage() {
                           <Icon name="book" size={16} />
                         </div>
                         <div>
-                          <div className="font-bold text-[#0B1026] line-clamp-2 max-w-[240px]" title={fine.bookTitle}>
+                          <div className="font-bold text-[#171412] line-clamp-2 max-w-[240px]" title={fine.bookTitle}>
                             {fine.bookTitle || "Unknown Book"}
                           </div>
                           <div className="mt-1 flex items-center gap-2">
@@ -208,7 +208,7 @@ export function UserFinesPage() {
                           type="button"
                           onClick={() => handlePayment(fine.borrowId!)}
                           disabled={processingId !== null}
-                          className="inline-flex items-center gap-1.5 rounded-full bg-[#111827] px-4 py-2 text-xs font-bold text-white transition hover:-translate-y-0.5 hover:bg-black hover:shadow-md disabled:opacity-50 disabled:hover:translate-y-0"
+                          className="inline-flex items-center gap-1.5 rounded-full bg-[#2B2723] px-4 py-2 text-xs font-bold text-white transition hover:-translate-y-0.5 hover:bg-black hover:shadow-md disabled:opacity-50 disabled:hover:translate-y-0"
                         >
                           <Icon name="credit-card" size={14} className={processingId === fine.borrowId ? "animate-pulse" : ""} />
                           {processingId === fine.borrowId ? text.processing : text.payNow}
@@ -217,7 +217,7 @@ export function UserFinesPage() {
                       {fine.fineStatus === "PAID" && (
                          <Link
                           href={`/user/receipts`}
-                          className="inline-flex items-center gap-1.5 rounded-full border border-[#D9DCE8] bg-white px-4 py-2 text-xs font-bold text-[#000054] transition hover:-translate-y-0.5 hover:border-[#337AB7] hover:text-[#E60028]"
+                          className="inline-flex items-center gap-1.5 rounded-full border border-[#D8CCBC] bg-white px-4 py-2 text-xs font-bold text-[#2B2723] transition hover:-translate-y-0.5 hover:border-[#7A263A] hover:text-[#7A263A]"
                        >
                          <Icon name="file-text" size={14} />
                          {text.viewReceipt}
@@ -269,7 +269,7 @@ function FineStatusBadge({ status }: { status?: string }) {
       );
     default:
       return (
-        <span className="inline-flex items-center rounded-full bg-[#F8FAFC] px-2.5 py-1 text-[10px] font-black text-[#6B7280] uppercase tracking-wider border border-[#E2E8F0]">
+        <span className="inline-flex items-center rounded-full bg-[#FBF8F1] px-2.5 py-1 text-[10px] font-black text-[#776D63] uppercase tracking-wider border border-[#E2E8F0]">
           {status || "Unknown"}
         </span>
       );

@@ -126,7 +126,7 @@ export function VerifyEmailStatus() {
   };
 
   return (
-    <main id="main-content" tabIndex={-1} className="min-h-dvh bg-[linear-gradient(180deg,#F8F9FA_0%,#FFFFFF_100%)] outline-none">
+    <main id="main-content" tabIndex={-1} className="min-h-dvh bg-[linear-gradient(180deg,#F7F3EA_0%,#FFFFFF_100%)] outline-none">
       <div className="grid min-h-dvh lg:grid-cols-[0.95fr_1.05fr]">
         <section className="bg-[radial-gradient(circle_at_15%_10%,rgba(255,255,255,0.14),transparent_30%),linear-gradient(135deg,#050505_0%,#171717_65%,#2d2d2d_100%)] px-6 py-8 text-white lg:px-12">
           <BrandMark />
@@ -145,7 +145,7 @@ export function VerifyEmailStatus() {
         </section>
 
         <section className="flex items-center justify-center px-5 py-12 lg:px-8">
-          <div className="animate-modal-in w-full max-w-md rounded-2xl border border-[#EDEDF2] bg-white p-8 shadow-[0_24px_60px_rgba(17,24,39,0.14)]">
+          <div className="animate-modal-in w-full max-w-md rounded-2xl border border-[#DED5C8] bg-white p-8 shadow-[0_24px_60px_rgba(17,24,39,0.14)]">
             {state === "loading" && <LoadingState message={message} text={text} />}
             {state === "success" && <SuccessState message={message} text={text} />}
             {(state === "expired" || state === "invalid") && (
@@ -174,7 +174,7 @@ function LoadingState({ message, text }: { message: string; text: VerifyEmailCop
       <p className="text-sm font-bold uppercase tracking-wide text-black/70">{text.loadingEyebrow}</p>
       <h2 className="mt-3 font-serif text-3xl font-bold text-black">{text.loadingTitle}</h2>
       <p className="mt-3 text-sm leading-6 text-black/75">{message}</p>
-      <div className="mt-6 h-2 overflow-hidden rounded-full bg-[#EDEDF2]">
+      <div className="mt-6 h-2 overflow-hidden rounded-full bg-[#DED5C8]">
         <div className="h-full w-2/3 animate-pulse rounded-full bg-black" />
       </div>
     </>
@@ -189,7 +189,7 @@ function SuccessState({ message, text }: { message: string; text: VerifyEmailCop
       <p className="mt-3 text-sm leading-6 text-black/75">{message}</p>
       <Link
         href="/login"
-        className="mt-6 inline-flex h-12 w-full items-center justify-center rounded-full bg-gradient-to-r from-[#E60028] to-[#c90022] px-5 text-sm font-bold text-white shadow-lg shadow-[#E60028]/25 transition-all duration-200 hover:-translate-y-0.5"
+        className="mt-6 inline-flex h-12 w-full items-center justify-center rounded-full bg-gradient-to-r from-[#7A263A] to-[#5A1C2B] px-5 text-sm font-bold text-white shadow-lg shadow-[#7A263A]/25 transition-all duration-200 hover:-translate-y-0.5"
       >
         {text.goToLogin}
       </Link>
@@ -222,7 +222,7 @@ function VerifyError({
 
   return (
     <>
-      <p className="text-sm font-bold uppercase tracking-wide text-[#E60028]">
+      <p className="text-sm font-bold uppercase tracking-wide text-[#7A263A]">
         {isExpired ? text.expiredEyebrow : text.invalidEyebrow}
       </p>
       <h2 className="mt-3 font-serif text-3xl font-bold text-black">
@@ -235,7 +235,7 @@ function VerifyError({
       <input
         id="resend-email"
         type="email"
-        className="mt-2 h-12 w-full rounded-lg border border-[#D9DCE8] px-4 text-black outline-none transition-all duration-200 focus:border-2 focus:border-black focus:shadow-[0_0_0_4px_rgba(0,0,0,0.1)]"
+        className="mt-2 h-12 w-full rounded-lg border border-[#D8CCBC] px-4 text-black outline-none transition-all duration-200 focus:border-2 focus:border-black focus:shadow-[0_0_0_4px_rgba(0,0,0,0.1)]"
         placeholder={text.emailPlaceholder}
         value={email}
         onChange={(event) => onEmailChange(event.target.value)}
@@ -246,7 +246,7 @@ function VerifyError({
         </p>
       )}
       {resendError && (
-        <p className="mt-4 animate-fade-up rounded-lg border border-[#E60028]/20 bg-[#E60028]/8 p-3 text-sm font-semibold text-[#B00020]">
+        <p className="mt-4 animate-fade-up rounded-lg border border-[#7A263A]/20 bg-[#7A263A]/8 p-3 text-sm font-semibold text-[#B00020]">
           {resendError}
         </p>
       )}
@@ -254,7 +254,7 @@ function VerifyError({
         <button
           type="button"
           disabled={isResending}
-          className="inline-flex h-12 items-center justify-center rounded-full bg-gradient-to-r from-[#E60028] to-[#c90022] px-5 text-sm font-bold text-white shadow-lg shadow-[#E60028]/25 transition-all duration-200 hover:-translate-y-0.5 disabled:cursor-not-allowed disabled:from-[#B8BBC8] disabled:to-[#9FA3B2]"
+          className="inline-flex h-12 items-center justify-center rounded-full bg-gradient-to-r from-[#7A263A] to-[#5A1C2B] px-5 text-sm font-bold text-white shadow-lg shadow-[#7A263A]/25 transition-all duration-200 hover:-translate-y-0.5 disabled:cursor-not-allowed disabled:from-[#BEB2A3] disabled:to-[#A09282]"
           onClick={onResend}
         >
           {isResending && (

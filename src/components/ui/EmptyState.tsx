@@ -26,8 +26,8 @@ const variantStyles = {
   },
   error: {
     iconBg: "bg-red-50",
-    iconColor: "text-[#E60028]",
-    titleColor: "text-[#E60028]",
+    iconColor: "text-[#7A263A]",
+    titleColor: "text-[#7A263A]",
   },
   success: {
     iconBg: "bg-green-50",
@@ -71,7 +71,7 @@ export function EmptyState({
   const defaultIcon = defaultIcons[variant];
 
   return (
-    <div className={`flex flex-col items-center justify-center rounded-xl border border-[#EDEDF2] bg-white px-6 py-16 text-center ${className}`}>
+    <div className={`flex flex-col items-center justify-center rounded-2xl border border-[#DED5C8] bg-[#FFFCF5] px-6 py-16 text-center shadow-[0_12px_32px_rgba(43,39,35,0.06)] ${className}`}>
       {/* Icon */}
       <div className={`mb-4 flex h-20 w-20 items-center justify-center rounded-full ${styles.iconBg} animate-scale-in`}>
         <div className={styles.iconColor}>
@@ -80,7 +80,7 @@ export function EmptyState({
       </div>
 
       {/* Title */}
-      <h3 className={`animate-fade-up text-xl font-bold ${styles.titleColor} animate-delay-75`}>
+      <h3 className={`animate-fade-up font-serif text-2xl font-semibold ${styles.titleColor} animate-delay-75`}>
         {title}
       </h3>
 
