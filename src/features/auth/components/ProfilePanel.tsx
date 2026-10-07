@@ -8,78 +8,64 @@ import { editorialSerif } from "@/components/layout/editorialFont";
 import { useLanguage } from "@/features/i18n/context/LanguageContext";
 import { useAuth } from "../context/AuthContext";
 
-const profileCopy = {
-  en: {
-    authenticating: "Authenticating",
-    checkingSession: "Checking your session...",
-    eyebrow: "Account",
-    pageTitle: "Profile settings",
-    pageDescription: "Manage your account information and preferences for The Athenaeum.",
-    fallbackName: "The Athenaeum member profile",
-    labels: {
-      email: "Email",
-      role: "Role",
-      status: "Status",
-      borrowLimit: "Borrow limit",
-      fullName: "Full name",
-      phone: "Phone",
-    },
-    updateTitle: "Personal information",
-    updateDescription: "Only full name and phone can be changed here.",
-    profileTip: "Keep your profile up to date for a smoother library experience.",
-    saving: "Saving...",
-    saveChanges: "Save changes",
-    fullNameRequired: "Full name is required.",
-    updated: "Your profile was updated.",
-    updateFailed: "Could not update profile.",
-    details: "Account details",
-    emailLocked: "Email cannot be changed",
-    overview: "Account overview",
-    overviewDescription: "A quick summary of your account details.",
-    membershipProgress: "Membership progress",
-    membershipHelp: "Enjoy full library access and privileges.",
-    thankYouTitle: "Thank you for being part of The Athenaeum.",
-    thankYouText: "Your account keeps reading activity, reservations and borrowing records in one calm workspace.",
-  },
-  vi: {
-    authenticating: "Xác thực",
-    checkingSession: "Đang kiểm tra phiên đăng nhập...",
-    eyebrow: "Tài khoản",
-    pageTitle: "Cài đặt hồ sơ",
-    pageDescription: "Quản lý thông tin tài khoản và tùy chọn của bạn tại The Athenaeum.",
-    fallbackName: "Hồ sơ thành viên The Athenaeum",
-    labels: {
-      email: "Email",
-      role: "Vai trò",
-      status: "Trạng thái",
-      borrowLimit: "Giới hạn mượn",
-      fullName: "Họ và tên",
-      phone: "Số điện thoại",
-    },
-    updateTitle: "Thông tin cá nhân",
-    updateDescription: "Chỉ có thể thay đổi họ tên và số điện thoại tại đây.",
-    profileTip: "Luôn cập nhật hồ sơ để có trải nghiệm thư viện thuận tiện hơn.",
-    saving: "Đang lưu...",
-    saveChanges: "Lưu thay đổi",
-    fullNameRequired: "Vui lòng nhập họ và tên.",
-    updated: "Hồ sơ của bạn đã được cập nhật.",
-    updateFailed: "Không thể cập nhật hồ sơ.",
-    details: "Chi tiết tài khoản",
-    emailLocked: "Email không thể thay đổi",
-    overview: "Tổng quan tài khoản",
-    overviewDescription: "Thông tin tóm tắt nhanh về tài khoản của bạn.",
-    membershipProgress: "Tiến độ thành viên",
-    membershipHelp: "Tận hưởng đầy đủ quyền truy cập và đặc quyền thư viện.",
-    thankYouTitle: "Cảm ơn bạn đã đồng hành cùng The Athenaeum.",
-    thankYouText: "Tài khoản giúp bạn quản lý hoạt động đọc, đặt giữ và mượn sách trong một không gian gọn gàng.",
-  },
-};
+const profileText = {
+  authenticating: ["Authenticating", "Xác thực"],
+  checkingSession: ["Checking your session...", "Đang kiểm tra phiên đăng nhập..."],
+  eyebrow: ["Account", "Tài khoản"],
+  pageTitle: ["Profile settings", "Cài đặt hồ sơ"],
+  pageDescription: [
+    "Manage your account information and preferences for The Athenaeum.",
+    "Quản lý thông tin tài khoản và tùy chọn của bạn tại The Athenaeum.",
+  ],
+  fallbackName: ["The Athenaeum member profile", "Hồ sơ thành viên The Athenaeum"],
+  email: ["Email", "Email"],
+  role: ["Role", "Vai trò"],
+  status: ["Status", "Trạng thái"],
+  borrowLimit: ["Borrow limit", "Giới hạn mượn"],
+  fullName: ["Full name", "Họ và tên"],
+  phone: ["Phone", "Số điện thoại"],
+  updateTitle: ["Personal information", "Thông tin cá nhân"],
+  updateDescription: [
+    "Only full name and phone can be changed here.",
+    "Chỉ có thể thay đổi họ tên và số điện thoại tại đây.",
+  ],
+  profileTip: [
+    "Keep your profile up to date for a smoother library experience.",
+    "Luôn cập nhật hồ sơ để có trải nghiệm thư viện thuận tiện hơn.",
+  ],
+  saving: ["Saving...", "Đang lưu..."],
+  saveChanges: ["Save changes", "Lưu thay đổi"],
+  fullNameRequired: ["Full name is required.", "Vui lòng nhập họ và tên."],
+  updated: ["Your profile was updated.", "Hồ sơ của bạn đã được cập nhật."],
+  updateFailed: ["Could not update profile.", "Không thể cập nhật hồ sơ."],
+  details: ["Account details", "Chi tiết tài khoản"],
+  emailLocked: ["Email cannot be changed", "Email không thể thay đổi"],
+  overview: ["Account overview", "Tổng quan tài khoản"],
+  overviewDescription: ["A quick summary of your account details.", "Thông tin tóm tắt nhanh về tài khoản của bạn."],
+  membershipProgress: ["Membership progress", "Tiến độ thành viên"],
+  membershipHelp: ["Enjoy full library access and privileges.", "Tận hưởng đầy đủ quyền truy cập và đặc quyền thư viện."],
+  thankYouTitle: ["Thank you for being part of The Athenaeum.", "Cảm ơn bạn đã đồng hành cùng The Athenaeum."],
+  thankYouText: [
+    "Your account keeps reading activity, reservations and borrowing records in one calm workspace.",
+    "Tài khoản giúp bạn quản lý hoạt động đọc, đặt giữ và mượn sách trong một không gian gọn gàng.",
+  ],
+} as const;
+
+type ProfileCopy = { [Key in keyof typeof profileText]: string };
+
+function getProfileCopy(locale: "en" | "vi"): ProfileCopy {
+  const localeIndex = locale === "en" ? 0 : 1;
+
+  return Object.fromEntries(
+    Object.entries(profileText).map(([key, translations]) => [key, translations[localeIndex]]),
+  ) as ProfileCopy;
+}
 
 export function ProfilePanel() {
   const router = useRouter();
   const auth = useAuth();
   const { locale } = useLanguage();
-  const copy = profileCopy[locale];
+  const copy = getProfileCopy(locale);
   const [message, setMessage] = useState("");
   const [error, setError] = useState("");
   const [isSaving, setIsSaving] = useState(false);
@@ -132,10 +118,10 @@ export function ProfilePanel() {
     Math.max(35, Number(auth.currentUser?.maxBorrowLimit ?? 0) * 5 || 70),
   );
   const detailItems = [
-    { label: copy.labels.email, value: auth.currentUser?.email ?? "-", icon: "mail" },
-    { label: copy.labels.role, value: auth.currentUser?.role ?? "-", icon: "user" },
-    { label: copy.labels.status, value: auth.currentUser?.status ?? "-", icon: "shield" },
-    { label: copy.labels.borrowLimit, value: String(auth.currentUser?.maxBorrowLimit ?? "-"), icon: "book" },
+    { label: copy.email, value: auth.currentUser?.email ?? "-", icon: "mail" },
+    { label: copy.role, value: auth.currentUser?.role ?? "-", icon: "user" },
+    { label: copy.status, value: auth.currentUser?.status ?? "-", icon: "shield" },
+    { label: copy.borrowLimit, value: String(auth.currentUser?.maxBorrowLimit ?? "-"), icon: "book" },
   ] as const;
 
   return (
@@ -219,13 +205,13 @@ export function ProfilePanel() {
 
                   <div className="mt-8 grid gap-5 md:grid-cols-2">
                     <TextField
-                      label={copy.labels.fullName}
+                      label={copy.fullName}
                       name="fullName"
                       defaultValue={auth.currentUser?.fullName ?? ""}
                       icon="user"
                     />
                     <TextField
-                      label={copy.labels.phone}
+                      label={copy.phone}
                       name="phone"
                       defaultValue={auth.currentUser?.phone ?? ""}
                       icon="phone"
@@ -234,14 +220,14 @@ export function ProfilePanel() {
 
                   <label className="mt-5 block">
                     <span className="text-sm font-semibold text-[#211D1A]">
-                      {copy.labels.email} <span className="font-normal text-[#827A73]">({copy.emailLocked})</span>
+                      {copy.email} <span className="font-normal text-[#827A73]">({copy.emailLocked})</span>
                     </span>
                     <span className="mt-2 flex items-center gap-3 rounded-xl border border-[#DCD5CE] bg-[#F5F3F0] px-4 py-3.5 text-[#827A73]">
                       <ProfileIcon name="mail" className="h-5 w-5 shrink-0" />
                       <input
                         value={auth.currentUser?.email ?? "-"}
                         readOnly
-                        aria-label={copy.labels.email}
+                        aria-label={copy.email}
                         className="min-w-0 flex-1 bg-transparent outline-none"
                       />
                     </span>
