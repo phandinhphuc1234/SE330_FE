@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowLeft, ArrowRight, BookOpen, LibraryBig, RefreshCw } from "lucide-react";
+import { ArrowLeft, ArrowRight, BookOpen, Bookmark, LibraryBig, RefreshCw } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
 import { editorialSerif } from "@/components/layout/editorialFont";
 import { Skeleton } from "@/components/ui/Skeleton";
@@ -158,22 +158,29 @@ function FeaturedBookCard({ book, unknownAuthor }: { book: Book; unknownAuthor: 
   const authors = book.authors?.map(authorLabel).join(", ") || unknownAuthor;
 
   return (
-    <Link href={bookId ? `/books/${bookId}` : "/books"} className="group flex min-w-0 flex-col rounded-xl border border-[#E5DCD0] bg-[#FFFCF5] p-4 text-[#2B2723] shadow-[0_10px_24px_rgba(0,0,0,0.14)] transition-[border-color,box-shadow] hover:border-[#E1C38B] hover:shadow-[0_14px_30px_rgba(0,0,0,0.2)] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#E1C38B] xl:p-5">
-      <div className="relative flex h-44 items-center justify-center overflow-hidden rounded-lg bg-[#EFE6D6] p-3 xl:h-52">
+    <Link href={bookId ? `/books/${bookId}` : "/books"} className="group relative flex h-full min-w-0 flex-col overflow-hidden rounded-2xl border border-[#D6B779]/60 bg-[linear-gradient(145deg,rgba(62,48,37,0.9),rgba(34,27,22,0.94))] p-3.5 text-[#FFFCF5] shadow-[0_18px_45px_rgba(0,0,0,0.3)] backdrop-blur-md transition-[transform,border-color,box-shadow] hover:-translate-y-1 hover:border-[#E9C77F] hover:shadow-[0_24px_55px_rgba(0,0,0,0.4)] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#E1C38B] xl:p-4">
+      <span aria-hidden="true" className="absolute right-2.5 top-2.5 z-10 grid h-11 w-11 place-items-center rounded-full border border-[#E1C38B] bg-[#2B211A]/90 text-[#F0CD88] shadow-[0_8px_18px_rgba(0,0,0,0.3)] backdrop-blur-sm xl:right-3 xl:top-3 xl:h-12 xl:w-12">
+        <Bookmark size={20} strokeWidth={1.7} />
+      </span>
+
+      <div className="relative aspect-[5/7] w-full overflow-hidden rounded-lg border border-[#D6B779]/45 bg-[#EFE6D6] shadow-[0_12px_28px_rgba(0,0,0,0.28)]">
         {coverUrl && coverUrl !== failedCoverUrl ? (
-          <Image src={coverUrl} alt={bookCoverAlt(book)} fill unoptimized sizes="180px" className="object-contain p-2" onError={() => setFailedCoverUrl(coverUrl)} />
+          <Image src={coverUrl} alt={bookCoverAlt(book)} fill unoptimized sizes="(min-width: 1280px) 210px, 180px" className="object-cover transition-transform duration-500 group-hover:scale-[1.025]" onError={() => setFailedCoverUrl(coverUrl)} />
         ) : (
-          <div className="flex h-full w-full flex-col justify-between border-l-4 border-[#7A263A]/35 p-3 text-[#5A1C2B]">
-            <BookOpen size={20} strokeWidth={1.4} aria-hidden="true" />
-            <span className={`${editorialSerif.className} line-clamp-3 text-base font-medium leading-snug`}>{book.title}</span>
+          <div className="relative flex h-full w-full flex-col justify-between overflow-hidden bg-[linear-gradient(155deg,#F8F0DF_0%,#E7D7B8_62%,#C8A978_100%)] p-5 text-[#5A1C2B]">
+            <div aria-hidden="true" className="absolute -bottom-10 -right-8 h-36 w-36 rounded-full border-[22px] border-[#7A263A]/10" />
+            <div aria-hidden="true" className="absolute bottom-12 left-0 h-px w-3/4 rotate-[-18deg] bg-[#7A263A]/25" />
+            <BookOpen size={24} strokeWidth={1.3} aria-hidden="true" className="relative" />
+            <span className={`${editorialSerif.className} relative line-clamp-4 text-xl font-medium leading-tight xl:text-2xl`}>{book.title}</span>
           </div>
         )}
       </div>
-      <p className="mt-4 truncate text-xs font-medium uppercase tracking-[0.08em] text-[#8B775F]">
+      <p className="mt-5 truncate text-[11px] font-semibold uppercase tracking-[0.12em] text-[#E1C38B] xl:text-xs">
         {book.category ? categoryLabel(book.category) : "The Athenaeum"}
       </p>
-      <h3 className={`${editorialSerif.className} mt-2 line-clamp-2 text-lg font-medium leading-6 transition-colors group-hover:text-[#7A263A] xl:text-xl`}>{book.title}</h3>
-      <p className="mt-3 line-clamp-2 text-sm leading-5 text-[#6F675E]">{authors}</p>
+      <span aria-hidden="true" className="mt-2 h-px w-7 bg-[#E1C38B] transition-all duration-300 group-hover:w-12" />
+      <h3 className={`${editorialSerif.className} mt-3 line-clamp-2 min-h-12 text-xl font-medium leading-6 text-[#FFFCF5] transition-colors group-hover:text-[#F0CD88] xl:text-[1.35rem] xl:leading-7`}>{book.title}</h3>
+      <p className="mt-3 line-clamp-2 min-h-10 text-sm leading-5 text-[#D8CBB9]">{authors}</p>
     </Link>
   );
 }
@@ -184,11 +191,11 @@ function FeaturedBooksSkeleton({ label }: { label: string }) {
       <span className="sr-only">{label}</span>
       <div aria-hidden="true" className="grid min-w-[960px] grid-cols-5 gap-4 xl:min-w-0 xl:gap-5">
         {Array.from({ length: 5 }).map((_, index) => (
-          <div key={index} className="rounded-xl bg-[#FFFCF5] p-4 xl:p-5">
-            <Skeleton width="100%" height={208} style={{ backgroundColor: "#EFE6D6" }} />
-            <Skeleton width="42%" height={10} className="mt-3" style={{ backgroundColor: "#EFE6D6" }} />
-            <Skeleton width="100%" height={38} className="mt-2" style={{ backgroundColor: "#EFE6D6" }} />
-            <Skeleton width="70%" height={12} className="mt-2" style={{ backgroundColor: "#EFE6D6" }} />
+          <div key={index} className="rounded-2xl border border-[#D6B779]/45 bg-[linear-gradient(145deg,rgba(62,48,37,0.88),rgba(34,27,22,0.92))] p-3.5 xl:p-4">
+            <div className="aspect-[5/7] w-full animate-pulse rounded-lg bg-[#E7D7B8]/35" />
+            <Skeleton width="52%" height={10} className="mt-5" style={{ backgroundColor: "rgba(225,195,139,0.3)" }} />
+            <Skeleton width="100%" height={44} className="mt-3" style={{ backgroundColor: "rgba(255,252,245,0.16)" }} />
+            <Skeleton width="76%" height={28} className="mt-3" style={{ backgroundColor: "rgba(216,203,185,0.16)" }} />
           </div>
         ))}
       </div>
