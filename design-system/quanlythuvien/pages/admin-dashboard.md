@@ -21,11 +21,11 @@ This page is an operational workspace for administrators. It may use compact met
 
 ## Visual Treatment
 
-- Use the warm ivory, white paper, burgundy, forest, and muted-gold tokens from `MASTER.md`.
-- Cards use 12px radius, thin warm borders, restrained shadows, and no hover translation.
+- Use the white, black, and neutral gray tokens from `MASTER.md`.
+- Cards use 12px radius, thin gray borders, restrained neutral shadows, and no hover translation.
 - Use Source Serif styling for the page and section headings; use the sans-serif UI font for labels and controls.
-- Burgundy identifies the primary action and overdue attention. Forest is reserved for successful/clear states.
-- Avoid blue SaaS-dashboard chrome, nested decorative cards, gradients, and animated live badges.
+- Black identifies primary actions; status meaning comes from icon and copy, with gray surface levels used only for hierarchy.
+- Avoid colored SaaS-dashboard chrome, nested decorative cards, gradients, and animated live badges.
 
 ## Responsive Behavior
 
