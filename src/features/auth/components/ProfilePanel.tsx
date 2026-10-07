@@ -301,15 +301,9 @@ function ProfileFact({
   label: string;
   value: string;
 }) {
-  const iconTone = icon === "shield"
-    ? "bg-[#E9F4E7] text-[#315A38]"
-    : icon === "book"
-      ? "bg-[#F8EEDF] text-[#6F4527]"
-      : "bg-[#F8E7EA] text-[#7A263A]";
-
   return (
     <div className="flex items-center gap-4 rounded-2xl border border-[#E3DDD6] bg-white/72 px-4 py-3.5">
-      <div className={`grid h-11 w-11 shrink-0 place-items-center rounded-full ${iconTone}`}>
+      <div className={`grid h-11 w-11 shrink-0 place-items-center rounded-full ${profileIconTone(icon)}`}>
         <ProfileIcon name={icon} className="h-6 w-6" />
       </div>
       <div className="min-w-0 flex-1">
@@ -330,15 +324,9 @@ function OverviewCard({
   label: string;
   value: string;
 }) {
-  const iconTone = icon === "shield"
-    ? "bg-[#E9F4E7] text-[#315A38]"
-    : icon === "book"
-      ? "bg-[#F8EEDF] text-[#6F4527]"
-      : "bg-[#F8E7EA] text-[#7A263A]";
-
   return (
     <div className="flex min-w-0 items-center gap-3 rounded-2xl border border-[#E6DED6] bg-white/68 p-4">
-      <div className={`grid h-11 w-11 shrink-0 place-items-center rounded-full ${iconTone}`}>
+      <div className={`grid h-11 w-11 shrink-0 place-items-center rounded-full ${profileIconTone(icon)}`}>
         <ProfileIcon name={icon} className="h-5 w-5" />
       </div>
       <div className="min-w-0 flex-1">
@@ -376,6 +364,18 @@ function TextField({
 }
 
 type ProfileIconName = "book" | "lock" | "mail" | "phone" | "save" | "shield" | "user";
+
+function profileIconTone(icon: ProfileIconName) {
+  if (icon === "shield") {
+    return "bg-[#E9F4E7] text-[#315A38]";
+  }
+
+  if (icon === "book") {
+    return "bg-[#F8EEDF] text-[#6F4527]";
+  }
+
+  return "bg-[#F8E7EA] text-[#7A263A]";
+}
 
 function ProfileIcon({ name, className = "" }: { name: ProfileIconName; className?: string }) {
   const paths: Record<ProfileIconName, React.ReactNode> = {
