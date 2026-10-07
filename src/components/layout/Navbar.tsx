@@ -57,11 +57,11 @@ export function Navbar() {
       className={`sticky inset-x-0 top-0 z-30 border-b text-[#111827] ${hasAdminAccess ? "border-[#DED5C8] bg-[#FFFCF5] shadow-[0_4px_16px_rgba(23,20,18,0.04)]" : "border-[#EDEDF2] bg-white shadow-[0_12px_30px_rgba(7,7,88,0.12)]"}`}
     >
       <nav className={`mx-auto min-h-16 w-full max-w-7xl items-center px-4 py-3 sm:px-6 ${hasAdminAccess ? "grid grid-cols-[auto_minmax(0,1fr)_auto] gap-x-2 xl:gap-x-4" : "flex flex-wrap gap-x-4 gap-y-2"}`}>
-        <BrandMark tone="dark" />
+        <BrandMark tone="dark" showSymbol />
         {hasAdminAccess ? (
           <AdminNavigation key={pathname} mobileActions={<LanguageToggle />} />
         ) : (
-          <div className="order-3 min-w-0 basis-full overflow-x-auto xl:order-2 xl:flex-1 xl:basis-0">
+          <div className="order-3 min-w-0 basis-full overflow-x-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden xl:order-2 xl:flex-1 xl:basis-0">
             <div className="flex w-max min-w-full items-center gap-0.5 xl:justify-center">
               {topNavItems.map((item) => {
                 const originalHref = item.originalHref ?? item.href;
