@@ -4,73 +4,68 @@ import { useRouter } from "next/navigation";
 import { FormEvent, useEffect, useState } from "react";
 import { Footer } from "@/components/layout/Footer";
 import { Navbar } from "@/components/layout/Navbar";
+import { editorialSerif } from "@/components/layout/editorialFont";
 import { useLanguage } from "@/features/i18n/context/LanguageContext";
 import { useAuth } from "../context/AuthContext";
 
-const profileCopy = {
-  en: {
-    authenticating: "Authenticating",
-    checkingSession: "Checking your session...",
-    eyebrow: "My profile",
-    fallbackName: "The Athenaeum member profile",
-    labels: {
-      email: "Email",
-      role: "Role",
-      status: "Status",
-      borrowLimit: "Borrow limit",
-      fullName: "Full name",
-      phone: "Phone",
-    },
-    updateTitle: "Update profile",
-    updateDescription: "Only full name and phone can be changed here.",
-    saving: "Saving...",
-    saveChanges: "Save changes",
-    fullNameRequired: "Full name is required.",
-    updated: "Your profile was updated.",
-    updateFailed: "Could not update profile.",
-    details: "Account details",
-    emailLocked: "Email cannot be changed",
-    overview: "Account overview",
-    membershipProgress: "Membership progress",
-    membershipHelp: "Enjoy full library access and privileges.",
-    thankYouTitle: "Thank you for being part of The Athenaeum.",
-    thankYouText: "Your account keeps reading activity, reservations and borrowing records in one calm workspace.",
-  },
-  vi: {
-    authenticating: "Xác thực",
-    checkingSession: "Đang kiểm tra phiên đăng nhập...",
-    eyebrow: "Hồ sơ của tôi",
-    fallbackName: "Hồ sơ thành viên The Athenaeum",
-    labels: {
-      email: "Email",
-      role: "Vai trò",
-      status: "Trạng thái",
-      borrowLimit: "Giới hạn mượn",
-      fullName: "Họ và tên",
-      phone: "Số điện thoại",
-    },
-    updateTitle: "Cập nhật hồ sơ",
-    updateDescription: "Chỉ có thể thay đổi họ tên và số điện thoại tại đây.",
-    saving: "Đang lưu...",
-    saveChanges: "Lưu thay đổi",
-    fullNameRequired: "Vui lòng nhập họ và tên.",
-    updated: "Hồ sơ của bạn đã được cập nhật.",
-    updateFailed: "Không thể cập nhật hồ sơ.",
-    details: "Chi tiết tài khoản",
-    emailLocked: "Email không thể thay đổi",
-    overview: "Tổng quan tài khoản",
-    membershipProgress: "Tiến độ thành viên",
-    membershipHelp: "Tận hưởng đầy đủ quyền truy cập và đặc quyền thư viện.",
-    thankYouTitle: "Cảm ơn bạn đã đồng hành cùng The Athenaeum.",
-    thankYouText: "Tài khoản giúp bạn quản lý hoạt động đọc, đặt giữ và mượn sách trong một không gian gọn gàng.",
-  },
-};
+const profileText = {
+  authenticating: ["Authenticating", "Xác thực"],
+  checkingSession: ["Checking your session...", "Đang kiểm tra phiên đăng nhập..."],
+  eyebrow: ["Account", "Tài khoản"],
+  pageTitle: ["Profile settings", "Cài đặt hồ sơ"],
+  pageDescription: [
+    "Manage your account information and preferences for The Athenaeum.",
+    "Quản lý thông tin tài khoản và tùy chọn của bạn tại The Athenaeum.",
+  ],
+  fallbackName: ["The Athenaeum member profile", "Hồ sơ thành viên The Athenaeum"],
+  email: ["Email", "Email"],
+  role: ["Role", "Vai trò"],
+  status: ["Status", "Trạng thái"],
+  borrowLimit: ["Borrow limit", "Giới hạn mượn"],
+  fullName: ["Full name", "Họ và tên"],
+  phone: ["Phone", "Số điện thoại"],
+  updateTitle: ["Personal information", "Thông tin cá nhân"],
+  updateDescription: [
+    "Only full name and phone can be changed here.",
+    "Chỉ có thể thay đổi họ tên và số điện thoại tại đây.",
+  ],
+  profileTip: [
+    "Keep your profile up to date for a smoother library experience.",
+    "Luôn cập nhật hồ sơ để có trải nghiệm thư viện thuận tiện hơn.",
+  ],
+  saving: ["Saving...", "Đang lưu..."],
+  saveChanges: ["Save changes", "Lưu thay đổi"],
+  fullNameRequired: ["Full name is required.", "Vui lòng nhập họ và tên."],
+  updated: ["Your profile was updated.", "Hồ sơ của bạn đã được cập nhật."],
+  updateFailed: ["Could not update profile.", "Không thể cập nhật hồ sơ."],
+  details: ["Account details", "Chi tiết tài khoản"],
+  emailLocked: ["Email cannot be changed", "Email không thể thay đổi"],
+  overview: ["Account overview", "Tổng quan tài khoản"],
+  overviewDescription: ["A quick summary of your account details.", "Thông tin tóm tắt nhanh về tài khoản của bạn."],
+  membershipProgress: ["Membership progress", "Tiến độ thành viên"],
+  membershipHelp: ["Enjoy full library access and privileges.", "Tận hưởng đầy đủ quyền truy cập và đặc quyền thư viện."],
+  thankYouTitle: ["Thank you for being part of The Athenaeum.", "Cảm ơn bạn đã đồng hành cùng The Athenaeum."],
+  thankYouText: [
+    "Your account keeps reading activity, reservations and borrowing records in one calm workspace.",
+    "Tài khoản giúp bạn quản lý hoạt động đọc, đặt giữ và mượn sách trong một không gian gọn gàng.",
+  ],
+} as const;
+
+type ProfileCopy = { [Key in keyof typeof profileText]: string };
+
+function getProfileCopy(locale: "en" | "vi"): ProfileCopy {
+  const localeIndex = locale === "en" ? 0 : 1;
+
+  return Object.fromEntries(
+    Object.entries(profileText).map(([key, translations]) => [key, translations[localeIndex]]),
+  ) as ProfileCopy;
+}
 
 export function ProfilePanel() {
   const router = useRouter();
   const auth = useAuth();
   const { locale } = useLanguage();
-  const copy = profileCopy[locale];
+  const copy = getProfileCopy(locale);
   const [message, setMessage] = useState("");
   const [error, setError] = useState("");
   const [isSaving, setIsSaving] = useState(false);
@@ -123,156 +118,162 @@ export function ProfilePanel() {
     Math.max(35, Number(auth.currentUser?.maxBorrowLimit ?? 0) * 5 || 70),
   );
   const detailItems = [
-    { label: copy.labels.email, value: auth.currentUser?.email ?? "-", icon: "mail" },
-    { label: copy.labels.role, value: auth.currentUser?.role ?? "-", icon: "user" },
-    { label: copy.labels.status, value: auth.currentUser?.status ?? "-", icon: "shield" },
-    { label: copy.labels.borrowLimit, value: String(auth.currentUser?.maxBorrowLimit ?? "-"), icon: "book" },
+    { label: copy.email, value: auth.currentUser?.email ?? "-", icon: "mail" },
+    { label: copy.role, value: auth.currentUser?.role ?? "-", icon: "user" },
+    { label: copy.status, value: auth.currentUser?.status ?? "-", icon: "shield" },
+    { label: copy.borrowLimit, value: String(auth.currentUser?.maxBorrowLimit ?? "-"), icon: "book" },
   ] as const;
 
   return (
-    <div className="min-h-dvh bg-[#f8f7f4]">
+    <div className="min-h-dvh bg-[#F7F1EA]">
       <Navbar />
       <main
         id="main-content"
         tabIndex={-1}
-        className="relative isolate min-h-[calc(100dvh-4.5rem)] overflow-hidden px-5 py-10 outline-none lg:px-8"
+        className="relative isolate min-h-[calc(100dvh-4.5rem)] overflow-hidden px-4 py-8 outline-none sm:px-6 lg:px-8 lg:py-10"
       >
-        <div aria-hidden="true" className="pointer-events-none absolute -left-28 top-12 -z-10 h-72 w-72 rounded-full border border-black/5" />
-        <div aria-hidden="true" className="pointer-events-none absolute -right-24 bottom-8 -z-10 h-96 w-96 rounded-full border border-black/5" />
-        <div aria-hidden="true" className="pointer-events-none absolute left-0 top-20 -z-10 h-px w-44 rotate-[72deg] bg-black/10" />
-        <div aria-hidden="true" className="pointer-events-none absolute right-8 top-44 -z-10 text-4xl text-black/10">✧</div>
+        <div aria-hidden="true" className="absolute inset-0 -z-20 bg-[url('/profile-library-bg.png')] bg-cover bg-top" />
+        <div aria-hidden="true" className="absolute inset-0 -z-10 bg-[linear-gradient(180deg,rgba(255,252,248,0.14),rgba(249,245,239,0.52))]" />
 
-        <section className="mx-auto grid w-full max-w-7xl gap-6 lg:grid-cols-[370px_minmax(0,1fr)]">
-          <aside className="rounded-[28px] border border-black/10 bg-white/90 p-7 shadow-[0_24px_70px_rgba(17,24,39,0.08)] backdrop-blur">
-            <SectionEyebrow>{copy.eyebrow}</SectionEyebrow>
-            <div className="mt-7 flex flex-col items-center text-center">
-              <div className="relative grid h-32 w-32 place-items-center rounded-full border border-black/12 bg-white p-1 shadow-[0_18px_50px_rgba(0,0,0,0.12)]">
-                <div className="grid h-full w-full place-items-center rounded-full bg-black font-serif text-5xl text-white">
-                  {profileInitials}
-                </div>
-                <span aria-hidden="true" className="absolute -right-5 top-6 text-2xl text-black/70">✧</span>
+        <div className="mx-auto w-full max-w-[90rem]">
+          <header className="mb-8 max-w-3xl">
+            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[#7D756C]">{copy.eyebrow}</p>
+            <h1 className={`${editorialSerif.className} mt-2 text-4xl font-semibold tracking-[-0.035em] text-[#171412] sm:text-5xl`}>
+              {copy.pageTitle}
+            </h1>
+            <p className="mt-2 text-base leading-7 text-[#756E67]">{copy.pageDescription}</p>
+          </header>
+
+          <section className="grid gap-5 lg:grid-cols-[390px_minmax(0,1fr)] lg:items-start">
+            <aside className="overflow-hidden rounded-[26px] border border-white/80 bg-white/88 shadow-[0_24px_70px_rgba(78,56,42,0.12)] backdrop-blur-md">
+              <div className="relative h-32 overflow-hidden bg-[linear-gradient(135deg,#5A1725_0%,#8D243E_55%,#45111B_100%)]">
+                <div aria-hidden="true" className="absolute -left-12 -top-24 h-64 w-64 rounded-full border border-white/15" />
+                <div aria-hidden="true" className="absolute left-24 -top-10 h-56 w-56 rounded-full border border-white/10" />
+                <div aria-hidden="true" className="absolute -right-12 top-4 h-44 w-44 rounded-full border border-white/15" />
               </div>
-              <h1 className="mt-8 font-serif text-4xl font-semibold leading-tight tracking-[-0.04em] text-black">
-                {profileName}
-              </h1>
-              <div className="mt-4 flex max-w-full items-center gap-2 text-sm text-black/65">
-                <ProfileIcon name="mail" className="h-4 w-4 shrink-0" />
-                <span className="truncate">{auth.currentUser?.email ?? "-"}</span>
-              </div>
-            </div>
 
-            <div className="mt-8 space-y-3 border-t border-black/10 pt-6">
-              {detailItems.slice(1).map((item) => (
-                <ProfileFact key={item.label} icon={item.icon} label={item.label} value={item.value} />
-              ))}
-            </div>
-
-            <div className="mt-7 rounded-2xl border border-black/10 bg-white p-5">
-              <div className="flex items-center justify-between gap-4 text-sm">
-                <span className="font-medium text-black/80">{copy.membershipProgress}</span>
-                <span className="font-semibold text-black">{membershipProgress}%</span>
-              </div>
-              <div className="mt-4 h-2 overflow-hidden rounded-full bg-black/10">
-                <div className="h-full rounded-full bg-black" style={{ width: `${membershipProgress}%` }} />
-              </div>
-              <p className="mt-4 text-sm leading-6 text-black/60">{copy.membershipHelp}</p>
-            </div>
-          </aside>
-
-          <section className="rounded-[28px] border border-black/10 bg-white/90 p-7 shadow-[0_24px_70px_rgba(17,24,39,0.08)] backdrop-blur">
-            <SectionEyebrow>{copy.details}</SectionEyebrow>
-
-            <form onSubmit={handleSubmit} className="mt-6 overflow-hidden rounded-2xl border border-black/10 bg-white">
-              <div className="relative p-6 md:p-8">
-                <div aria-hidden="true" className="absolute right-8 top-5 hidden text-black/10 md:block">
-                  <OpenBookIllustration />
-                </div>
-                <div className="relative max-w-2xl">
-                  <h2 className="font-serif text-3xl font-semibold tracking-[-0.03em] text-black">
-                    {copy.updateTitle}
+              <div className="px-6 pb-7">
+                <div className="-mt-16 flex flex-col items-center text-center">
+                  <div className="relative z-10 grid h-28 w-28 place-items-center rounded-full border-[5px] border-white bg-[#0F0F10] shadow-[0_16px_36px_rgba(0,0,0,0.2)]">
+                    <span className={`${editorialSerif.className} text-4xl text-white`}>{profileInitials}</span>
+                  </div>
+                  <h2 className={`${editorialSerif.className} mt-4 text-3xl font-semibold leading-tight tracking-[-0.035em] text-[#171412]`}>
+                    {profileName}
                   </h2>
-                  <p className="mt-2 text-sm leading-6 text-black/65">{copy.updateDescription}</p>
+                  <div className="mt-2 flex max-w-full items-center gap-2 text-sm text-[#746D66]">
+                    <ProfileIcon name="mail" className="h-4 w-4 shrink-0" />
+                    <span className="truncate">{auth.currentUser?.email ?? "-"}</span>
+                  </div>
                 </div>
 
-                <div className="relative mt-8 grid gap-5 md:grid-cols-2">
-                  <TextField
-                    label={copy.labels.fullName}
-                    name="fullName"
-                    defaultValue={auth.currentUser?.fullName ?? ""}
-                    icon="user"
-                  />
-                  <TextField
-                    label={copy.labels.phone}
-                    name="phone"
-                    defaultValue={auth.currentUser?.phone ?? ""}
-                    icon="phone"
-                  />
+                <div className="mt-7 space-y-3">
+                  {detailItems.slice(1).map((item) => (
+                    <ProfileFact key={item.label} icon={item.icon} label={item.label} value={item.value} />
+                  ))}
                 </div>
 
-                <label className="relative mt-5 block">
-                  <span className="text-sm font-semibold text-black">
-                    {copy.labels.email} <span className="font-normal text-black/60">({copy.emailLocked})</span>
-                  </span>
-                  <span className="mt-2 flex items-center gap-3 rounded-xl border border-black/12 bg-black/[0.03] px-4 py-3 text-black/55">
-                    <ProfileIcon name="lock" className="h-5 w-5 shrink-0" />
-                    <input
-                      value={auth.currentUser?.email ?? "-"}
-                      readOnly
-                      aria-label={copy.labels.email}
-                      className="min-w-0 flex-1 bg-transparent outline-none"
+                <div className="mt-5 rounded-2xl border border-[#DED6CE] bg-white/70 p-5">
+                  <div className="flex items-center justify-between gap-4 text-sm">
+                    <span className="font-semibold text-[#302B27]">{copy.membershipProgress}</span>
+                    <span className="font-bold text-[#171412]">{membershipProgress}%</span>
+                  </div>
+                  <div className="mt-3 h-2 overflow-hidden rounded-full bg-[#E8E1DA]">
+                    <div className="h-full rounded-full bg-[#8D1534]" style={{ width: `${membershipProgress}%` }} />
+                  </div>
+                  <p className="mt-3 text-sm leading-6 text-[#79716A]">{copy.membershipHelp}</p>
+                </div>
+              </div>
+            </aside>
+
+            <div className="space-y-5">
+              <form onSubmit={handleSubmit} className="overflow-hidden rounded-[26px] border border-white/80 bg-white/90 shadow-[0_24px_70px_rgba(78,56,42,0.12)] backdrop-blur-md">
+                <div className="p-6 md:p-8">
+                  <div className="flex items-start justify-between gap-6">
+                    <div>
+                      <h2 className={`${editorialSerif.className} text-3xl font-semibold tracking-[-0.03em] text-[#171412]`}>
+                        {copy.updateTitle}
+                      </h2>
+                      <p className="mt-1 text-sm leading-6 text-[#756E67]">{copy.updateDescription}</p>
+                    </div>
+                    <div className="hidden max-w-[250px] items-center gap-4 xl:flex">
+                      <div className="grid h-14 w-14 shrink-0 place-items-center rounded-2xl border border-[#E8DED5] bg-[#FAF7F2]">
+                        <ProfileIcon name="book" className="h-7 w-7 text-[#9A8A7B]" />
+                      </div>
+                      <p className="text-xs leading-5 text-[#7D756E]">{copy.profileTip}</p>
+                    </div>
+                  </div>
+
+                  <div className="mt-8 grid gap-5 md:grid-cols-2">
+                    <TextField
+                      label={copy.fullName}
+                      name="fullName"
+                      defaultValue={auth.currentUser?.fullName ?? ""}
+                      icon="user"
                     />
-                  </span>
-                </label>
+                    <TextField
+                      label={copy.phone}
+                      name="phone"
+                      defaultValue={auth.currentUser?.phone ?? ""}
+                      icon="phone"
+                    />
+                  </div>
 
-                {message ? <p className="mt-5 rounded-xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm font-bold text-emerald-700">{message}</p> : null}
-                {error ? <p className="mt-5 rounded-xl border border-rose-200 bg-rose-50 px-4 py-3 text-sm font-bold text-rose-700">{error}</p> : null}
-              </div>
+                  <label className="mt-5 block">
+                    <span className="text-sm font-semibold text-[#211D1A]">
+                      {copy.email} <span className="font-normal text-[#827A73]">({copy.emailLocked})</span>
+                    </span>
+                    <span className="mt-2 flex items-center gap-3 rounded-xl border border-[#DCD5CE] bg-[#F5F3F0] px-4 py-3.5 text-[#827A73]">
+                      <ProfileIcon name="mail" className="h-5 w-5 shrink-0" />
+                      <input
+                        value={auth.currentUser?.email ?? "-"}
+                        readOnly
+                        aria-label={copy.email}
+                        className="min-w-0 flex-1 bg-transparent outline-none"
+                      />
+                    </span>
+                  </label>
 
-              <div className="flex justify-end border-t border-black/10 bg-[#fbfaf8] p-5 md:px-8">
-                <button
-                  type="submit"
-                  disabled={isSaving}
-                  className="inline-flex items-center gap-3 rounded-xl bg-black px-7 py-4 text-sm font-bold text-white shadow-[0_18px_40px_rgba(0,0,0,0.18)] transition hover:-translate-y-0.5 hover:bg-[#7A263A] disabled:opacity-60"
-                >
-                  <ProfileIcon name="save" className="h-5 w-5" />
-                  {isSaving ? copy.saving : copy.saveChanges}
-                </button>
-              </div>
-            </form>
+                  {message ? <p className="mt-5 rounded-xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm font-bold text-emerald-700">{message}</p> : null}
+                  {error ? <p className="mt-5 rounded-xl border border-rose-200 bg-rose-50 px-4 py-3 text-sm font-bold text-rose-700">{error}</p> : null}
+                </div>
 
-            <div className="mt-8">
-              <div className="flex items-center justify-between gap-4">
-                <h2 className="font-serif text-2xl font-semibold tracking-[-0.03em] text-black">{copy.overview}</h2>
-              </div>
-              <div className="mt-5 grid gap-4 md:grid-cols-2 xl:grid-cols-4">
-                {detailItems.map((item) => (
-                  <OverviewCard key={item.label} icon={item.icon} label={item.label} value={item.value} />
-                ))}
-              </div>
-            </div>
+                <div className="flex justify-end border-t border-[#E8E1DA] bg-white/55 p-5 md:px-8">
+                  <button
+                    type="submit"
+                    disabled={isSaving}
+                    className="inline-flex min-h-12 items-center gap-3 rounded-xl bg-[#8D1534] px-7 text-sm font-bold text-white shadow-[0_14px_30px_rgba(141,21,52,0.24)] transition hover:-translate-y-0.5 hover:bg-[#6F1028] disabled:opacity-60"
+                  >
+                    <ProfileIcon name="save" className="h-5 w-5" />
+                    {isSaving ? copy.saving : copy.saveChanges}
+                  </button>
+                </div>
+              </form>
 
-            <div className="mt-6 flex items-center gap-5 rounded-2xl border border-black/10 bg-white p-5">
-              <div className="grid h-14 w-14 shrink-0 place-items-center rounded-full bg-black/[0.04]">
-                <ProfileIcon name="book" className="h-7 w-7 text-black" />
-              </div>
-              <div>
-                <h3 className="font-bold text-black">{copy.thankYouTitle}</h3>
-                <p className="mt-1 text-sm leading-6 text-black/60">{copy.thankYouText}</p>
-              </div>
+              <section className="rounded-[26px] border border-white/80 bg-white/90 p-6 shadow-[0_24px_70px_rgba(78,56,42,0.12)] backdrop-blur-md md:p-8">
+                <h2 className={`${editorialSerif.className} text-3xl font-semibold tracking-[-0.03em] text-[#171412]`}>{copy.overview}</h2>
+                <p className="mt-1 text-sm leading-6 text-[#756E67]">{copy.overviewDescription}</p>
+
+                <div className="mt-5 grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
+                  {detailItems.map((item) => (
+                    <OverviewCard key={item.label} icon={item.icon} label={item.label} value={item.value} />
+                  ))}
+                </div>
+
+                <div className="mt-4 flex items-center gap-4 rounded-2xl border border-[#E6DED6] bg-white/65 p-4">
+                  <div className="grid h-12 w-12 shrink-0 place-items-center rounded-full bg-[#F5E7EA] text-[#7A263A]">
+                    <ProfileIcon name="book" className="h-6 w-6" />
+                  </div>
+                  <div>
+                    <h3 className="font-bold text-[#211D1A]">{copy.thankYouTitle}</h3>
+                    <p className="mt-0.5 text-sm leading-6 text-[#756E67]">{copy.thankYouText}</p>
+                  </div>
+                </div>
+              </section>
             </div>
           </section>
-        </section>
+        </div>
       </main>
       <Footer />
-    </div>
-  );
-}
-
-function SectionEyebrow({ children }: { children: React.ReactNode }) {
-  return (
-    <div>
-      <p className="text-xs font-bold uppercase tracking-[0.16em] text-black">{children}</p>
-      <span className="mt-3 block h-px w-8 bg-black" />
     </div>
   );
 }
@@ -287,13 +288,15 @@ function ProfileFact({
   value: string;
 }) {
   return (
-    <div className="flex items-center gap-4 rounded-xl border border-black/10 bg-white px-4 py-3">
-      <ProfileIcon name={icon} className="h-7 w-7 shrink-0 text-black" />
-      <div className="min-w-0 flex-1">
-        <p className="text-xs text-black/55">{label}</p>
-        <p className="mt-0.5 truncate font-bold text-black">{value}</p>
+    <div className="flex items-center gap-4 rounded-2xl border border-[#E3DDD6] bg-white/72 px-4 py-3.5">
+      <div className={`grid h-11 w-11 shrink-0 place-items-center rounded-full ${profileIconTone(icon)}`}>
+        <ProfileIcon name={icon} className="h-6 w-6" />
       </div>
-      <span aria-hidden="true" className="text-xl text-black/55">›</span>
+      <div className="min-w-0 flex-1">
+        <p className="text-xs text-[#80776F]">{label}</p>
+        <p className="mt-0.5 truncate font-bold text-[#211D1A]">{value}</p>
+      </div>
+      <span aria-hidden="true" className="text-xl text-[#948A82]">›</span>
     </div>
   );
 }
@@ -308,15 +311,14 @@ function OverviewCard({
   value: string;
 }) {
   return (
-    <div className="flex items-center gap-4 rounded-2xl border border-black/10 bg-white p-4">
-      <div className="grid h-12 w-12 shrink-0 place-items-center rounded-full border border-black/10 bg-black/[0.03]">
-        <ProfileIcon name={icon} className="h-6 w-6 text-black" />
+    <div className="flex min-w-0 items-center gap-3 rounded-2xl border border-[#E6DED6] bg-white/68 p-4">
+      <div className={`grid h-11 w-11 shrink-0 place-items-center rounded-full ${profileIconTone(icon)}`}>
+        <ProfileIcon name={icon} className="h-5 w-5" />
       </div>
       <div className="min-w-0 flex-1">
-        <p className="text-xs text-black/55">{label}</p>
-        <p className="mt-1 truncate font-serif text-xl font-semibold text-black">{value}</p>
+        <p className="text-xs text-[#80776F]">{label}</p>
+        <p className="mt-1 truncate font-bold text-[#211D1A]">{value}</p>
       </div>
-      <span aria-hidden="true" className="text-xl text-black/55">›</span>
     </div>
   );
 }
@@ -334,13 +336,13 @@ function TextField({
 }) {
   return (
     <label className="block">
-      <span className="text-sm font-semibold text-black">{label}</span>
-      <span className="mt-2 flex items-center gap-3 rounded-xl border border-black/12 bg-white px-4 py-3 transition focus-within:border-black">
-        <ProfileIcon name={icon} className="h-5 w-5 shrink-0 text-black" />
+      <span className="text-sm font-semibold text-[#211D1A]">{label}</span>
+      <span className="mt-2 flex items-center gap-3 rounded-xl border border-[#DCD5CE] bg-white/78 px-4 py-3.5 transition focus-within:border-[#8D1534] focus-within:ring-2 focus-within:ring-[#8D1534]/10">
+        <ProfileIcon name={icon} className="h-5 w-5 shrink-0 text-[#453F39]" />
         <input
           name={name}
           defaultValue={defaultValue}
-          className="min-w-0 flex-1 bg-transparent outline-none"
+          className="min-w-0 flex-1 bg-transparent text-[#211D1A] outline-none"
         />
       </span>
     </label>
@@ -348,6 +350,18 @@ function TextField({
 }
 
 type ProfileIconName = "book" | "lock" | "mail" | "phone" | "save" | "shield" | "user";
+
+function profileIconTone(icon: ProfileIconName) {
+  if (icon === "shield") {
+    return "bg-[#E9F4E7] text-[#315A38]";
+  }
+
+  if (icon === "book") {
+    return "bg-[#F8EEDF] text-[#6F4527]";
+  }
+
+  return "bg-[#F8E7EA] text-[#7A263A]";
+}
 
 function ProfileIcon({ name, className = "" }: { name: ProfileIconName; className?: string }) {
   const paths: Record<ProfileIconName, React.ReactNode> = {
@@ -403,22 +417,6 @@ function ProfileIcon({ name, className = "" }: { name: ProfileIconName; classNam
       strokeWidth="1.7"
     >
       {paths[name]}
-    </svg>
-  );
-}
-
-function OpenBookIllustration() {
-  return (
-    <svg viewBox="0 0 220 100" aria-hidden="true" className="h-24 w-56" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.4">
-      <path d="M22 74c28-12 54-8 86 8V24C78 9 50 8 22 20z" />
-      <path d="M198 74c-28-12-54-8-86 8V24c30-15 58-16 86-4z" />
-      <path d="M110 24v58" />
-      <path d="M42 30c16-4 33-2 50 6" />
-      <path d="M42 43c16-4 33-2 50 6" />
-      <path d="M128 36c16-8 32-10 50-6" />
-      <path d="M128 49c16-8 32-10 50-6" />
-      <path d="M164 12c10-3 16-8 24-16-2 14-6 25-20 35" />
-      <path d="M168 31c-7 8-14 16-21 25" />
     </svg>
   );
 }
