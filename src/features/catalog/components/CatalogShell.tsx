@@ -20,9 +20,10 @@ type CatalogShellProps = {
   catalogPanel?: boolean;
   compactPanelHeader?: boolean;
   hideHeader?: boolean;
+  warm?: boolean;
 };
 
-export function CatalogShell({ eyebrow, title, description, children, actions, protectedPage = false, wide = false, frameless = false, catalogPanel = false, compactPanelHeader = false, hideHeader = false }: CatalogShellProps) {
+export function CatalogShell({ eyebrow, title, description, children, actions, protectedPage = false, wide = false, frameless = false, catalogPanel = false, compactPanelHeader = false, hideHeader = false, warm = false }: CatalogShellProps) {
   const framedSectionClass = catalogPanel
     ? "relative overflow-hidden rounded-[32px] border border-black/10 bg-white/95 p-6 shadow-[0_30px_90px_rgba(0,0,0,0.08)] md:p-10 lg:p-12"
     : "rounded-2xl border border-[#EDEDF2] bg-white p-6 shadow-[0_24px_60px_rgba(7,7,88,0.08)] md:p-8";
@@ -36,7 +37,7 @@ export function CatalogShell({ eyebrow, title, description, children, actions, p
 
   return (
     <ProtectedGate enabled={protectedPage}>
-      <div className="min-h-dvh bg-[#F8F9FA]">
+      <div className={`min-h-dvh ${warm ? "bg-[#F7F3EA]" : "bg-[#F8F9FA]"}`}>
         <Navbar />
         <main id="main-content" tabIndex={-1} className={`mx-auto min-h-[calc(100dvh-4.5rem)] w-full px-5 pt-6 pb-12 outline-none lg:px-8 ${wide ? "max-w-[calc(100vw-2rem)] 2xl:max-w-[1720px]" : "max-w-7xl"}`}>
           {frameless ? (
@@ -45,9 +46,9 @@ export function CatalogShell({ eyebrow, title, description, children, actions, p
                 <section className="px-1 py-5 md:px-2">
                   <div className="flex flex-col justify-between gap-5 lg:flex-row lg:items-end">
                     <div>
-                      <p className="text-sm font-bold uppercase tracking-wide text-[#337AB7]">{eyebrow}</p>
-                      <h1 className="mt-3 text-4xl font-black tracking-tight text-[#111827] md:text-5xl">{title}</h1>
-                      <p className="mt-3 max-w-3xl leading-7 text-[#333333]">{description}</p>
+                      <p className={`text-sm font-bold uppercase tracking-wide ${warm ? "text-[#7A263A]" : "text-[#337AB7]"}`}>{eyebrow}</p>
+                      <h1 className={`mt-3 text-4xl tracking-tight md:text-5xl ${warm ? "font-serif font-semibold text-[#171412]" : "font-black text-[#111827]"}`}>{title}</h1>
+                      <p className={`mt-3 max-w-3xl leading-7 ${warm ? "text-[#6F675E]" : "text-[#333333]"}`}>{description}</p>
                     </div>
                     {actions ? <div className="flex flex-wrap gap-3">{actions}</div> : null}
                   </div>
