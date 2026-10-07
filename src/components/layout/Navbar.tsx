@@ -429,25 +429,30 @@ function UserMenu({
         aria-haspopup="menu"
         aria-controls="navbar-user-menu"
         onClick={() => setIsOpen((open) => !open)}
-        className="flex h-11 max-w-[13rem] cursor-pointer items-center gap-2 rounded-xl border border-[#DED5C8] bg-[#FFFCF5] p-1.5 pr-2 text-left text-[#171412] shadow-[0_4px_14px_rgba(23,20,18,0.05)] transition-colors duration-200 hover:border-[#CBBEAE] hover:bg-[#FBF8F1] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#7A263A] focus-visible:ring-offset-2"
+        className="group flex h-12 max-w-[18rem] cursor-pointer items-center rounded-full border border-[#E8DED5] bg-white/85 p-1.5 text-left text-[#171412] shadow-[0_8px_24px_rgba(79,55,45,0.08)] backdrop-blur-md transition-[border-color,background-color,box-shadow] duration-200 hover:border-[#D6C5B8] hover:bg-white hover:shadow-[0_12px_30px_rgba(79,55,45,0.12)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#7A263A] focus-visible:ring-offset-2"
       >
-        <span className="grid h-8 w-8 shrink-0 place-items-center rounded-lg bg-[#7A263A] font-serif text-xs font-bold tracking-wide text-white shadow-[0_3px_10px_rgba(122,38,58,0.18)]">
+        <span className="relative grid h-9 w-9 shrink-0 place-items-center rounded-full bg-[linear-gradient(145deg,#A8244B,#7A263A)] text-xs font-bold tracking-wide text-white shadow-[0_5px_14px_rgba(122,38,58,0.24)] md:h-10 md:w-10">
           {initials}
+          <span
+            aria-hidden="true"
+            className="absolute -bottom-0.5 -right-0.5 h-3.5 w-3.5 rounded-full border-[3px] border-[#FFFCF5] bg-[#59A66F] shadow-[0_2px_5px_rgba(49,90,56,0.28)]"
+          />
         </span>
-        <span className="hidden min-w-0 flex-1 sm:block">
-          <span className="block truncate text-sm font-bold leading-4">{displayName}</span>
-          <span className="mt-0.5 block truncate text-[11px] font-medium leading-3 text-[#6F675E]">
+        <span className="mx-3 hidden min-w-0 flex-1 md:block">
+          <span className="block truncate text-[13px] font-bold leading-4 text-[#211D1A]">{displayName}</span>
+          <span className="mt-1 block truncate text-[11px] font-medium leading-3 text-[#766D65]">
             {displayMeta}
           </span>
         </span>
-        <Icon
-          name="chevron-down"
-          size={15}
-          aria-hidden="true"
-          className={`hidden shrink-0 text-[#6F675E] transition-transform duration-200 sm:block ${
-            isOpen ? "rotate-180" : ""
-          }`}
-        />
+        <span aria-hidden="true" className="hidden h-7 w-px shrink-0 bg-[#E7DDD4] md:block" />
+        <span className="hidden h-9 w-10 shrink-0 place-items-center rounded-full text-[#453F39] transition-colors group-hover:bg-[#F5EEE8] group-hover:text-[#7A263A] md:grid">
+          <Icon
+            name="chevron-down"
+            size={17}
+            aria-hidden="true"
+            className={`transition-transform duration-200 ${isOpen ? "rotate-180" : ""}`}
+          />
+        </span>
       </button>
 
       <div
