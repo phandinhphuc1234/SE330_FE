@@ -146,7 +146,7 @@ function BorrowChart({ days, locale }: { days: BorrowStatDay[]; locale: "en" | "
         if (days.length > 14 && i % 2 !== 0) return null;
         return (
           <text key={d.date} x={xp(i)} y={H - 10} textAnchor="middle" fontSize="11"
-            fill={hovered === i ? "#111827" : "#9CA3AF"}
+            fill={hovered === i ? "#2B2723" : "#9CA3AF"}
             fontWeight={hovered === i ? "bold" : "normal"}>
             {shortDate(d.date, locale)}
           </text>
@@ -206,7 +206,7 @@ function BorrowChart({ days, locale }: { days: BorrowStatDay[]; locale: "en" | "
             {/* Shadow */}
             <rect x={TX + 2} y={TY + 2} width={TW} height={TH} rx="8" fill="rgba(0,0,0,0.10)" />
             {/* Box */}
-            <rect x={TX} y={TY} width={TW} height={TH} rx="8" fill="#111827" />
+            <rect x={TX} y={TY} width={TW} height={TH} rx="8" fill="#2B2723" />
             {/* Date */}
             <text x={TX + 12} y={TY + 20} fontSize="11" fontWeight="600" fill="#9CA3AF">{fullDate}</text>
             {/* Divider */}
@@ -231,9 +231,9 @@ function BorrowChart({ days, locale }: { days: BorrowStatDay[]; locale: "en" | "
 function StatCard({ label, value, sub, colorClass }: { label: string; value: string; sub?: string; colorClass: string }) {
   return (
     <div className="rounded-2xl border border-white bg-white p-5 shadow-sm">
-      <p className="text-xs font-bold uppercase tracking-wide text-[#337AB7]">{label}</p>
+      <p className="text-xs font-bold uppercase tracking-wide text-[#7A263A]">{label}</p>
       <p className={`mt-2 text-4xl font-bold ${colorClass}`}>{value}</p>
-      {sub && <p className="mt-1 text-sm text-[#6B7280]">{sub}</p>}
+      {sub && <p className="mt-1 text-sm text-[#776D63]">{sub}</p>}
     </div>
   );
 }
@@ -280,10 +280,10 @@ function PeakDayCard({ locale, peakBorrowDay, peakReturnDay, days }: {
     <div className="rounded-2xl border border-white bg-white p-5 shadow-sm">
       {/* Header + toggle */}
       <div className="flex items-center justify-between gap-2">
-        <p className="text-xs font-bold uppercase tracking-wide text-[#337AB7]">
+        <p className="text-xs font-bold uppercase tracking-wide text-[#7A263A]">
           {locale === "vi" ? "Ngày cao nhất" : "Peak day"}
         </p>
-        <div className="flex rounded-lg border border-[#EDEDF2] bg-[#F8F9FA] p-0.5">
+        <div className="flex rounded-lg border border-[#DED5C8] bg-[#F7F3EA] p-0.5">
           {modes.map(({ key, label }) => (
             <button
               key={key}
@@ -291,8 +291,8 @@ function PeakDayCard({ locale, peakBorrowDay, peakReturnDay, days }: {
               onClick={() => setMode(key)}
               className={`rounded-md px-2 py-0.5 text-[10px] font-bold transition ${
                 mode === key
-                  ? "bg-white text-[#111827] shadow-sm"
-                  : "text-[#9CA3AF] hover:text-[#111827]"
+                  ? "bg-white text-[#2B2723] shadow-sm"
+                  : "text-[#9CA3AF] hover:text-[#2B2723]"
               }`}
             >
               {label}
@@ -427,31 +427,31 @@ export function BorrowStatisticsPage() {
       {loadError && <div className="mb-5"><Notice tone="error" message={loadError} /></div>}
 
       {/* ── Controls + Stats panel ── */}
-      <section className="overflow-hidden rounded-3xl border border-[#DDE5F4] bg-white shadow-[0_24px_60px_rgba(7,7,88,0.08)]">
+      <section className="overflow-hidden rounded-3xl border border-[#DDE5F4] bg-white shadow-[0_24px_60px_rgba(43,39,35,0.08)]">
 
         {/* ══ FILTER BAR — h-14 giống hệt Books ══ */}
-        <div className="flex flex-wrap items-center gap-3 border-b border-[#EDEDF2] px-5 py-4">
+        <div className="flex flex-wrap items-center gap-3 border-b border-[#DED5C8] px-5 py-4">
 
           {/* Date range — 2 ô riêng giống Books inputs */}
-          <div className="inline-flex h-14 items-center gap-1 rounded-2xl border border-[#D5DBE8] bg-white px-4 transition focus-within:border-[#111827] focus-within:shadow-[0_0_0_4px_rgba(15,23,42,0.08)]">
+          <div className="inline-flex h-14 items-center gap-1 rounded-2xl border border-[#D5DBE8] bg-white px-4 transition focus-within:border-[#2B2723] focus-within:shadow-[0_0_0_4px_rgba(15,23,42,0.08)]">
             <svg className="shrink-0 text-[#5F6B85]" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
             <input
               type="date"
               value={fromDate}
               onChange={(e) => handleFromChange(e.target.value)}
-              className="w-[120px] border-none bg-transparent text-sm font-bold text-[#111827] outline-none"
+              className="w-[120px] border-none bg-transparent text-sm font-bold text-[#2B2723] outline-none"
             />
             <span className="px-1 text-[#9CA3AF]" aria-hidden="true">→</span>
             <input
               type="date"
               value={toDate}
               onChange={(e) => handleToChange(e.target.value)}
-              className="w-[120px] border-none bg-transparent text-sm font-bold text-[#111827] outline-none"
+              className="w-[120px] border-none bg-transparent text-sm font-bold text-[#2B2723] outline-none"
             />
           </div>
 
           {/* All categories — h-14 rounded-2xl giống Books */}
-          <label className="relative inline-flex h-14 cursor-pointer items-center gap-2 rounded-2xl border border-[#D5DBE8] bg-white px-5 text-sm font-bold text-[#111827] transition hover:border-[#111827] hover:bg-[#F8FAFC] focus-within:border-[#111827] focus-within:shadow-[0_0_0_4px_rgba(15,23,42,0.08)]">
+          <label className="relative inline-flex h-14 cursor-pointer items-center gap-2 rounded-2xl border border-[#D5DBE8] bg-white px-5 text-sm font-bold text-[#2B2723] transition hover:border-[#2B2723] hover:bg-[#FBF8F1] focus-within:border-[#2B2723] focus-within:shadow-[0_0_0_4px_rgba(15,23,42,0.08)]">
             <span className="pointer-events-none whitespace-nowrap">
               {filterType === "category" && filterValue ? filterValue : (locale === "vi" ? "Tất cả thể loại" : "All categories")}
             </span>
@@ -472,7 +472,7 @@ export function BorrowStatisticsPage() {
           </label>
 
           {/* All languages — h-14 rounded-2xl giống Books */}
-          <label className="relative inline-flex h-14 cursor-pointer items-center gap-2 rounded-2xl border border-[#D5DBE8] bg-white px-5 text-sm font-bold text-[#111827] transition hover:border-[#111827] hover:bg-[#F8FAFC] focus-within:border-[#111827] focus-within:shadow-[0_0_0_4px_rgba(15,23,42,0.08)]">
+          <label className="relative inline-flex h-14 cursor-pointer items-center gap-2 rounded-2xl border border-[#D5DBE8] bg-white px-5 text-sm font-bold text-[#2B2723] transition hover:border-[#2B2723] hover:bg-[#FBF8F1] focus-within:border-[#2B2723] focus-within:shadow-[0_0_0_4px_rgba(15,23,42,0.08)]">
             <span className="pointer-events-none whitespace-nowrap">
               {language === "en" ? "English" : language === "vi" ? "Tiếng Việt" : (locale === "vi" ? "Tất cả ngôn ngữ" : "All languages")}
             </span>
@@ -489,7 +489,7 @@ export function BorrowStatisticsPage() {
           </label>
 
           {/* Search — flex-1, h-14 giống Books */}
-          <label className="relative inline-flex h-14 flex-1 min-w-[200px] items-center gap-2 rounded-2xl border border-[#D5DBE8] bg-white px-5 transition focus-within:border-[#111827] focus-within:shadow-[0_0_0_4px_rgba(15,23,42,0.08)]">
+          <label className="relative inline-flex h-14 flex-1 min-w-[200px] items-center gap-2 rounded-2xl border border-[#D5DBE8] bg-white px-5 transition focus-within:border-[#2B2723] focus-within:shadow-[0_0_0_4px_rgba(15,23,42,0.08)]">
             <svg className="shrink-0 text-[#5F6B85]" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
             <input
               type="text"
@@ -502,7 +502,7 @@ export function BorrowStatisticsPage() {
                 setFilterValue(v);
               }}
               onKeyDown={(e) => e.key === "Enter" && handleApply()}
-              className="w-full border-none bg-transparent text-sm text-[#111827] outline-none placeholder:text-[#7B8498]"
+              className="w-full border-none bg-transparent text-sm text-[#2B2723] outline-none placeholder:text-[#7B8498]"
             />
           </label>
 
@@ -510,7 +510,7 @@ export function BorrowStatisticsPage() {
           <button
             type="button"
             onClick={handleClear}
-            className="inline-flex h-14 items-center gap-2 rounded-2xl border border-[#D5DBE8] bg-white px-5 text-sm font-bold text-[#6B7280] transition hover:border-[#111827] hover:text-[#111827]"
+            className="inline-flex h-14 items-center gap-2 rounded-2xl border border-[#D5DBE8] bg-white px-5 text-sm font-bold text-[#776D63] transition hover:border-[#2B2723] hover:text-[#2B2723]"
           >
             <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
             {locale === "vi" ? "Xóa" : "Clear"}
@@ -528,7 +528,7 @@ export function BorrowStatisticsPage() {
 
           {/* Date error / hint */}
           {dateError
-            ? <p className="w-full pl-1 text-xs font-semibold text-[#E60028]">{dateError}</p>
+            ? <p className="w-full pl-1 text-xs font-semibold text-[#7A263A]">{dateError}</p>
             : <p className="w-full pl-1 text-xs text-[#9CA3AF]">⏱ {t.maxRangeNote}</p>
           }
         </div>
@@ -575,7 +575,7 @@ export function BorrowStatisticsPage() {
               </div>
 
               {/* Chart — full width, ngay dưới metric cards */}
-              <div className="mt-4 rounded-2xl bg-[#F8F9FA] p-5">
+              <div className="mt-4 rounded-2xl bg-[#F7F3EA] p-5">
                 <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
                   <div>
                     <p className="text-xs font-bold uppercase tracking-widest text-[#5F6B85]">{t.chartTitle}</p>

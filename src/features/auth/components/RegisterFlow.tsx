@@ -212,7 +212,7 @@ export function RegisterFlow() {
     <main
       id="main-content"
       tabIndex={-1}
-      className="relative min-h-dvh overflow-hidden bg-[#050726] outline-none"
+      className="relative min-h-dvh overflow-hidden bg-[#201A16] outline-none"
       style={{
         backgroundImage: `linear-gradient(105deg, rgba(0, 0, 0, 0.76) 0%, rgba(0, 0, 0, 0.52) 42%, rgba(0, 0, 0, 0.18) 68%, rgba(255, 255, 255, 0.08) 100%), url(${REGISTER_HERO_IMAGE_URL})`,
         backgroundPosition: "center",
@@ -244,7 +244,7 @@ export function RegisterFlow() {
           {isSubmitted ? (
             <VerificationPending email={form.email} cooldown={cooldown} onResend={handleResend} copy={copy} />
           ) : (
-            <div className="animate-scale-in w-full max-w-lg rounded-[2rem] border border-white bg-white p-7 shadow-[0_30px_90px_rgba(0,0,84,0.26)] sm:p-8">
+            <div className="animate-scale-in w-full max-w-lg rounded-[2rem] border border-white bg-white p-7 shadow-[0_30px_90px_rgba(43,39,35,0.24)] sm:p-8">
               <div className="mb-8">
                 <div className="mb-5 flex items-center justify-between gap-4">
                   <Link href="/" className="font-serif text-2xl font-bold text-black">
@@ -313,17 +313,17 @@ export function RegisterFlow() {
                     />
                   </div>
                   <div className="mt-3">
-                    <div className="h-2 overflow-hidden rounded-full bg-[#EDEDF2]">
+                    <div className="h-2 overflow-hidden rounded-full bg-[#DED5C8]">
                       <div className={`h-full rounded-full ${strength.width} ${strength.color} transition-all duration-300`} />
                     </div>
                     <p className="mt-2 text-xs font-semibold text-black/75">{copy.passwordStrength}: {strength.label}</p>
                     {!passwordMeetsRules && form.password.length > 0 && (
-                      <p className="mt-2 animate-fade-up text-xs font-semibold text-[#E60028]">
+                      <p className="mt-2 animate-fade-up text-xs font-semibold text-[#7A263A]">
                         {passwordError}
                       </p>
                     )}
                     {fieldErrors.password && (
-                      <p className="mt-2 animate-fade-up text-xs font-semibold text-[#E60028]">
+                      <p className="mt-2 animate-fade-up text-xs font-semibold text-[#7A263A]">
                         {fieldErrors.password}
                       </p>
                     )}
@@ -344,14 +344,14 @@ export function RegisterFlow() {
                 />
 
                 {error && (
-                  <p className="animate-scale-in rounded-xl border border-[#E60028]/25 bg-[#E60028]/10 p-4 text-sm font-semibold text-[#B00020] shadow-sm">
+                  <p className="animate-scale-in rounded-xl border border-[#7A263A]/25 bg-[#7A263A]/10 p-4 text-sm font-semibold text-[#B00020] shadow-sm">
                     {error}
                   </p>
                 )}
                 <button
                   type="submit"
                   disabled={!canSubmit || isSubmitting}
-                  className="inline-flex h-[52px] items-center justify-center rounded-2xl bg-[#E60028] px-5 text-sm font-bold text-white shadow-lg shadow-[#E60028]/30 transition-all duration-200 hover:-translate-y-0.5 hover:bg-[#C90022] hover:shadow-xl hover:shadow-[#E60028]/40 active:translate-y-0 disabled:cursor-not-allowed disabled:bg-[#B8BBC8] disabled:text-white disabled:shadow-none disabled:hover:translate-y-0"
+                  className="inline-flex h-[52px] items-center justify-center rounded-2xl bg-[#7A263A] px-5 text-sm font-bold text-white shadow-lg shadow-[#7A263A]/30 transition-all duration-200 hover:-translate-y-0.5 hover:bg-[#5A1C2B] hover:shadow-xl hover:shadow-[#7A263A]/40 active:translate-y-0 disabled:cursor-not-allowed disabled:bg-[#BEB2A3] disabled:text-white disabled:shadow-none disabled:hover:translate-y-0"
                 >
                   {isSubmitting && (
                     <span className="mr-2 inline-block h-4 w-4 animate-spin rounded-full border-2 border-white border-t-transparent" />
@@ -437,7 +437,7 @@ function Field({
           />
         )}
       </div>
-      {error && <p className="mt-2 animate-fade-up text-xs font-semibold text-[#E60028]">{error}</p>}
+      {error && <p className="mt-2 animate-fade-up text-xs font-semibold text-[#7A263A]">{error}</p>}
     </div>
   );
 }
@@ -487,7 +487,7 @@ function VerificationPending({
   copy: typeof registerCopy.en;
 }) {
   return (
-    <div className="animate-scale-in w-full max-w-lg rounded-[2rem] border border-white bg-white p-8 shadow-[0_30px_90px_rgba(0,0,84,0.26)]">
+    <div className="animate-scale-in w-full max-w-lg rounded-[2rem] border border-white bg-white p-8 shadow-[0_30px_90px_rgba(43,39,35,0.24)]">
       <p className="text-sm font-bold uppercase tracking-wide text-black">{copy.checkInbox}</p>
       <h2 className="mt-3 font-serif text-3xl font-bold text-black">{copy.verifyEmail}</h2>
       <p className="mt-3 text-sm leading-6 text-black/75">
@@ -511,7 +511,7 @@ function VerificationPending({
         <button
           type="button"
           disabled={cooldown > 0}
-          className="h-[52px] rounded-2xl bg-[#E60028] px-5 text-sm font-bold text-white shadow-lg shadow-[#E60028]/30 transition-all duration-200 hover:-translate-y-0.5 hover:bg-[#C90022] hover:shadow-xl hover:shadow-[#E60028]/40 disabled:cursor-not-allowed disabled:bg-[#B8BBC8] disabled:shadow-none disabled:hover:translate-y-0"
+          className="h-[52px] rounded-2xl bg-[#7A263A] px-5 text-sm font-bold text-white shadow-lg shadow-[#7A263A]/30 transition-all duration-200 hover:-translate-y-0.5 hover:bg-[#5A1C2B] hover:shadow-xl hover:shadow-[#7A263A]/40 disabled:cursor-not-allowed disabled:bg-[#BEB2A3] disabled:shadow-none disabled:hover:translate-y-0"
           onClick={onResend}
         >
           {cooldown > 0 ? `${copy.resendIn} ${cooldown}s` : copy.resendEmail}

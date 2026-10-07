@@ -290,7 +290,7 @@ export function StaffBooksPage({ mode = "staff", initialQuery = "" }: StaffBooks
               name="q"
               defaultValue={normalizedInitialQuery}
               placeholder="Search by title, ISBN, author..."
-              className="h-14 w-full rounded-2xl border border-[#D5DBE8] bg-white pl-14 pr-5 text-base text-[#111827] outline-none transition placeholder:text-[#7B8498] focus:border-[#111827] focus:shadow-[0_0_0_4px_rgba(15,23,42,0.08)]"
+              className="h-14 w-full rounded-2xl border border-[#D5DBE8] bg-white pl-14 pr-5 text-base text-[#2B2723] outline-none transition placeholder:text-[#7B8498] focus:border-[#2B2723] focus:shadow-[0_0_0_4px_rgba(15,23,42,0.08)]"
             />
           </label>
 
@@ -298,7 +298,7 @@ export function StaffBooksPage({ mode = "staff", initialQuery = "" }: StaffBooks
             <span className="sr-only">Filter by category</span>
             <select
               name="categoryId"
-              className="h-14 w-full appearance-none rounded-2xl border border-[#D5DBE8] bg-white px-5 pr-11 text-sm font-bold text-[#111827] outline-none transition focus:border-[#111827] focus:shadow-[0_0_0_4px_rgba(15,23,42,0.08)]"
+              className="h-14 w-full appearance-none rounded-2xl border border-[#D5DBE8] bg-white px-5 pr-11 text-sm font-bold text-[#2B2723] outline-none transition focus:border-[#2B2723] focus:shadow-[0_0_0_4px_rgba(15,23,42,0.08)]"
             >
               <option value="">All categories</option>
               {categories.map((category) => (
@@ -307,20 +307,20 @@ export function StaffBooksPage({ mode = "staff", initialQuery = "" }: StaffBooks
                 </option>
               ))}
             </select>
-            <Icon name="chevron-down" size={18} aria-hidden="true" className="pointer-events-none absolute right-4 top-1/2 -translate-y-1/2 text-[#111827]" />
+            <Icon name="chevron-down" size={18} aria-hidden="true" className="pointer-events-none absolute right-4 top-1/2 -translate-y-1/2 text-[#2B2723]" />
           </label>
 
           <label className="relative min-w-0 basis-full xl:w-40 xl:flex-none xl:basis-auto">
             <span className="sr-only">Filter by language</span>
             <select
               name="language"
-              className="h-14 w-full appearance-none rounded-2xl border border-[#D5DBE8] bg-white px-5 pr-11 text-sm font-bold text-[#111827] outline-none transition focus:border-[#111827] focus:shadow-[0_0_0_4px_rgba(15,23,42,0.08)]"
+              className="h-14 w-full appearance-none rounded-2xl border border-[#D5DBE8] bg-white px-5 pr-11 text-sm font-bold text-[#2B2723] outline-none transition focus:border-[#2B2723] focus:shadow-[0_0_0_4px_rgba(15,23,42,0.08)]"
             >
               <option value="">All languages</option>
               <option value="en">English</option>
               <option value="vi">Vietnamese</option>
             </select>
-            <Icon name="chevron-down" size={18} aria-hidden="true" className="pointer-events-none absolute right-4 top-1/2 -translate-y-1/2 text-[#111827]" />
+            <Icon name="chevron-down" size={18} aria-hidden="true" className="pointer-events-none absolute right-4 top-1/2 -translate-y-1/2 text-[#2B2723]" />
           </label>
 
           <label className="relative min-w-0 basis-full xl:w-36 xl:flex-none xl:basis-auto">
@@ -328,31 +328,31 @@ export function StaffBooksPage({ mode = "staff", initialQuery = "" }: StaffBooks
             <select
               name="sort"
               defaultValue="title,asc"
-              className="h-14 w-full appearance-none rounded-2xl border border-[#D5DBE8] bg-white px-5 pr-11 text-sm font-bold text-[#111827] outline-none transition focus:border-[#111827] focus:shadow-[0_0_0_4px_rgba(15,23,42,0.08)]"
+              className="h-14 w-full appearance-none rounded-2xl border border-[#D5DBE8] bg-white px-5 pr-11 text-sm font-bold text-[#2B2723] outline-none transition focus:border-[#2B2723] focus:shadow-[0_0_0_4px_rgba(15,23,42,0.08)]"
             >
               <option value="title,asc">Sort: A-Z</option>
               <option value="publishedDate,desc">Newest first</option>
             </select>
-            <Icon name="chevron-down" size={18} aria-hidden="true" className="pointer-events-none absolute right-4 top-1/2 -translate-y-1/2 text-[#111827]" />
+            <Icon name="chevron-down" size={18} aria-hidden="true" className="pointer-events-none absolute right-4 top-1/2 -translate-y-1/2 text-[#2B2723]" />
           </label>
 
           <label className="relative min-w-0 basis-full xl:w-44 xl:flex-none xl:basis-auto">
             <span className="sr-only">Filter by availability</span>
             <select
               name="availableOnly"
-              className="h-14 w-full appearance-none rounded-2xl border border-[#D5DBE8] bg-white px-5 pr-11 text-sm font-bold text-[#111827] outline-none transition focus:border-[#111827] focus:shadow-[0_0_0_4px_rgba(15,23,42,0.08)]"
+              className="h-14 w-full appearance-none rounded-2xl border border-[#D5DBE8] bg-white px-5 pr-11 text-sm font-bold text-[#2B2723] outline-none transition focus:border-[#2B2723] focus:shadow-[0_0_0_4px_rgba(15,23,42,0.08)]"
             >
               <option value="">Availability: All</option>
               <option value="true">Available only</option>
             </select>
-            <Icon name="chevron-down" size={18} aria-hidden="true" className="pointer-events-none absolute right-4 top-1/2 -translate-y-1/2 text-[#111827]" />
+            <Icon name="chevron-down" size={18} aria-hidden="true" className="pointer-events-none absolute right-4 top-1/2 -translate-y-1/2 text-[#2B2723]" />
           </label>
 
           <button
             type="button"
             onClick={() => setShowAdvancedFilters((current) => !current)}
             aria-pressed={showAdvancedFilters || hasAdvancedFilters}
-            className="inline-flex h-14 min-w-0 basis-full items-center justify-center gap-2 rounded-2xl border border-[#D5DBE8] bg-white px-4 text-sm font-bold text-[#111827] transition hover:border-[#111827] hover:bg-[#F8FAFC] xl:w-32 xl:flex-none xl:basis-auto"
+            className="inline-flex h-14 min-w-0 basis-full items-center justify-center gap-2 rounded-2xl border border-[#D5DBE8] bg-white px-4 text-sm font-bold text-[#2B2723] transition hover:border-[#2B2723] hover:bg-[#FBF8F1] xl:w-32 xl:flex-none xl:basis-auto"
           >
             <Icon name="filter" size={20} aria-hidden="true" />
             Filters
@@ -368,13 +368,13 @@ export function StaffBooksPage({ mode = "staff", initialQuery = "" }: StaffBooks
           </button>
         </div>
 
-        <div className={`${showAdvancedFilters || hasAdvancedFilters ? "mt-4 grid gap-3 rounded-2xl border border-[#E5E8F0] bg-[#F8FAFC] p-4 md:grid-cols-2" : "hidden"}`}>
+        <div className={`${showAdvancedFilters || hasAdvancedFilters ? "mt-4 grid gap-3 rounded-2xl border border-[#E5E8F0] bg-[#FBF8F1] p-4 md:grid-cols-2" : "hidden"}`}>
           <label className="min-w-0">
             <span className="mb-2 block text-xs font-black uppercase tracking-[0.22em] text-[#647089]">Author</span>
             <input
               name="author"
               placeholder="Find author..."
-              className="h-12 w-full rounded-xl border border-[#D5DBE8] bg-white px-4 text-sm outline-none transition focus:border-[#111827] focus:shadow-[0_0_0_4px_rgba(15,23,42,0.08)]"
+              className="h-12 w-full rounded-xl border border-[#D5DBE8] bg-white px-4 text-sm outline-none transition focus:border-[#2B2723] focus:shadow-[0_0_0_4px_rgba(15,23,42,0.08)]"
             />
           </label>
 
@@ -393,7 +393,7 @@ export function StaffBooksPage({ mode = "staff", initialQuery = "" }: StaffBooks
           <div className="mt-4 flex flex-wrap items-center gap-2 border-t border-[#E5E8F0] pt-4" aria-label="Active filters">
             <div className="flex flex-wrap gap-2">
               {activeFilters.map((filter) => (
-                <span key={filter} className="rounded-full border border-[#D5DBE8] bg-[#F8FAFC] px-3 py-1.5 text-xs font-bold text-[#111827]">
+                <span key={filter} className="rounded-full border border-[#D5DBE8] bg-[#FBF8F1] px-3 py-1.5 text-xs font-bold text-[#2B2723]">
                   {filter}
                 </span>
               ))}
@@ -402,7 +402,7 @@ export function StaffBooksPage({ mode = "staff", initialQuery = "" }: StaffBooks
             <button
               type="button"
               onClick={handleResetFilters}
-              className="inline-flex items-center gap-1 rounded-full px-3 py-1.5 text-xs font-bold text-[#E60028] transition hover:bg-[#E60028]/8"
+              className="inline-flex items-center gap-1 rounded-full px-3 py-1.5 text-xs font-bold text-[#7A263A] transition hover:bg-[#7A263A]/8"
             >
               <Icon name="x" size={14} aria-hidden="true" />
               Clear all
@@ -424,7 +424,7 @@ export function StaffBooksPage({ mode = "staff", initialQuery = "" }: StaffBooks
             </span>
             <div>
               <p className="text-sm font-semibold text-[#61708F]">Catalog result</p>
-              <p className="text-lg font-black text-[#0B1026]">{pageInfo.totalElements || books.length} books found</p>
+              <p className="text-lg font-black text-[#171412]">{pageInfo.totalElements || books.length} books found</p>
             </div>
           </div>
 
@@ -442,7 +442,7 @@ export function StaffBooksPage({ mode = "staff", initialQuery = "" }: StaffBooks
 
                 event.currentTarget.value = "";
               }}
-              className="h-11 rounded-2xl border border-[#D5DBE8] bg-white px-5 text-sm font-bold text-[#111827] outline-none transition hover:border-[#111827]"
+              className="h-11 rounded-2xl border border-[#D5DBE8] bg-white px-5 text-sm font-bold text-[#2B2723] outline-none transition hover:border-[#2B2723]"
             >
               <option value="">Bulk actions</option>
               <option value="export-selected" disabled={!selectedBooks.length}>
@@ -458,7 +458,7 @@ export function StaffBooksPage({ mode = "staff", initialQuery = "" }: StaffBooks
             <button
               type="button"
               onClick={() => exportBooks(sortedBooks)}
-              className="inline-flex h-11 items-center gap-2 rounded-2xl border border-[#D5DBE8] bg-white px-5 text-sm font-bold text-[#111827] transition hover:border-[#111827]"
+              className="inline-flex h-11 items-center gap-2 rounded-2xl border border-[#D5DBE8] bg-white px-5 text-sm font-bold text-[#2B2723] transition hover:border-[#2B2723]"
             >
               <Icon name="download" size={18} aria-hidden="true" />
               Export visible
@@ -485,7 +485,7 @@ export function StaffBooksPage({ mode = "staff", initialQuery = "" }: StaffBooks
       ) : (
         <div className="mt-4 overflow-hidden rounded-2xl border border-[#E5E8F0] bg-white shadow-[0_20px_50px_rgba(15,23,42,0.06)]">
           <table className="w-full min-w-[1180px] border-collapse bg-white text-left text-sm">
-            <thead className="bg-[#F6F8FC] text-[#0B1026]">
+            <thead className="bg-[#F6F8FC] text-[#171412]">
               <tr>
                 <th className="w-12 px-5 py-4">
                   <input
@@ -493,7 +493,7 @@ export function StaffBooksPage({ mode = "staff", initialQuery = "" }: StaffBooks
                     checked={allVisibleSelected}
                     onChange={toggleVisibleSelection}
                     aria-label="Select all visible books"
-                    className="h-4 w-4 rounded border-[#C8D0DF] accent-[#E60028]"
+                    className="h-4 w-4 rounded border-[#C8D0DF] accent-[#7A263A]"
                   />
                 </th>
                 <th className="px-5 py-4">
@@ -541,7 +541,7 @@ export function StaffBooksPage({ mode = "staff", initialQuery = "" }: StaffBooks
                         disabled={!id}
                         onChange={() => toggleBookSelection(id)}
                         aria-label={`Select ${book.title}`}
-                        className="h-4 w-4 rounded border-[#C8D0DF] accent-[#E60028]"
+                        className="h-4 w-4 rounded border-[#C8D0DF] accent-[#7A263A]"
                       />
                     </td>
 
@@ -549,11 +549,11 @@ export function StaffBooksPage({ mode = "staff", initialQuery = "" }: StaffBooks
                       <StaffBookIdentity book={book} href={id ? `/staff/books/${id}/edit` : undefined} />
                     </td>
 
-                    <td className="px-5 py-3 font-medium text-[#0B1026]">{book.isbn}</td>
+                    <td className="px-5 py-3 font-medium text-[#171412]">{book.isbn}</td>
                     <td className="px-5 py-3">
                       <CategoryPill label={categoryLabel(book.category)} />
                     </td>
-                    <td className="px-5 py-3 font-medium text-[#0B1026]">{book.language || "N/A"}</td>
+                    <td className="px-5 py-3 font-medium text-[#171412]">{book.language || "N/A"}</td>
                     <td className="px-5 py-3">
                       <CopiesMeter available={available} total={total} />
                     </td>
@@ -565,7 +565,7 @@ export function StaffBooksPage({ mode = "staff", initialQuery = "" }: StaffBooks
                       <div className="flex flex-nowrap items-center gap-2 whitespace-nowrap">
                         <Link
                           href={`/staff/books/${id}/edit`}
-                          className="inline-flex items-center gap-1.5 rounded-full border border-[#E0E5EF] px-3 py-2 font-bold text-[#0B1026] transition hover:border-[#111827]"
+                          className="inline-flex items-center gap-1.5 rounded-full border border-[#E0E5EF] px-3 py-2 font-bold text-[#171412] transition hover:border-[#2B2723]"
                         >
                           <Icon name="edit" size={16} aria-hidden="true" />
                           Edit
@@ -573,7 +573,7 @@ export function StaffBooksPage({ mode = "staff", initialQuery = "" }: StaffBooks
 
                         <Link
                           href={isAdmin ? `/admin/books/${id}/copies` : `/staff/books/${id}/copies`}
-                          className="inline-flex items-center gap-1.5 rounded-full border border-[#E0E5EF] px-3 py-2 font-bold text-[#0B1026] transition hover:border-[#111827]"
+                          className="inline-flex items-center gap-1.5 rounded-full border border-[#E0E5EF] px-3 py-2 font-bold text-[#171412] transition hover:border-[#2B2723]"
                         >
                           <Icon name="book" size={16} aria-hidden="true" />
                           Copies
@@ -582,7 +582,7 @@ export function StaffBooksPage({ mode = "staff", initialQuery = "" }: StaffBooks
                         <button
                           type="button"
                           onClick={() => exportBooks([book])}
-                          className="grid h-9 w-9 place-items-center rounded-full text-[#0B1026] transition hover:bg-[#F1F4F9]"
+                          className="grid h-9 w-9 place-items-center rounded-full text-[#171412] transition hover:bg-[#F1F4F9]"
                           aria-label={`Export ${book.title}`}
                         >
                           <Icon name="download" size={17} aria-hidden="true" />
@@ -631,7 +631,7 @@ function StaffHeaderActions({ isAdmin }: { isAdmin: boolean }) {
     <div className="flex flex-wrap gap-4">
       <Link
         href="/staff/books/new"
-        className="inline-flex h-14 items-center gap-3 rounded-2xl bg-[#E60028] px-7 text-sm font-black text-white shadow-[0_18px_34px_rgba(230,0,40,0.24)] transition hover:-translate-y-0.5 hover:bg-[#c90022]"
+        className="inline-flex h-14 items-center gap-3 rounded-2xl bg-[#7A263A] px-7 text-sm font-black text-white shadow-[0_18px_34px_rgba(230,0,40,0.24)] transition hover:-translate-y-0.5 hover:bg-[#5A1C2B]"
       >
         <Icon name="plus" size={21} aria-hidden="true" />
         Create Book
@@ -639,7 +639,7 @@ function StaffHeaderActions({ isAdmin }: { isAdmin: boolean }) {
 
       <Link
         href="/staff/books/import"
-        className="inline-flex h-14 items-center gap-3 rounded-2xl border border-[#D5DBE8] bg-white px-7 text-sm font-black text-[#111827] transition hover:-translate-y-0.5 hover:border-[#111827]"
+        className="inline-flex h-14 items-center gap-3 rounded-2xl border border-[#D5DBE8] bg-white px-7 text-sm font-black text-[#2B2723] transition hover:-translate-y-0.5 hover:border-[#2B2723]"
       >
         <Icon name="upload" size={21} aria-hidden="true" />
         Import CSV
@@ -647,7 +647,7 @@ function StaffHeaderActions({ isAdmin }: { isAdmin: boolean }) {
 
       <Link
         href={isAdmin ? "/admin/categories" : "/staff/authors"}
-        className="inline-flex h-14 items-center gap-3 rounded-2xl border border-[#D5DBE8] bg-white px-7 text-sm font-black text-[#111827] transition hover:-translate-y-0.5 hover:border-[#111827]"
+        className="inline-flex h-14 items-center gap-3 rounded-2xl border border-[#D5DBE8] bg-white px-7 text-sm font-black text-[#2B2723] transition hover:-translate-y-0.5 hover:border-[#2B2723]"
       >
         <Icon name="users" size={21} aria-hidden="true" />
         {isAdmin ? "Categories" : "Authors"}
@@ -665,14 +665,14 @@ function StaffBookIdentity({ book, href }: { book: Book; href?: string }) {
         {coverUrl ? (
           <Image src={coverUrl} alt={bookCoverAlt(book)} fill unoptimized sizes="44px" className="object-cover" />
         ) : (
-          <div className="flex h-full w-full items-center justify-center bg-[#111827] text-white">
+          <div className="flex h-full w-full items-center justify-center bg-[#2B2723] text-white">
             <Icon name="book-open" size={20} aria-hidden="true" />
           </div>
         )}
       </div>
 
       <div className="min-w-0">
-        <p className="line-clamp-1 font-black text-[#0B1026] transition group-hover:text-[#E60028]">{book.title}</p>
+        <p className="line-clamp-1 font-black text-[#171412] transition group-hover:text-[#7A263A]">{book.title}</p>
         <p className="mt-1 line-clamp-1 text-sm font-medium text-[#61708F]">
           {(book.authors ?? []).map(authorLabel).join(", ") || "N/A"}
         </p>
@@ -688,7 +688,7 @@ function StaffBookIdentity({ book, href }: { book: Book; href?: string }) {
     <Link
       href={href}
       aria-label={`Edit ${book.title}`}
-      className="group flex items-center gap-4 rounded-xl outline-none transition focus-visible:ring-4 focus-visible:ring-[#E60028]/20"
+      className="group flex items-center gap-4 rounded-xl outline-none transition focus-visible:ring-4 focus-visible:ring-[#7A263A]/20"
     >
       {content}
     </Link>
@@ -719,7 +719,7 @@ function CopiesMeter({ available, total }: { available: number; total: number })
 
   return (
     <div className="min-w-32">
-      <p className="font-black text-[#0B1026]">
+      <p className="font-black text-[#171412]">
         {available} / {total}
       </p>
       <div className="mt-2 h-1.5 overflow-hidden rounded-full bg-[#E5E8F0]">
@@ -745,7 +745,7 @@ function StaffSortableHeader({
     <button
       type="button"
       onClick={onClick}
-      className="inline-flex items-center gap-2 rounded-lg py-1 text-left font-black text-[#0B1026] transition hover:text-[#E60028] focus:outline-none focus:ring-2 focus:ring-[#E60028]/30"
+      className="inline-flex items-center gap-2 rounded-lg py-1 text-left font-black text-[#171412] transition hover:text-[#7A263A] focus:outline-none focus:ring-2 focus:ring-[#7A263A]/30"
       aria-label={`Sort by ${children}${active ? `, currently ${direction === "asc" ? "ascending" : "descending"}` : ""}`}
     >
       <span>{children}</span>
@@ -801,13 +801,13 @@ function PaginationBar({
   onPageChange: (page: number) => void;
 }) {
   return (
-    <nav className="mt-8 flex justify-center rounded-2xl border border-[#EDEDF2] bg-white px-5 py-4 shadow-sm" aria-label="Books pagination">
+    <nav className="mt-8 flex justify-center rounded-2xl border border-[#DED5C8] bg-white px-5 py-4 shadow-sm" aria-label="Books pagination">
       <div className="flex flex-wrap items-center justify-center gap-2">
         <button
           type="button"
           onClick={() => onPageChange(currentPage - 1)}
           disabled={currentPage <= 0}
-          className="rounded-full border border-[#D9DCE8] px-4 py-2 text-sm font-bold text-[#000054] transition hover:border-[#337AB7] disabled:cursor-not-allowed disabled:opacity-45"
+          className="rounded-full border border-[#D8CCBC] px-4 py-2 text-sm font-bold text-[#2B2723] transition hover:border-[#7A263A] disabled:cursor-not-allowed disabled:opacity-45"
         >
           Previous
         </button>
@@ -819,8 +819,8 @@ function PaginationBar({
             onClick={() => onPageChange(page)}
             aria-current={page === currentPage ? "page" : undefined}
             className={`grid h-10 w-10 place-items-center rounded-full text-sm font-bold transition ${page === currentPage
-                ? "bg-[#E60028] text-white shadow-lg shadow-[#E60028]/20"
-                : "border border-[#D9DCE8] text-[#000054] hover:border-[#337AB7]"
+                ? "bg-[#7A263A] text-white shadow-lg shadow-[#7A263A]/20"
+                : "border border-[#D8CCBC] text-[#2B2723] hover:border-[#7A263A]"
               }`}
           >
             {page + 1}
@@ -831,7 +831,7 @@ function PaginationBar({
           type="button"
           onClick={() => onPageChange(currentPage + 1)}
           disabled={currentPage >= totalPages - 1}
-          className="rounded-full border border-[#D9DCE8] px-4 py-2 text-sm font-bold text-[#000054] transition hover:border-[#337AB7] disabled:cursor-not-allowed disabled:opacity-45"
+          className="rounded-full border border-[#D8CCBC] px-4 py-2 text-sm font-bold text-[#2B2723] transition hover:border-[#7A263A] disabled:cursor-not-allowed disabled:opacity-45"
         >
           Next
         </button>

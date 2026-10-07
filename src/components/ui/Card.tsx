@@ -16,10 +16,10 @@ export function Card({
   ...props
 }: CardProps) {
   const variantClasses = {
-    default: "bg-white border border-[#EDEDF2]",
-    bordered: "bg-white border-2 border-[#D9DCE8]",
-    elevated: "bg-white border border-[#EDEDF2] shadow-[0_8px_16px_rgba(17,24,39,0.08)]",
-    gradient: "bg-gradient-to-br from-white to-[#F8F9FA] border border-[#EDEDF2]",
+    default: "bg-[#FFFCF5] border border-[#DED5C8]",
+    bordered: "bg-[#FFFCF5] border border-[#CBBDAA]",
+    elevated: "bg-[#FFFCF5] border border-[#DED5C8] shadow-[0_14px_38px_rgba(43,39,35,0.08)]",
+    gradient: "bg-gradient-to-br from-[#FFFCF5] to-[#F1EADF] border border-[#DED5C8]",
   };
 
   const paddingClasses = {
@@ -30,12 +30,12 @@ export function Card({
   };
 
   const hoverClasses = hover
-    ? "transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_18px_40px_rgba(17,24,39,0.13)] cursor-pointer"
+    ? "cursor-pointer transition-all duration-300 hover:border-[#CBBDAA] hover:shadow-[0_18px_40px_rgba(43,39,35,0.12)]"
     : "";
 
   return (
     <div
-      className={`rounded-xl ${variantClasses[variant]} ${paddingClasses[padding]} ${hoverClasses} ${className}`}
+      className={`rounded-2xl ${variantClasses[variant]} ${paddingClasses[padding]} ${hoverClasses} ${className}`}
       {...props}
     >
       {children}

@@ -50,7 +50,7 @@ export function ReviewList({
       <div className="flex flex-col items-center justify-center rounded-xl border border-dashed border-[#D1D5DB] py-14 text-center">
         <div className="text-4xl">📝</div>
         <p className="mt-3 text-base font-bold text-[#374151]">{text.noReviews}</p>
-        <p className="mt-1 text-sm text-[#6B7280]">{text.noReviewsBody}</p>
+        <p className="mt-1 text-sm text-[#776D63]">{text.noReviewsBody}</p>
       </div>
     );
   }
@@ -82,12 +82,12 @@ export function ReviewList({
             type="button"
             disabled={page <= 0}
             onClick={() => onPageChange(page - 1)}
-            className="rounded-full border border-[#D9DCE8] px-5 py-2 text-sm font-bold text-[#111827] transition-all hover:border-[#111827] hover:bg-[#111827] hover:text-white disabled:cursor-not-allowed disabled:opacity-40 disabled:hover:border-[#D9DCE8] disabled:hover:bg-transparent disabled:hover:text-[#111827]"
+            className="rounded-full border border-[#D8CCBC] px-5 py-2 text-sm font-bold text-[#2B2723] transition-all hover:border-[#2B2723] hover:bg-[#2B2723] hover:text-white disabled:cursor-not-allowed disabled:opacity-40 disabled:hover:border-[#D8CCBC] disabled:hover:bg-transparent disabled:hover:text-[#2B2723]"
           >
             {text.previous}
           </button>
 
-          <span className="text-sm font-medium text-[#6B7280]">
+          <span className="text-sm font-medium text-[#776D63]">
             {text.pageOf(page + 1, totalPages)}
           </span>
 
@@ -95,7 +95,7 @@ export function ReviewList({
             type="button"
             disabled={page >= totalPages - 1}
             onClick={() => onPageChange(page + 1)}
-            className="rounded-full border border-[#D9DCE8] px-5 py-2 text-sm font-bold text-[#111827] transition-all hover:border-[#111827] hover:bg-[#111827] hover:text-white disabled:cursor-not-allowed disabled:opacity-40 disabled:hover:border-[#D9DCE8] disabled:hover:bg-transparent disabled:hover:text-[#111827]"
+            className="rounded-full border border-[#D8CCBC] px-5 py-2 text-sm font-bold text-[#2B2723] transition-all hover:border-[#2B2723] hover:bg-[#2B2723] hover:text-white disabled:cursor-not-allowed disabled:opacity-40 disabled:hover:border-[#D8CCBC] disabled:hover:bg-transparent disabled:hover:text-[#2B2723]"
           >
             {text.next}
           </button>

@@ -83,8 +83,8 @@ export function ProfilePanel() {
 
   if (auth.isInitializing || !auth.isAuthenticated) {
     return (
-      <main id="main-content" tabIndex={-1} className="flex min-h-dvh items-center justify-center bg-[#F8F9FA] px-5 outline-none">
-        <div className="w-full max-w-md rounded-2xl border border-[#EDEDF2] bg-white p-8 text-center shadow-[0_24px_60px_rgba(17,24,39,0.14)]">
+      <main id="main-content" tabIndex={-1} className="flex min-h-dvh items-center justify-center bg-[#F7F3EA] px-5 outline-none">
+        <div className="w-full max-w-md rounded-2xl border border-[#DED5C8] bg-white p-8 text-center shadow-[0_24px_60px_rgba(17,24,39,0.14)]">
           <p className="text-sm font-bold uppercase tracking-wide text-black/70">{copy.authenticating}</p>
           <h1 className="mt-3 font-serif text-3xl font-bold text-black">{copy.checkingSession}</h1>
         </div>
@@ -232,7 +232,7 @@ export function ProfilePanel() {
                 <button
                   type="submit"
                   disabled={isSaving}
-                  className="inline-flex items-center gap-3 rounded-xl bg-black px-7 py-4 text-sm font-bold text-white shadow-[0_18px_40px_rgba(0,0,0,0.18)] transition hover:-translate-y-0.5 hover:bg-[#E60028] disabled:opacity-60"
+                  className="inline-flex items-center gap-3 rounded-xl bg-black px-7 py-4 text-sm font-bold text-white shadow-[0_18px_40px_rgba(0,0,0,0.18)] transition hover:-translate-y-0.5 hover:bg-[#7A263A] disabled:opacity-60"
                 >
                   <ProfileIcon name="save" className="h-5 w-5" />
                   {isSaving ? copy.saving : copy.saveChanges}

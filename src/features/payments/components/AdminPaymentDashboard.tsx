@@ -105,7 +105,7 @@ export function AdminPaymentDashboard() {
       <div className="mb-6 rounded-2xl border border-[#D8DEE8] bg-white p-4 shadow-sm">
         <div className="flex flex-wrap gap-4">
           <div className="flex-1 min-w-[240px]">
-            <label className="block text-[10px] font-black uppercase text-[#6B7280] mb-1.5 ml-1">Search</label>
+            <label className="block text-[10px] font-black uppercase text-[#776D63] mb-1.5 ml-1">Search</label>
             <div className="relative">
               <Icon name="search" size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-[#94A3B8]" />
               <input
@@ -113,17 +113,17 @@ export function AdminPaymentDashboard() {
                 placeholder="Code, email, title..."
                 value={q}
                 onChange={(e) => { setQ(e.target.value); setPage(0); }}
-                className="w-full rounded-xl border border-[#D8DEE8] bg-[#F8FAFC] py-2 pl-10 pr-4 text-sm font-semibold text-[#0B1026] outline-none transition focus:border-[#B30D2D] focus:ring-2 focus:ring-[#B30D2D]/10"
+                className="w-full rounded-xl border border-[#D8DEE8] bg-[#FBF8F1] py-2 pl-10 pr-4 text-sm font-semibold text-[#171412] outline-none transition focus:border-[#B30D2D] focus:ring-2 focus:ring-[#B30D2D]/10"
               />
             </div>
           </div>
 
           <div className="w-40">
-            <label className="block text-[10px] font-black uppercase text-[#6B7280] mb-1.5 ml-1">Status</label>
+            <label className="block text-[10px] font-black uppercase text-[#776D63] mb-1.5 ml-1">Status</label>
             <select
               value={status}
               onChange={(e) => { setStatus(e.target.value); setPage(0); }}
-              className="w-full rounded-xl border border-[#D8DEE8] bg-[#F8FAFC] py-2 px-3 text-sm font-semibold text-[#0B1026] outline-none transition focus:border-[#B30D2D]"
+              className="w-full rounded-xl border border-[#D8DEE8] bg-[#FBF8F1] py-2 px-3 text-sm font-semibold text-[#171412] outline-none transition focus:border-[#B30D2D]"
             >
               <option value="">All Statuses</option>
               <option value="SUCCESS">Success</option>
@@ -135,22 +135,22 @@ export function AdminPaymentDashboard() {
           </div>
 
           <div className="w-40">
-            <label className="block text-[10px] font-black uppercase text-[#6B7280] mb-1.5 ml-1">From</label>
+            <label className="block text-[10px] font-black uppercase text-[#776D63] mb-1.5 ml-1">From</label>
             <input
               type="date"
               value={paidFrom}
               onChange={(e) => { setPaidFrom(e.target.value); setPage(0); }}
-              className="w-full rounded-xl border border-[#D8DEE8] bg-[#F8FAFC] py-2 px-3 text-sm font-semibold text-[#0B1026] outline-none transition focus:border-[#B30D2D]"
+              className="w-full rounded-xl border border-[#D8DEE8] bg-[#FBF8F1] py-2 px-3 text-sm font-semibold text-[#171412] outline-none transition focus:border-[#B30D2D]"
             />
           </div>
 
           <div className="w-40">
-            <label className="block text-[10px] font-black uppercase text-[#6B7280] mb-1.5 ml-1">To</label>
+            <label className="block text-[10px] font-black uppercase text-[#776D63] mb-1.5 ml-1">To</label>
             <input
               type="date"
               value={paidTo}
               onChange={(e) => { setPaidTo(e.target.value); setPage(0); }}
-              className="w-full rounded-xl border border-[#D8DEE8] bg-[#F8FAFC] py-2 px-3 text-sm font-semibold text-[#0B1026] outline-none transition focus:border-[#B30D2D]"
+              className="w-full rounded-xl border border-[#D8DEE8] bg-[#FBF8F1] py-2 px-3 text-sm font-semibold text-[#171412] outline-none transition focus:border-[#B30D2D]"
             />
           </div>
         </div>
@@ -165,9 +165,9 @@ export function AdminPaymentDashboard() {
       <div className="overflow-x-auto rounded-2xl border border-[#D8DEE8] bg-white shadow-sm">
         <table className="w-full min-w-[1000px] border-collapse text-left text-sm">
           <thead>
-            <tr className="bg-[#F8FAFC] border-b border-[#D8DEE8]">
+            <tr className="bg-[#FBF8F1] border-b border-[#D8DEE8]">
               {["Code", "Member", "Item", "Amount", "Status", "Provider", "Paid At", "Actions"].map((h) => (
-                <th key={h} className="px-6 py-4 font-black uppercase tracking-wider text-[#6B7280] text-[10px]">
+                <th key={h} className="px-6 py-4 font-black uppercase tracking-wider text-[#776D63] text-[10px]">
                   {h}
                 </th>
               ))}
@@ -182,23 +182,23 @@ export function AdminPaymentDashboard() {
               </tr>
             ) : (
               payments.map((p) => (
-                <tr key={p.paymentId} className="hover:bg-[#F8FAFC] transition-colors">
+                <tr key={p.paymentId} className="hover:bg-[#FBF8F1] transition-colors">
                   <td className="px-6 py-4">
-                    <span className="font-mono text-[10px] font-bold text-[#0B1026] bg-[#F1F5F9] px-2 py-1 rounded">
+                    <span className="font-mono text-[10px] font-bold text-[#171412] bg-[#F1F5F9] px-2 py-1 rounded">
                       {p.paymentCode}
                     </span>
                   </td>
                   <td className="px-6 py-4">
-                    <div className="font-bold text-[#0B1026]">{p.memberName}</div>
-                    <div className="text-[10px] font-semibold text-[#6B7280]">{p.memberEmail}</div>
+                    <div className="font-bold text-[#171412]">{p.memberName}</div>
+                    <div className="text-[10px] font-semibold text-[#776D63]">{p.memberEmail}</div>
                   </td>
                   <td className="px-6 py-4">
-                    <div className="font-bold text-[#0B1026] truncate max-w-[180px]" title={p.itemTitle}>
+                    <div className="font-bold text-[#171412] truncate max-w-[180px]" title={p.itemTitle}>
                       {p.itemTitle}
                     </div>
-                    <div className="text-[10px] font-black uppercase text-[#6B7280]">{p.purpose.replace(/_/g, " ")}</div>
+                    <div className="text-[10px] font-black uppercase text-[#776D63]">{p.purpose.replace(/_/g, " ")}</div>
                   </td>
-                  <td className="px-6 py-4 font-black text-[#0B1026]">
+                  <td className="px-6 py-4 font-black text-[#171412]">
                     {formatCurrency(p.amount, p.currency)}
                   </td>
                   <td className="px-6 py-4">
@@ -206,7 +206,7 @@ export function AdminPaymentDashboard() {
                   </td>
                   <td className="px-6 py-4">
                     <div className="text-[10px] font-black uppercase text-[#0066FF]">{p.provider}</div>
-                    <div className="text-[10px] font-mono text-[#6B7280] truncate max-w-[100px]" title={p.providerTransactionId ?? ""}>
+                    <div className="text-[10px] font-mono text-[#776D63] truncate max-w-[100px]" title={p.providerTransactionId ?? ""}>
                       {p.providerTransactionId || "–"}
                     </div>
                   </td>
@@ -217,14 +217,14 @@ export function AdminPaymentDashboard() {
                     <div className="flex gap-2">
                       <Link
                         href={`/admin/payments/receipts/${p.paymentCode}`}
-                        className="grid h-8 w-8 place-items-center rounded-lg bg-[#F8FAFC] border border-[#D8DEE8] text-[#0B1026] transition hover:border-[#B30D2D] hover:text-[#B30D2D]"
+                        className="grid h-8 w-8 place-items-center rounded-lg bg-[#FBF8F1] border border-[#D8DEE8] text-[#171412] transition hover:border-[#B30D2D] hover:text-[#B30D2D]"
                         title="View Receipt"
                       >
                         <Icon name="file-text" size={16} />
                       </Link>
                       <Link
                         href={`/admin/members/${p.memberId}`}
-                        className="grid h-8 w-8 place-items-center rounded-lg bg-[#F8FAFC] border border-[#D8DEE8] text-[#0B1026] transition hover:border-[#B30D2D] hover:text-[#B30D2D]"
+                        className="grid h-8 w-8 place-items-center rounded-lg bg-[#FBF8F1] border border-[#D8DEE8] text-[#171412] transition hover:border-[#B30D2D] hover:text-[#B30D2D]"
                         title="View Member"
                       >
                         <Icon name="user" size={16} />
@@ -243,16 +243,16 @@ export function AdminPaymentDashboard() {
         <button
           onClick={() => setPage((p) => Math.max(0, p - 1))}
           disabled={page === 0 || isLoading}
-          className="inline-flex items-center gap-2 rounded-xl border border-[#D8DEE8] bg-white px-4 py-2 text-xs font-black text-[#0B1026] transition hover:border-[#B30D2D] disabled:opacity-40"
+          className="inline-flex items-center gap-2 rounded-xl border border-[#D8DEE8] bg-white px-4 py-2 text-xs font-black text-[#171412] transition hover:border-[#B30D2D] disabled:opacity-40"
         >
           <Icon name="chevron-left" size={16} />
           Previous
         </button>
-        <span className="text-xs font-black text-[#6B7280]">PAGE {page + 1}</span>
+        <span className="text-xs font-black text-[#776D63]">PAGE {page + 1}</span>
         <button
           onClick={() => setPage((p) => p + 1)}
           disabled={payments.length < 20 || isLoading}
-          className="inline-flex items-center gap-2 rounded-xl border border-[#D8DEE8] bg-white px-4 py-2 text-xs font-black text-[#0B1026] transition hover:border-[#B30D2D] disabled:opacity-40"
+          className="inline-flex items-center gap-2 rounded-xl border border-[#D8DEE8] bg-white px-4 py-2 text-xs font-black text-[#171412] transition hover:border-[#B30D2D] disabled:opacity-40"
         >
           Next
           <Icon name="chevron-right" size={16} />

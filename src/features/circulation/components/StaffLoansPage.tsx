@@ -163,23 +163,23 @@ export function StaffLoansPage() {
     >
       {!canUseStaffApi ? <Notice tone="error" message="This workspace requires LIBRARIAN or ADMIN access." /> : null}
 
-      <form ref={filterFormRef} onSubmit={handleSubmit} onChange={handleFilterChange} className="rounded-2xl border border-[#EDEDF2] bg-[#F8F9FA] p-4 shadow-sm">
+      <form ref={filterFormRef} onSubmit={handleSubmit} onChange={handleFilterChange} className="rounded-2xl border border-[#DED5C8] bg-[#F7F3EA] p-4 shadow-sm">
         <div className="grid gap-3 md:grid-cols-2 xl:grid-cols-[minmax(320px,2fr)_minmax(150px,0.8fr)_minmax(150px,0.8fr)_minmax(150px,0.8fr)_minmax(150px,0.8fr)]">
           <label className="relative min-w-0">
             <span className="sr-only">Search loans</span>
-            <span aria-hidden="true" className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-[#337AB7]">
+            <span aria-hidden="true" className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-[#7A263A]">
               <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="m21 21-4.35-4.35M10.5 18a7.5 7.5 0 1 1 0-15 7.5 7.5 0 0 1 0 15Z" />
               </svg>
             </span>
-            <input name="q" placeholder="Search member, title, ISBN, barcode..." className="h-14 w-full rounded-xl border border-[#D9DCE8] bg-white pl-11 pr-4 text-sm outline-none transition focus:border-[#337AB7]" />
+            <input name="q" placeholder="Search member, title, ISBN, barcode..." className="h-14 w-full rounded-xl border border-[#D8CCBC] bg-white pl-11 pr-4 text-sm outline-none transition focus:border-[#7A263A]" />
           </label>
-          <select name="scope" defaultValue="open" className="h-14 rounded-xl border border-[#D9DCE8] bg-white px-4 text-sm font-semibold text-[#111827] outline-none transition focus:border-[#337AB7]">
+          <select name="scope" defaultValue="open" className="h-14 rounded-xl border border-[#D8CCBC] bg-white px-4 text-sm font-semibold text-[#2B2723] outline-none transition focus:border-[#7A263A]">
             <option value="open">Open loans</option>
             <option value="overdue">Overdue only</option>
             <option value="all">All history</option>
           </select>
-          <select name="status" className="h-14 rounded-xl border border-[#D9DCE8] bg-white px-4 text-sm font-semibold text-[#111827] outline-none transition focus:border-[#337AB7]">
+          <select name="status" className="h-14 rounded-xl border border-[#D8CCBC] bg-white px-4 text-sm font-semibold text-[#2B2723] outline-none transition focus:border-[#7A263A]">
             <option value="">Any status</option>
             <option value="BORROWED">Borrowed</option>
             <option value="OVERDUE">Overdue</option>
@@ -189,8 +189,8 @@ export function StaffLoansPage() {
             <option value="EXPIRED">Expired ebook</option>
             <option value="REVOKED">Revoked ebook</option>
           </select>
-          <input name="dueFrom" type="date" aria-label="Due from" className="h-14 rounded-xl border border-[#D9DCE8] bg-white px-4 text-sm outline-none transition focus:border-[#337AB7]" />
-          <input name="dueTo" type="date" aria-label="Due to" className="h-14 rounded-xl border border-[#D9DCE8] bg-white px-4 text-sm outline-none transition focus:border-[#337AB7]" />
+          <input name="dueFrom" type="date" aria-label="Due from" className="h-14 rounded-xl border border-[#D8CCBC] bg-white px-4 text-sm outline-none transition focus:border-[#7A263A]" />
+          <input name="dueTo" type="date" aria-label="Due to" className="h-14 rounded-xl border border-[#D8CCBC] bg-white px-4 text-sm outline-none transition focus:border-[#7A263A]" />
         </div>
       </form>
 
@@ -218,9 +218,9 @@ export function StaffLoansPage() {
 
 function MetricCard({ label, value, tone = "normal" }: { label: string; value: string; tone?: "normal" | "danger" }) {
   return (
-    <div className={`rounded-xl border p-4 ${tone === "danger" ? "border-rose-200 bg-rose-50" : "border-[#EDEDF2] bg-white"}`}>
-      <p className={`text-xs font-bold uppercase tracking-wide ${tone === "danger" ? "text-rose-700" : "text-[#337AB7]"}`}>{label}</p>
-      <p className="mt-2 text-2xl font-bold text-[#000054]">{value}</p>
+    <div className={`rounded-xl border p-4 ${tone === "danger" ? "border-rose-200 bg-rose-50" : "border-[#DED5C8] bg-white"}`}>
+      <p className={`text-xs font-bold uppercase tracking-wide ${tone === "danger" ? "text-rose-700" : "text-[#7A263A]"}`}>{label}</p>
+      <p className="mt-2 text-2xl font-bold text-[#2B2723]">{value}</p>
     </div>
   );
 }

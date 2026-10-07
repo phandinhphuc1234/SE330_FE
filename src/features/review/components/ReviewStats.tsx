@@ -21,16 +21,16 @@ export function ReviewStats({ stats }: { stats: BookReviewStats }) {
   const maxCount = Math.max(...Object.values(stats.ratingDistribution), 1);
 
   return (
-    <div className="flex flex-col gap-6 rounded-2xl border border-[#E1E6F0] bg-[#F8FAFC] p-6 sm:flex-row sm:items-start sm:gap-10">
+    <div className="flex flex-col gap-6 rounded-2xl border border-[#E1E6F0] bg-[#FBF8F1] p-6 sm:flex-row sm:items-start sm:gap-10">
       {/* Left: Big average */}
       <div className="flex shrink-0 flex-col items-center text-center sm:min-w-[140px]">
-        <span className="text-5xl font-black leading-none text-[#111827]">
+        <span className="text-5xl font-black leading-none text-[#2B2723]">
           {stats.averageRating.toFixed(1)}
         </span>
         <div className="mt-2">
           <StarRating rating={stats.averageRating} size="md" />
         </div>
-        <p className="mt-1.5 text-sm font-medium text-[#6B7280]">
+        <p className="mt-1.5 text-sm font-medium text-[#776D63]">
           {stats.totalReviews} {text.reviews}
         </p>
         <p className="text-xs text-[#9CA3AF]">{text.outOf}</p>
@@ -53,7 +53,7 @@ export function ReviewStats({ stats }: { stats: BookReviewStats }) {
                   style={{ width: `${percent}%` }}
                 />
               </div>
-              <span className="w-8 shrink-0 text-right text-xs font-semibold text-[#6B7280]">
+              <span className="w-8 shrink-0 text-right text-xs font-semibold text-[#776D63]">
                 {count}
               </span>
             </div>

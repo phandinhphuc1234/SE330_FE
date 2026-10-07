@@ -170,7 +170,7 @@ export function ImportBooksPage() {
       <section className="rounded-xl border border-gray-200 bg-white p-6 shadow-[0_18px_48px_rgba(15,23,42,0.08)] md:p-8">
         <div className="mb-8">
           <p className="text-xs font-bold uppercase tracking-[0.08em] text-red-700">CSV Import</p>
-          <h1 className="mt-3 text-3xl font-bold leading-tight text-[#111827] md:text-4xl">Import books and copies</h1>
+          <h1 className="mt-3 text-3xl font-bold leading-tight text-[#2B2723] md:text-4xl">Import books and copies</h1>
           <p className="mt-3 max-w-3xl text-sm font-medium leading-6 text-[#4B5563]">
             Upload catalog records in bulk and review row-level errors returned by the backend.
           </p>
@@ -184,8 +184,8 @@ export function ImportBooksPage() {
               <Icon name={icon} size={17} aria-hidden="true" />
             </span>
             <div className="min-w-0">
-              <p className="truncate text-xs font-bold text-[#111827]">{title}</p>
-              <p className="truncate text-[11px] font-medium leading-4 text-[#6B7280]" title={body}>
+              <p className="truncate text-xs font-bold text-[#2B2723]">{title}</p>
+              <p className="truncate text-[11px] font-medium leading-4 text-[#776D63]" title={body}>
                 {body}
               </p>
             </div>
@@ -203,8 +203,8 @@ export function ImportBooksPage() {
               <Icon name="upload" size={19} aria-hidden="true" />
             </span>
             <div className="min-w-0">
-              <h2 className="text-base font-bold text-[#111827]">Upload CSV</h2>
-              <p className="mt-1 text-xs font-medium leading-5 text-[#6B7280]">
+              <h2 className="text-base font-bold text-[#2B2723]">Upload CSV</h2>
+              <p className="mt-1 text-xs font-medium leading-5 text-[#776D63]">
                 Choose a catalog file, then start the import job.
               </p>
             </div>
@@ -243,14 +243,14 @@ export function ImportBooksPage() {
                 <Icon name="file" size={17} aria-hidden="true" />
               </span>
               <div className="min-w-0 flex-1">
-                <p className="truncate text-xs font-bold text-[#111827]" title={selectedFileName}>{selectedFileName}</p>
-                <p className="mt-0.5 text-[11px] font-medium text-[#6B7280]">{selectedFile ? formatFileSize(selectedFile.size) : "Ready to import"}</p>
+                <p className="truncate text-xs font-bold text-[#2B2723]" title={selectedFileName}>{selectedFileName}</p>
+                <p className="mt-0.5 text-[11px] font-medium text-[#776D63]">{selectedFile ? formatFileSize(selectedFile.size) : "Ready to import"}</p>
               </div>
               <Icon name="check-circle" size={16} className="shrink-0 text-[#2F7D47]" aria-hidden="true" />
               <button
                 type="button"
                 onClick={clearSelectedFile}
-                className="grid h-7 w-7 shrink-0 place-items-center rounded-md text-[#6B7280] transition hover:bg-white hover:text-[#111827]"
+                className="grid h-7 w-7 shrink-0 place-items-center rounded-md text-[#776D63] transition hover:bg-white hover:text-[#2B2723]"
                 aria-label="Remove selected file"
               >
                 <Icon name="x" size={15} aria-hidden="true" />
@@ -265,18 +265,18 @@ export function ImportBooksPage() {
             <Icon name="upload" size={17} aria-hidden="true" />
             {isSubmitting ? "Importing..." : "Start import"}
           </button>
-          <p className="mt-4 text-[11px] font-medium text-[#6B7280]">Missing columns or invalid data will be reported in the review step.</p>
+          <p className="mt-4 text-[11px] font-medium text-[#776D63]">Missing columns or invalid data will be reported in the review step.</p>
         </form>
 
         <section className="min-w-0 rounded-xl border border-gray-200 bg-white p-6 shadow-[0_10px_28px_rgba(15,23,42,0.06)]">
           <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
             <div className="flex items-start gap-3">
-              <span className="mt-0.5 grid h-8 w-8 shrink-0 place-items-center text-[#111827]">
+              <span className="mt-0.5 grid h-8 w-8 shrink-0 place-items-center text-[#2B2723]">
                 <Icon name="trending-up" size={19} aria-hidden="true" />
               </span>
               <div className="min-w-0">
-                <h2 className="text-base font-bold text-[#111827]">Import result</h2>
-                <p className="mt-1 text-xs font-medium leading-5 text-[#6B7280]">
+                <h2 className="text-base font-bold text-[#2B2723]">Import result</h2>
+                <p className="mt-1 text-xs font-medium leading-5 text-[#776D63]">
                   Review job status, imported copies, and row-level validation.
                 </p>
               </div>
@@ -292,9 +292,9 @@ export function ImportBooksPage() {
               {result.jobId || result.id ? (
                 <div className="mt-4 flex flex-col gap-3 rounded-xl border border-[#E5E7EB] bg-white p-4 sm:flex-row sm:items-center sm:justify-between">
                   <div className="min-w-0">
-                    <p className="text-[11px] font-bold uppercase tracking-[0.08em] text-[#6B7280]">Import job id</p>
-                    <p className="mt-2 break-all text-sm font-bold leading-5 text-[#111827]">{result.jobId ?? result.id}</p>
-                    <p className="mt-1 text-[11px] font-medium text-[#6B7280]">
+                    <p className="text-[11px] font-bold uppercase tracking-[0.08em] text-[#776D63]">Import job id</p>
+                    <p className="mt-2 break-all text-sm font-bold leading-5 text-[#2B2723]">{result.jobId ?? result.id}</p>
+                    <p className="mt-1 text-[11px] font-medium text-[#776D63]">
                       {resultDateLabel ? `${getImportStatusLabel(resultStatus)} on ${resultDateLabel}` : getImportStatusLabel(resultStatus)}
                     </p>
                   </div>
@@ -336,14 +336,14 @@ export function ImportBooksPage() {
 
 function getWorkflowBadgeStyle(state: string) {
   return {
-    backgroundColor: state === "active" ? "#C1122F" : state === "done" ? "#111827" : "#9CA3AF",
+    backgroundColor: state === "active" ? "#C1122F" : state === "done" ? "#2B2723" : "#9CA3AF",
   };
 }
 
 function getWorkflowIconStyle(state: string) {
   return {
     backgroundColor: state === "active" ? "#FFF0F2" : "#F3F4F6",
-    color: state === "active" ? "#C1122F" : state === "done" ? "#111827" : "#6B7280",
+    color: state === "active" ? "#C1122F" : state === "done" ? "#2B2723" : "#776D63",
   };
 }
 
@@ -363,7 +363,7 @@ function ImportMetricCard({
   const toneClasses = {
     brand: "border-[#D8E8F6] bg-[#F5FAFF] text-[#3C6E9F]",
     danger: "border-[#F6C9CF] bg-[#FFF7F8] text-[#C1122F]",
-    neutral: "border-[#E5E7EB] bg-white text-[#6B7280]",
+    neutral: "border-[#E5E7EB] bg-white text-[#776D63]",
     success: "border-[#CFEAD8] bg-[#F6FFF8] text-[#2F7D47]",
   }[tone];
 
@@ -373,8 +373,8 @@ function ImportMetricCard({
         <Icon name={icon} size={15} className="shrink-0" aria-hidden="true" />
         <p className="min-w-0 truncate text-[11px] font-bold uppercase tracking-[0.08em]">{label}</p>
       </div>
-      <p className="mt-3 break-words text-3xl font-bold leading-none text-[#111827]">{value}</p>
-      <p className="mt-1 text-[11px] font-semibold text-[#6B7280]">{helper}</p>
+      <p className="mt-3 break-words text-3xl font-bold leading-none text-[#2B2723]">{value}</p>
+      <p className="mt-1 text-[11px] font-semibold text-[#776D63]">{helper}</p>
     </div>
   );
 }
@@ -383,8 +383,8 @@ function EmptyImportResult() {
   return (
     <div className="rounded-xl border border-dashed border-[#D1D5DB] bg-[#F9FAFB] px-4 py-8 text-center">
       <Icon name="file" size={28} className="mx-auto text-[#9CA3AF]" aria-hidden="true" />
-      <p className="mt-3 text-sm font-bold text-[#111827]">No import result yet</p>
-      <p className="mt-1 text-xs font-medium text-[#6B7280]">Upload a CSV file to review job status and row validation.</p>
+      <p className="mt-3 text-sm font-bold text-[#2B2723]">No import result yet</p>
+      <p className="mt-1 text-xs font-medium text-[#776D63]">Upload a CSV file to review job status and row validation.</p>
     </div>
   );
 }
@@ -422,7 +422,7 @@ function RecentImportEvents({
   return (
     <div className="mt-5 rounded-xl border border-[#E5E7EB] bg-white">
       <div className="flex items-center justify-between border-b border-[#E5E7EB] px-4 py-3">
-        <p className="text-xs font-bold text-[#111827]">Recent events</p>
+        <p className="text-xs font-bold text-[#2B2723]">Recent events</p>
         <Link href="/staff/imports" className="text-[11px] font-bold text-[#C1122F] transition hover:text-[#9F0F27]">
           View all events
         </Link>
@@ -430,10 +430,10 @@ function RecentImportEvents({
       <div className="flex items-start gap-3 px-4 py-3">
         <Icon name={isFailed ? "alert-circle" : "check-circle"} size={15} className={isFailed ? "mt-0.5 shrink-0 text-[#C1122F]" : "mt-0.5 shrink-0 text-[#2F7D47]"} aria-hidden="true" />
         <div className="min-w-0 flex-1">
-          <p className="truncate text-xs font-bold text-[#111827]">{isFailed ? "CSV import failed" : "CSV import completed"}</p>
-          <p className="mt-1 text-[11px] font-medium text-[#6B7280]">{processedRows} rows processed - {failedRows} failed</p>
+          <p className="truncate text-xs font-bold text-[#2B2723]">{isFailed ? "CSV import failed" : "CSV import completed"}</p>
+          <p className="mt-1 text-[11px] font-medium text-[#776D63]">{processedRows} rows processed - {failedRows} failed</p>
         </div>
-        {eventTime ? <p className="shrink-0 text-[11px] font-medium text-[#6B7280]">{eventTime}</p> : null}
+        {eventTime ? <p className="shrink-0 text-[11px] font-medium text-[#776D63]">{eventTime}</p> : null}
       </div>
     </div>
   );
@@ -456,18 +456,18 @@ function ImportErrorTable({
     <div className="mt-6">
       <div className="mb-3 flex flex-col gap-1 sm:flex-row sm:items-end sm:justify-between">
         <div>
-          <p className="text-sm font-bold text-[#000054]">Row-level errors</p>
+          <p className="text-sm font-bold text-[#2B2723]">Row-level errors</p>
           <p className="text-xs font-semibold text-[#6F675E]">
             {isComplete ? "Showing all returned row errors." : "Showing the first 5 errors while the import is running."}
           </p>
         </div>
         {!isComplete && totalErrors > errors.length ? (
-          <p className="text-xs font-bold text-[#337AB7]">{totalErrors - errors.length} more will be available when the job finishes.</p>
+          <p className="text-xs font-bold text-[#7A263A]">{totalErrors - errors.length} more will be available when the job finishes.</p>
         ) : null}
       </div>
-      <div className="max-w-full overflow-x-auto rounded-xl border border-[#EDEDF2]">
+      <div className="max-w-full overflow-x-auto rounded-xl border border-[#DED5C8]">
         <table className="w-full min-w-[640px] border-collapse text-left text-sm">
-          <thead className="bg-[#000054] text-white">
+          <thead className="bg-[#2B2723] text-white">
             <tr>
               {["Row", "ISBN", "Barcode", "Code", "Message"].map((heading) => (
                 <th key={heading} className="px-4 py-3 font-bold">
@@ -478,11 +478,11 @@ function ImportErrorTable({
           </thead>
           <tbody>
             {errors.map((row, index) => (
-              <tr key={`${row.rowNumber}-${index}`} className="border-t border-[#EDEDF2]">
+              <tr key={`${row.rowNumber}-${index}`} className="border-t border-[#DED5C8]">
                 <td className="px-4 py-3">{row.rowNumber ?? "-"}</td>
                 <td className="px-4 py-3">{row.isbn ?? "-"}</td>
                 <td className="px-4 py-3">{row.barcode ?? "-"}</td>
-                <td className="px-4 py-3 font-bold text-[#E60028]">{row.code ?? "-"}</td>
+                <td className="px-4 py-3 font-bold text-[#7A263A]">{row.code ?? "-"}</td>
                 <td className="px-4 py-3">{row.message ?? "-"}</td>
               </tr>
             ))}

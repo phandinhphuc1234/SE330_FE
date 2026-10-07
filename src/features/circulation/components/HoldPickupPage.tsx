@@ -58,21 +58,21 @@ export function HoldPickupPage() {
       {!canUseStaffApi ? <Notice tone="error" message="This workspace requires LIBRARIAN or ADMIN access." /> : null}
       {successMessage ? <div className="mt-6"><Notice tone="success" message={successMessage} /></div> : null}
       <div className="mt-6 grid gap-6 lg:grid-cols-[0.8fr_1.2fr]">
-        <form onSubmit={handleSubmit} className="rounded-xl border border-[#EDEDF2] bg-[#F8F9FA] p-5">
-          <h2 className="text-lg font-bold text-[#000054]">Reserved hold checkout</h2>
-          <p className="mt-2 text-sm leading-6 text-[#333333]">
+        <form onSubmit={handleSubmit} className="rounded-xl border border-[#DED5C8] bg-[#F7F3EA] p-5">
+          <h2 className="text-lg font-bold text-[#2B2723]">Reserved hold checkout</h2>
+          <p className="mt-2 text-sm leading-6 text-[#5F574F]">
             Enter the hold ID from the member&apos;s reservation record, then confirm pickup at the desk.
           </p>
           <label className="mt-4 block">
-            <span className="text-xs font-bold uppercase tracking-wide text-[#000054]">Ready Hold ID</span>
-            <input name="holdId" defaultValue={holdIdFromQuery} placeholder="Enter hold ID" className="mt-2 w-full rounded-xl border border-[#D9DCE8] bg-white px-4 py-3 outline-none focus:border-[#337AB7]" />
+            <span className="text-xs font-bold uppercase tracking-wide text-[#2B2723]">Ready Hold ID</span>
+            <input name="holdId" defaultValue={holdIdFromQuery} placeholder="Enter hold ID" className="mt-2 w-full rounded-xl border border-[#D8CCBC] bg-white px-4 py-3 outline-none focus:border-[#7A263A]" />
           </label>
-          <button type="submit" disabled={!canUseStaffApi || isSubmitting} className="mt-5 rounded-full bg-[#E60028] px-5 py-3 text-sm font-bold text-white disabled:opacity-50">
+          <button type="submit" disabled={!canUseStaffApi || isSubmitting} className="mt-5 rounded-full bg-[#7A263A] px-5 py-3 text-sm font-bold text-white disabled:opacity-50">
             {isSubmitting ? "Processing pickup..." : "Checkout Reserved Hold"}
           </button>
         </form>
-        <section className="rounded-xl border border-[#EDEDF2] bg-white p-5">
-          <h2 className="text-lg font-bold text-[#000054]">Result</h2>
+        <section className="rounded-xl border border-[#DED5C8] bg-white p-5">
+          <h2 className="text-lg font-bold text-[#2B2723]">Result</h2>
           {error ? <div className="mt-4"><Notice tone="error" message={error} /></div> : null}
           {result ? (
             <dl className="mt-4 grid gap-3 sm:grid-cols-2">
@@ -100,5 +100,5 @@ function buildSuccessMessage(result: CheckoutResponse) {
 }
 
 function Metric({ label, value }: { label: string; value: string }) {
-  return <div className="rounded-lg border border-[#EDEDF2] bg-[#F8F9FA] p-4"><dt className="text-xs font-bold uppercase tracking-wide text-[#337AB7]">{label}</dt><dd className="mt-2 font-semibold text-[#111827]">{value}</dd></div>;
+  return <div className="rounded-lg border border-[#DED5C8] bg-[#F7F3EA] p-4"><dt className="text-xs font-bold uppercase tracking-wide text-[#7A263A]">{label}</dt><dd className="mt-2 font-semibold text-[#2B2723]">{value}</dd></div>;
 }

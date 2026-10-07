@@ -1,22 +1,24 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #111827;
-  --brand-ink: #111827;
-  --brand-ink-soft: #27272a;
-  --brand-paper: #ffffff;
-  --brand-muted: #f6f6f3;
-  --brand-border: #dedede;
-  --brand-red: #e60028;
-  --brand-red-dark: #c90022;
+  --background: #f7f3ea;
+  --foreground: #2b2723;
+  --brand-ink: #171412;
+  --brand-ink-soft: #5f574f;
+  --brand-paper: #fffcf5;
+  --brand-muted: #f1eadf;
+  --brand-border: #ded5c8;
+  --brand-red: #7a263a;
+  --brand-red-dark: #5a1c2b;
+  --brand-gold: #b8872b;
+  --brand-gold-soft: #e1c38b;
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --font-sans: var(--font-be-vietnam-pro);
-  --font-serif: var(--font-be-vietnam-pro);
+  --font-serif: var(--font-editorial-serif);
 }
 
 html {
@@ -39,9 +41,17 @@ a {
   font: inherit;
 }
 
-.font-serif,
+.font-serif {
+  font-family: var(--font-editorial-serif), Georgia, "Times New Roman", serif !important;
+}
+
 .font-sans {
   font-family: var(--font-be-vietnam-pro), system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif !important;
+}
+
+::selection {
+  background: rgba(122, 38, 58, 0.18);
+  color: #171412;
 }
 
 @keyframes fade-up {
@@ -317,11 +327,11 @@ a {
    ============================================ */
 
 .gradient-primary {
-  background: linear-gradient(135deg, #e60028 0%, #c90022 100%);
+  background: linear-gradient(135deg, #7a263a 0%, #5a1c2b 100%);
 }
 
 .gradient-secondary {
-  background: linear-gradient(135deg, #111827 0%, #3f3f46 100%);
+  background: linear-gradient(135deg, #2b2723 0%, #5f574f 100%);
 }
 
 .gradient-success {
@@ -329,17 +339,17 @@ a {
 }
 
 .gradient-navy {
-  background: linear-gradient(135deg, #050505 0%, #171717 65%, #2d2d2d 100%);
+  background: linear-gradient(135deg, #171412 0%, #2b2723 65%, #5a1c2b 100%);
 }
 
 .gradient-mesh {
   background: radial-gradient(at 15% 10%, rgba(255, 255, 255, 0.14) 0%, transparent 50%),
-    radial-gradient(at 85% 90%, rgba(230, 0, 40, 0.12) 0%, transparent 50%),
-    linear-gradient(135deg, #050505 0%, #171717 100%);
+    radial-gradient(at 85% 90%, rgba(122, 38, 58, 0.16) 0%, transparent 50%),
+    linear-gradient(135deg, #171412 0%, #2b2723 100%);
 }
 
 .gradient-soft {
-  background: linear-gradient(180deg, #f8f9fa 0%, #ffffff 100%);
+  background: linear-gradient(180deg, #f7f3ea 0%, #fffcf5 100%);
 }
 
 .gradient-hero {
@@ -354,21 +364,21 @@ a {
 
 /* Text gradients */
 .text-gradient-primary {
-  background: linear-gradient(135deg, #e60028, #c90022);
+  background: linear-gradient(135deg, #7a263a, #5a1c2b);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
 }
 
 .text-gradient-blue {
-  background: linear-gradient(135deg, #111827, #52525b);
+  background: linear-gradient(135deg, #2b2723, #7a263a);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
 }
 
 .text-gradient-rainbow {
-  background: linear-gradient(135deg, #e60028, #111827, #52525b);
+  background: linear-gradient(135deg, #7a263a, #2b2723, #b8872b);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -408,7 +418,7 @@ a {
 
 /* Colored shadows */
 .shadow-primary {
-  box-shadow: 0 8px 24px rgba(230, 0, 40, 0.25);
+  box-shadow: 0 8px 24px rgba(122, 38, 58, 0.22);
 }
 
 .shadow-secondary {
@@ -505,7 +515,7 @@ a {
 
 .hover-lift:hover {
   transform: translateY(-4px);
-  box-shadow: 0 18px 40px rgba(7, 7, 88, 0.13);
+  box-shadow: 0 18px 40px rgba(43, 39, 35, 0.13);
 }
 
 .hover-glow {
@@ -513,7 +523,7 @@ a {
 }
 
 .hover-glow:hover {
-  box-shadow: 0 0 20px rgba(230, 0, 40, 0.4);
+  box-shadow: 0 0 20px rgba(122, 38, 58, 0.3);
 }
 
 /* Scrollbar styling */
@@ -523,159 +533,68 @@ a {
 }
 
 .scrollbar-thin::-webkit-scrollbar-track {
-  background: #f8f9fa;
+  background: #f1eadf;
   border-radius: 4px;
 }
 
 .scrollbar-thin::-webkit-scrollbar-thumb {
-  background: #d9dce8;
+  background: #cbbdad;
   border-radius: 4px;
 }
 
 .scrollbar-thin::-webkit-scrollbar-thumb:hover {
-  background: #b8bbc8;
+  background: #a99682;
 }
 
-/* ============================================
-   MONOCHROME BRAND PASS
-   Keeps the old blue/navy utility classes from making
-   the interface look mixed while red stays reserved for actions.
-   ============================================ */
-
+/* Athenaeum sitewide compatibility helpers. */
 .auth-link-blue {
-  color: #337ab7;
-}
-
-.auth-link-blue:hover {
-  color: #e60028;
-}
-
-[class~="text-[#000054]"],
-[class~="text-[#337AB7]"] {
-  color: #111827;
-}
-
-[class~="text-[#51D2FF]"] {
-  color: #ffffff;
-}
-
-[class~="bg-[#000054]"],
-[class~="bg-[#337AB7]"] {
-  background-color: #111827;
-}
-
-[class~="border-[#000054]"],
-[class~="border-[#337AB7]"] {
-  border-color: #111827;
-}
-
-[class~="text-[#000054]/70"],
-[class~="text-[#337AB7]/70"] {
-  color: rgba(17, 24, 39, 0.7);
-}
-
-[class~="bg-[#000054]/5"],
-[class~="bg-[#337AB7]/5"],
-[class~="bg-[#000054]/8"],
-[class~="bg-[#337AB7]/8"],
-[class~="bg-[#000054]/10"],
-[class~="bg-[#337AB7]/10"],
-[class~="bg-[#000054]/12"],
-[class~="bg-[#337AB7]/12"] {
-  background-color: rgba(17, 24, 39, 0.06);
-}
-
-[class~="border-[#000054]/20"],
-[class~="border-[#337AB7]/20"],
-[class~="border-[#000054]/35"],
-[class~="border-[#337AB7]/35"],
-[class~="border-[#000054]/40"],
-[class~="border-[#337AB7]/40"] {
-  border-color: rgba(17, 24, 39, 0.18);
-}
-
-[class~="hover:text-[#000054]"]:hover,
-[class~="hover:text-[#337AB7]"]:hover {
-  color: #111827;
-}
-
-[class~="hover:text-[#51D2FF]"]:hover {
-  color: #ffffff;
-}
-
-[class~="hover:bg-[#000054]/5"]:hover,
-[class~="hover:bg-[#337AB7]/5"]:hover,
-[class~="hover:bg-[#000054]/8"]:hover,
-[class~="hover:bg-[#337AB7]/8"]:hover {
-  background-color: rgba(17, 24, 39, 0.06);
-}
-
-[class~="hover:bg-[#000054]"]:hover,
-[class~="hover:bg-[#337AB7]"]:hover,
-[class~="hover:bg-[#090970]"]:hover {
-  background-color: #000000;
-}
-
-[class~="hover:border-[#000054]"]:hover,
-[class~="hover:border-[#337AB7]"]:hover,
-[class~="hover:border-[#000054]/35"]:hover,
-[class~="hover:border-[#337AB7]/35"]:hover,
-[class~="hover:border-[#000054]/40"]:hover,
-[class~="hover:border-[#337AB7]/40"]:hover {
-  border-color: #111827;
-}
-
-a[class~="rounded-full"][class~="border-[#D9DCE8]"]:hover,
-button[class~="rounded-full"][class~="border-[#D9DCE8]"]:not(:disabled):hover {
-  background-color: #111827;
-  border-color: #111827;
-  color: #ffffff;
-}
-
-[class~="hover:text-white"]:hover,
-.group:hover [class~="group-hover:text-white"] {
-  color: #ffffff !important;
-  -webkit-text-fill-color: #ffffff !important;
-}
-
-[class~="focus:border-[#000054]"]:focus,
-[class~="focus:border-[#337AB7]"]:focus,
-[class~="focus:border-[#000054]"]:focus-visible,
-[class~="focus:border-[#337AB7]"]:focus-visible {
-  border-color: #111827;
-}
-
-[class*="rgba(51,122,183,0.12)"]:focus,
-[class*="focus:ring-[#337AB7]"]:focus,
-[class*="focus:ring-[#337AB7]"]:focus-visible {
-  box-shadow: 0 0 0 4px rgba(17, 24, 39, 0.1);
-}
-
-[class~="from-[#000054]"],
-[class~="from-[#337AB7]"] {
-  --tw-gradient-from: #111827 var(--tw-gradient-from-position);
-  --tw-gradient-to: rgb(17 24 39 / 0) var(--tw-gradient-to-position);
-}
-
-[class~="via-[#000054]"],
-[class~="via-[#337AB7]"],
-[class~="via-[#51D2FF]"] {
-  --tw-gradient-via: #27272a var(--tw-gradient-via-position);
-}
-
-[class~="to-[#000054]"],
-[class~="to-[#337AB7]"],
-[class~="to-[#51D2FF]"] {
-  --tw-gradient-to: #52525b var(--tw-gradient-to-position);
-}
-
-[class*="rgba(81,210,255"] {
-  background-image: radial-gradient(circle at 20% 0%, rgba(255, 255, 255, 0.12), transparent 40%);
-}
-
-.auth-link-blue,
-.auth-link-blue:hover {
+  color: #7a263a;
   -webkit-text-fill-color: currentColor;
+}
+
+.auth-link-blue:hover {
+  color: #5a1c2b;
+}
+
+:where(button, a, input, select, textarea):focus-visible {
+  outline-color: #7a263a;
+}
+
+/* Older screens still use Tailwind slate utilities for neutral copy. Warm them
+   globally while leaving semantic success, warning, and error colors intact. */
+[class~="bg-slate-50"],
+[class~="bg-gray-50"],
+[class~="bg-gray-100"] {
+  background-color: #f7f3ea;
+}
+
+[class~="bg-slate-100"] {
+  background-color: #f1eadf;
+}
+
+[class~="border-slate-200"],
+[class~="border-gray-200"],
+[class~="border-gray-300"] {
+  border-color: #ded5c8;
+}
+
+[class~="text-slate-400"],
+[class~="text-gray-400"] {
+  color: #a09282;
+}
+
+[class~="text-slate-500"],
+[class~="text-gray-500"],
+[class~="text-slate-600"],
+[class~="text-gray-600"] {
+  color: #776d63;
+}
+
+[class~="text-slate-700"],
+[class~="text-gray-700"],
+[class~="text-slate-800"],
+[class~="text-gray-800"] {
+  color: #3f3933;
 }
 
 .books-filter-fields {

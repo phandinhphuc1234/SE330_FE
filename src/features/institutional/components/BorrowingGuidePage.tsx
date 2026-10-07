@@ -91,25 +91,25 @@ export function BorrowingGuidePage() {
       <SectionBand tone="soft">
         <div className="grid gap-8 lg:grid-cols-[0.9fr_1.1fr] lg:items-start">
           <div>
-            <p className="text-sm font-bold uppercase tracking-wide text-[#337AB7]">{copy.loanEyebrow}</p>
-            <h2 className="mt-3 font-serif text-4xl font-bold text-[#000054]">{copy.loanTitle}</h2>
-            <p className="mt-4 leading-7 text-[#333333]">
+            <p className="text-sm font-bold uppercase tracking-wide text-[#7A263A]">{copy.loanEyebrow}</p>
+            <h2 className="mt-3 font-serif text-4xl font-bold text-[#2B2723]">{copy.loanTitle}</h2>
+            <p className="mt-4 leading-7 text-[#5F574F]">
               {copy.loanDescription}
             </p>
             <div className="mt-6 flex flex-wrap gap-3">
-              <Link href="/user/loans" className="rounded-full bg-[#E60028] px-5 py-3 text-sm font-bold text-white">{copy.myLoans}</Link>
-              <Link href="/user/holds" className="rounded-full border border-[#D9DCE8] px-5 py-3 text-sm font-bold text-[#000054]">{copy.myHolds}</Link>
+              <Link href="/user/loans" className="rounded-full bg-[#7A263A] px-5 py-3 text-sm font-bold text-white">{copy.myLoans}</Link>
+              <Link href="/user/holds" className="rounded-full border border-[#D8CCBC] px-5 py-3 text-sm font-bold text-[#2B2723]">{copy.myHolds}</Link>
             </div>
           </div>
-          <div className="overflow-x-auto rounded-xl border border-[#EDEDF2] bg-white">
+          <div className="overflow-x-auto rounded-xl border border-[#DED5C8] bg-white">
             <table className="w-full min-w-[720px] border-collapse text-left text-sm">
-              <thead className="bg-[#000054] text-white">
+              <thead className="bg-[#2B2723] text-white">
                 <tr>{copy.headings.map((heading) => <th key={heading} className="px-4 py-3">{heading}</th>)}</tr>
               </thead>
               <tbody>
                 {copy.loanRules.map((row) => (
-                  <tr key={row[0]} className="border-t border-[#EDEDF2]">
-                    {row.map((cell, index) => <td key={cell} className={`px-4 py-4 ${index === 0 ? "font-bold text-[#000054]" : "text-[#333333]"}`}>{cell}</td>)}
+                  <tr key={row[0]} className="border-t border-[#DED5C8]">
+                    {row.map((cell, index) => <td key={cell} className={`px-4 py-4 ${index === 0 ? "font-bold text-[#2B2723]" : "text-[#5F574F]"}`}>{cell}</td>)}
                   </tr>
                 ))}
               </tbody>
@@ -121,17 +121,17 @@ export function BorrowingGuidePage() {
       <SectionBand>
         <div className="flex flex-col justify-between gap-5 md:flex-row md:items-end">
           <div>
-            <p className="text-sm font-bold uppercase tracking-wide text-[#337AB7]">{copy.stepsEyebrow}</p>
-            <h2 className="mt-3 font-serif text-4xl font-bold text-[#000054]">{copy.stepsTitle}</h2>
+            <p className="text-sm font-bold uppercase tracking-wide text-[#7A263A]">{copy.stepsEyebrow}</p>
+            <h2 className="mt-3 font-serif text-4xl font-bold text-[#2B2723]">{copy.stepsTitle}</h2>
           </div>
-          <Link href="/books" className="rounded-full border border-[#D9DCE8] px-5 py-3 text-sm font-bold text-[#000054]">{copy.browseCatalog}</Link>
+          <Link href="/books" className="rounded-full border border-[#D8CCBC] px-5 py-3 text-sm font-bold text-[#2B2723]">{copy.browseCatalog}</Link>
         </div>
         <div className="mt-8 grid gap-5 md:grid-cols-4">
           {copy.steps.map(([title, body], index) => (
-            <article key={title} className="rounded-xl border border-[#EDEDF2] bg-[#F8F9FA] p-6">
-              <span className="grid h-10 w-10 place-items-center rounded-full bg-[#E60028] text-sm font-bold text-white">{index + 1}</span>
-              <h3 className="mt-5 text-xl font-bold text-[#000054]">{title}</h3>
-              <p className="mt-3 leading-7 text-[#333333]">{body}</p>
+            <article key={title} className="rounded-xl border border-[#DED5C8] bg-[#F7F3EA] p-6">
+              <span className="grid h-10 w-10 place-items-center rounded-full bg-[#7A263A] text-sm font-bold text-white">{index + 1}</span>
+              <h3 className="mt-5 text-xl font-bold text-[#2B2723]">{title}</h3>
+              <p className="mt-3 leading-7 text-[#5F574F]">{body}</p>
             </article>
           ))}
         </div>

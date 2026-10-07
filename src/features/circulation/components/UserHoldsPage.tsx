@@ -121,18 +121,18 @@ export function UserHoldsPage() {
         {message ? <Notice tone="success" message={message} /> : null}
         {error ? <Notice tone="error" message={error} /> : null}
       </div>
-      <div className="mt-6 flex flex-wrap gap-2 rounded-2xl border border-[#EDEDF2] bg-white p-2 shadow-sm">
+      <div className="mt-6 flex flex-wrap gap-2 rounded-2xl border border-[#DED5C8] bg-white p-2 shadow-sm">
         <button
           type="button"
           onClick={() => setHoldView("active")}
           className={`rounded-full px-5 py-2.5 text-sm font-bold transition ${
             holdView === "active"
-              ? "bg-[#000054] text-white shadow-lg shadow-[#000054]/15"
-              : "text-[#333333] hover:bg-[#F8F9FA] hover:text-[#000054]"
+              ? "bg-[#2B2723] text-white shadow-lg shadow-[#2B2723]/15"
+              : "text-[#5F574F] hover:bg-[#F7F3EA] hover:text-[#2B2723]"
           }`}
         >
           {text.activeTab}
-          <span className={`ml-2 rounded-full px-2 py-0.5 text-xs ${holdView === "active" ? "bg-white/15 text-white" : "bg-[#EDEDF2] text-[#000054]"}`}>
+          <span className={`ml-2 rounded-full px-2 py-0.5 text-xs ${holdView === "active" ? "bg-white/15 text-white" : "bg-[#DED5C8] text-[#2B2723]"}`}>
             {activeHolds.length}
           </span>
         </button>
@@ -141,19 +141,19 @@ export function UserHoldsPage() {
           onClick={() => setHoldView("history")}
           className={`rounded-full px-5 py-2.5 text-sm font-bold transition ${
             holdView === "history"
-              ? "bg-[#000054] text-white shadow-lg shadow-[#000054]/15"
-              : "text-[#333333] hover:bg-[#F8F9FA] hover:text-[#000054]"
+              ? "bg-[#2B2723] text-white shadow-lg shadow-[#2B2723]/15"
+              : "text-[#5F574F] hover:bg-[#F7F3EA] hover:text-[#2B2723]"
           }`}
         >
           {text.historyTab}
-          <span className={`ml-2 rounded-full px-2 py-0.5 text-xs ${holdView === "history" ? "bg-white/15 text-white" : "bg-[#EDEDF2] text-[#000054]"}`}>
+          <span className={`ml-2 rounded-full px-2 py-0.5 text-xs ${holdView === "history" ? "bg-white/15 text-white" : "bg-[#DED5C8] text-[#2B2723]"}`}>
             {historyHolds.length}
           </span>
         </button>
       </div>
-      <div className="mt-4 overflow-x-auto rounded-xl border border-[#EDEDF2]">
+      <div className="mt-4 overflow-x-auto rounded-xl border border-[#DED5C8]">
         <table className="w-full min-w-[980px] border-collapse bg-white text-left text-sm">
-          <thead className="bg-[#000054] text-white">
+          <thead className="bg-[#2B2723] text-white">
             <tr>{text.headings.map((heading) => <th key={heading} className="px-4 py-3">{heading}</th>)}</tr>
           </thead>
           <tbody>
@@ -163,8 +163,8 @@ export function UserHoldsPage() {
               const canCancel = canCancelHold(hold);
               const fallbackAction = holdFallbackAction(hold, locale);
               return (
-                <tr key={id} className={`border-t border-[#EDEDF2] transition ${isCancelling ? "bg-rose-50/45" : "hover:bg-[#F8F9FA]"}`}>
-                  <td className="px-4 py-4 font-bold text-[#000054]">{titleOf(hold)}</td>
+                <tr key={id} className={`border-t border-[#DED5C8] transition ${isCancelling ? "bg-rose-50/45" : "hover:bg-[#F7F3EA]"}`}>
+                  <td className="px-4 py-4 font-bold text-[#2B2723]">{titleOf(hold)}</td>
                   <td className="px-4 py-4">{statusLabel(hold.status, locale)}</td>
                   <td className="px-4 py-4">{hold.queuePosition ?? "-"}</td>
                   <td className="px-4 py-4">{hold.assignedBarcode ?? hold.barcode ?? "-"}</td>
@@ -258,6 +258,6 @@ function holdFallbackAction(hold: HoldRecord, locale: "en" | "vi") {
   return {
     label: text.noAction,
     href: "",
-    className: "border-[#D9DCE8] bg-[#F8F9FA] text-[#6B7280]",
+    className: "border-[#D8CCBC] bg-[#F7F3EA] text-[#776D63]",
   };
 }

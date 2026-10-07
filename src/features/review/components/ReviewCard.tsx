@@ -102,10 +102,10 @@ export function ReviewCard({ review, isOwn = false, onEdit, onDelete }: ReviewCa
         <div className="min-w-0 flex-1">
           {/* Header row */}
           <div className="flex flex-wrap items-center gap-x-3 gap-y-1">
-            <span className="text-sm font-bold text-[#111827]">
+            <span className="text-sm font-bold text-[#2B2723]">
               {review.memberName}
               {isOwn && (
-                <span className="ml-1.5 text-xs font-semibold text-[#E60028]">{text.you}</span>
+                <span className="ml-1.5 text-xs font-semibold text-[#7A263A]">{text.you}</span>
               )}
             </span>
             <StarRating rating={review.rating} size="sm" />
@@ -129,7 +129,7 @@ export function ReviewCard({ review, isOwn = false, onEdit, onDelete }: ReviewCa
               <button
                 type="button"
                 onClick={onEdit}
-                className="rounded-lg px-3 py-1.5 text-xs font-bold text-[#111827] transition-colors hover:bg-[#F3F4F6] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#111827]/20"
+                className="rounded-lg px-3 py-1.5 text-xs font-bold text-[#2B2723] transition-colors hover:bg-[#F3F4F6] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#2B2723]/20"
               >
                 {text.edit}
               </button>

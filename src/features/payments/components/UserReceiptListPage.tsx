@@ -54,9 +54,9 @@ export function UserReceiptListPage() {
         <div className="overflow-x-auto rounded-2xl border border-[#D8DEE8] bg-white shadow-sm">
           <table className="w-full min-w-[800px] border-collapse text-left text-sm">
             <thead>
-              <tr className="bg-[#F8FAFC] border-b border-[#D8DEE8]">
+              <tr className="bg-[#FBF8F1] border-b border-[#D8DEE8]">
                 {["Receipt #", "Item", "Amount", "Provider", "Paid at", "Actions"].map((h) => (
-                  <th key={h} className="px-6 py-4 font-black uppercase tracking-wider text-[#6B7280] text-[10px]">
+                  <th key={h} className="px-6 py-4 font-black uppercase tracking-wider text-[#776D63] text-[10px]">
                     {h}
                   </th>
                 ))}
@@ -71,21 +71,21 @@ export function UserReceiptListPage() {
                 </tr>
               ) : (
                 receipts.map((receipt) => (
-                  <tr key={receipt.paymentId} className="hover:bg-[#F8FAFC] transition-colors group">
+                  <tr key={receipt.paymentId} className="hover:bg-[#FBF8F1] transition-colors group">
                     <td className="px-6 py-4">
-                      <span className="font-mono text-xs font-bold text-[#0B1026] bg-[#F1F5F9] px-2 py-1 rounded">
+                      <span className="font-mono text-xs font-bold text-[#171412] bg-[#F1F5F9] px-2 py-1 rounded">
                         {receipt.receiptNumber}
                       </span>
                     </td>
                     <td className="px-6 py-4">
-                      <div className="font-bold text-[#0B1026] truncate max-w-[240px]" title={receipt.itemTitle}>
+                      <div className="font-bold text-[#171412] truncate max-w-[240px]" title={receipt.itemTitle}>
                         {receipt.itemTitle}
                       </div>
-                      <div className="text-[10px] font-black uppercase text-[#6B7280] mt-0.5">
+                      <div className="text-[10px] font-black uppercase text-[#776D63] mt-0.5">
                         {receipt.purpose.replace(/_/g, " ")}
                       </div>
                     </td>
-                    <td className="px-6 py-4 font-black text-[#0B1026]">
+                    <td className="px-6 py-4 font-black text-[#171412]">
                       {formatCurrency(receipt.amount, receipt.currency)}
                     </td>
                     <td className="px-6 py-4">
@@ -100,7 +100,7 @@ export function UserReceiptListPage() {
                     <td className="px-6 py-4 whitespace-nowrap">
                       <Link
                         href={`/user/receipts/${receipt.paymentCode}`}
-                        className="inline-flex items-center gap-2 rounded-xl bg-[#111827] px-4 py-2 text-xs font-black text-white transition hover:-translate-y-0.5 hover:bg-black shadow-sm"
+                        className="inline-flex items-center gap-2 rounded-xl bg-[#2B2723] px-4 py-2 text-xs font-black text-white transition hover:-translate-y-0.5 hover:bg-black shadow-sm"
                       >
                         View Receipt
                         <Icon name="arrow-right" size={14} />

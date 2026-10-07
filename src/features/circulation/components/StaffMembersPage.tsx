@@ -157,25 +157,25 @@ export function StaffMembersPage() {
     >
       {!canUseStaffApi ? <Notice tone="error" message="This workspace requires LIBRARIAN or ADMIN access." /> : null}
 
-      <form ref={filterFormRef} onSubmit={handleSubmit} onChange={handleFilterChange} className="rounded-2xl border border-[#EDEDF2] bg-[#F8F9FA] p-4 shadow-sm">
+      <form ref={filterFormRef} onSubmit={handleSubmit} onChange={handleFilterChange} className="rounded-2xl border border-[#DED5C8] bg-[#F7F3EA] p-4 shadow-sm">
         <div className="grid gap-3 md:grid-cols-2 xl:grid-cols-[minmax(320px,2fr)_minmax(170px,0.8fr)_minmax(180px,0.9fr)]">
           <label className="relative min-w-0">
             <span className="sr-only">Search members</span>
-            <span aria-hidden="true" className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-[#337AB7]">
+            <span aria-hidden="true" className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-[#7A263A]">
               <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="m21 21-4.35-4.35M10.5 18a7.5 7.5 0 1 1 0-15 7.5 7.5 0 0 1 0 15Z" />
               </svg>
             </span>
-            <input name="q" placeholder="Search member ID, name, email, phone..." className="h-14 w-full rounded-xl border border-[#D9DCE8] bg-white pl-11 pr-4 text-sm outline-none transition focus:border-[#337AB7]" />
+            <input name="q" placeholder="Search member ID, name, email, phone..." className="h-14 w-full rounded-xl border border-[#D8CCBC] bg-white pl-11 pr-4 text-sm outline-none transition focus:border-[#7A263A]" />
           </label>
-          <select name="status" className="h-14 rounded-xl border border-[#D9DCE8] bg-white px-4 text-sm font-semibold text-[#111827] outline-none transition focus:border-[#337AB7]">
+          <select name="status" className="h-14 rounded-xl border border-[#D8CCBC] bg-white px-4 text-sm font-semibold text-[#2B2723] outline-none transition focus:border-[#7A263A]">
             <option value="">Any status</option>
             <option value="ACTIVE">Active</option>
             <option value="PENDING_VERIFICATION">Pending verification</option>
             <option value="SUSPENDED">Suspended</option>
           </select>
-          <label className="flex h-14 items-center justify-center gap-2 rounded-xl border border-[#D9DCE8] bg-white px-4 text-sm font-bold text-[#000054]">
-            <input name="hasOverdue" type="checkbox" className="h-4 w-4 accent-[#E60028]" />
+          <label className="flex h-14 items-center justify-center gap-2 rounded-xl border border-[#D8CCBC] bg-white px-4 text-sm font-bold text-[#2B2723]">
+            <input name="hasOverdue" type="checkbox" className="h-4 w-4 accent-[#7A263A]" />
             Has overdue loans
           </label>
         </div>
@@ -206,16 +206,16 @@ export function StaffMembersPage() {
 function MembersTable({ members }: { members: StaffMemberSummary[] }) {
   if (!members.length) {
     return (
-      <div className="rounded-xl border border-[#EDEDF2] bg-[#F8F9FA] p-5 text-sm font-semibold text-[#333333]">
+      <div className="rounded-xl border border-[#DED5C8] bg-[#F7F3EA] p-5 text-sm font-semibold text-[#5F574F]">
         No borrower records found.
       </div>
     );
   }
 
   return (
-    <div className="overflow-hidden rounded-xl border border-[#EDEDF2]">
+    <div className="overflow-hidden rounded-xl border border-[#DED5C8]">
       <table className="w-full min-w-[1060px] border-collapse bg-white text-left text-sm">
-        <thead className="bg-[#000054] text-white">
+        <thead className="bg-[#2B2723] text-white">
           <tr>
             {["Borrower", "Contact", "Role", "Status", "Loans/access", "Holds", "Unpaid fines", "Action"].map((heading) => (
               <th key={heading} className="px-4 py-3 font-bold">{heading}</th>
@@ -227,29 +227,29 @@ function MembersTable({ members }: { members: StaffMemberSummary[] }) {
             const id = memberIdOf(member);
 
             return (
-              <tr key={id || member.email} className="border-t border-[#EDEDF2] align-top transition hover:bg-[#F8F9FA]">
+              <tr key={id || member.email} className="border-t border-[#DED5C8] align-top transition hover:bg-[#F7F3EA]">
                 <td className="px-4 py-4">
-                  <p className="font-bold text-[#000054]">{member.fullName || `Member ${id}`}</p>
-                  <p className="mt-1 text-xs font-semibold text-[#333333]/70">ID {id || "-"}</p>
-                  <p className="mt-1 text-xs text-[#333333]/70">Joined {formatDate(member.createdAt)}</p>
+                  <p className="font-bold text-[#2B2723]">{member.fullName || `Member ${id}`}</p>
+                  <p className="mt-1 text-xs font-semibold text-[#5F574F]/70">ID {id || "-"}</p>
+                  <p className="mt-1 text-xs text-[#5F574F]/70">Joined {formatDate(member.createdAt)}</p>
                 </td>
                 <td className="px-4 py-4">
-                  <p className="font-semibold text-[#333333]">{member.email || "-"}</p>
-                  <p className="mt-1 text-xs text-[#333333]/75">{member.phone || "-"}</p>
+                  <p className="font-semibold text-[#5F574F]">{member.email || "-"}</p>
+                  <p className="mt-1 text-xs text-[#5F574F]/75">{member.phone || "-"}</p>
                 </td>
-                <td className="px-4 py-4 font-semibold text-[#333333]">{member.role || "-"}</td>
+                <td className="px-4 py-4 font-semibold text-[#5F574F]">{member.role || "-"}</td>
                 <td className="px-4 py-4"><StatusBadge status={member.status} /></td>
                 <td className="px-4 py-4">
-                  <p className="font-bold text-[#000054]">{member.activeLoansCount ?? 0} active</p>
-                  <p className={`mt-1 text-xs font-bold ${(member.overdueLoansCount ?? 0) > 0 ? "text-[#E60028]" : "text-[#333333]/70"}`}>
+                  <p className="font-bold text-[#2B2723]">{member.activeLoansCount ?? 0} active</p>
+                  <p className={`mt-1 text-xs font-bold ${(member.overdueLoansCount ?? 0) > 0 ? "text-[#7A263A]" : "text-[#5F574F]/70"}`}>
                     {member.overdueLoansCount ?? 0} overdue
                   </p>
                 </td>
-                <td className="px-4 py-4 font-semibold text-[#333333]">{member.activeHoldsCount ?? 0}</td>
-                <td className="px-4 py-4 font-semibold text-[#333333]">{money(member.unpaidFineTotal)}</td>
+                <td className="px-4 py-4 font-semibold text-[#5F574F]">{member.activeHoldsCount ?? 0}</td>
+                <td className="px-4 py-4 font-semibold text-[#5F574F]">{money(member.unpaidFineTotal)}</td>
                 <td className="px-4 py-4">
                   {id ? (
-                    <Link href={`/staff/members/${id}`} className="rounded-full border border-[#D9DCE8] px-4 py-2 text-sm font-bold text-[#000054] transition hover:border-[#337AB7] hover:text-[#E60028]">
+                    <Link href={`/staff/members/${id}`} className="rounded-full border border-[#D8CCBC] px-4 py-2 text-sm font-bold text-[#2B2723] transition hover:border-[#7A263A] hover:text-[#7A263A]">
                       Open profile
                     </Link>
                   ) : null}
@@ -265,9 +265,9 @@ function MembersTable({ members }: { members: StaffMemberSummary[] }) {
 
 function MetricCard({ label, value, tone = "normal" }: { label: string; value: string; tone?: "normal" | "danger" }) {
   return (
-    <div className={`rounded-xl border p-4 ${tone === "danger" ? "border-rose-200 bg-rose-50" : "border-[#EDEDF2] bg-white"}`}>
-      <p className={`text-xs font-bold uppercase tracking-wide ${tone === "danger" ? "text-rose-700" : "text-[#337AB7]"}`}>{label}</p>
-      <p className="mt-2 text-2xl font-bold text-[#000054]">{value}</p>
+    <div className={`rounded-xl border p-4 ${tone === "danger" ? "border-rose-200 bg-rose-50" : "border-[#DED5C8] bg-white"}`}>
+      <p className={`text-xs font-bold uppercase tracking-wide ${tone === "danger" ? "text-rose-700" : "text-[#7A263A]"}`}>{label}</p>
+      <p className="mt-2 text-2xl font-bold text-[#2B2723]">{value}</p>
     </div>
   );
 }

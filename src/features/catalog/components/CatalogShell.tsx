@@ -23,51 +23,51 @@ type CatalogShellProps = {
   warm?: boolean;
 };
 
-export function CatalogShell({ eyebrow, title, description, children, actions, protectedPage = false, wide = false, frameless = false, catalogPanel = false, compactPanelHeader = false, hideHeader = false, warm = false }: CatalogShellProps) {
+export function CatalogShell({ eyebrow, title, description, children, actions, protectedPage = false, wide = false, frameless = false, catalogPanel = false, compactPanelHeader = false, hideHeader = false }: CatalogShellProps) {
   const framedSectionClass = catalogPanel
-    ? "relative overflow-hidden rounded-[32px] border border-black/10 bg-white/95 p-6 shadow-[0_30px_90px_rgba(0,0,0,0.08)] md:p-10 lg:p-12"
-    : "rounded-2xl border border-[#EDEDF2] bg-white p-6 shadow-[0_24px_60px_rgba(7,7,88,0.08)] md:p-8";
+    ? "relative overflow-hidden rounded-[28px] border border-[#DED5C8] bg-[#FFFCF5]/95 p-6 shadow-[0_24px_72px_rgba(43,39,35,0.08)] md:p-10 lg:p-12"
+    : "rounded-2xl border border-[#DED5C8] bg-[#FFFCF5] p-6 shadow-[0_18px_48px_rgba(43,39,35,0.07)] md:p-8 lg:p-10";
   const catalogTitleClass = compactPanelHeader
-    ? "mt-3 font-serif text-5xl font-bold leading-tight tracking-[-0.035em] text-[#0B1026] md:text-6xl"
+    ? "mt-3 font-serif text-5xl font-bold leading-tight tracking-[-0.035em] text-[#171412] md:text-6xl"
     : "mt-4 font-serif text-5xl font-normal leading-none tracking-[-0.04em] text-[#151515] md:text-6xl lg:text-7xl";
   const catalogDescriptionClass = compactPanelHeader
-    ? "mt-3 max-w-2xl text-base leading-7 text-[#59637A]"
-    : "mt-5 max-w-2xl text-lg leading-8 text-[#555555]";
+    ? "mt-3 max-w-2xl text-base leading-7 text-[#6F675E]"
+    : "mt-5 max-w-2xl text-lg leading-8 text-[#6F675E]";
   const catalogHeaderClass = compactPanelHeader ? "lg:flex-row lg:items-start" : "lg:flex-row lg:items-end";
 
   return (
     <ProtectedGate enabled={protectedPage}>
-      <div className={`min-h-dvh ${warm ? "bg-[#F7F3EA]" : "bg-[#F8F9FA]"}`}>
+      <div className="min-h-dvh bg-[#F7F3EA] text-[#2B2723]">
         <Navbar />
-        <main id="main-content" tabIndex={-1} className={`mx-auto min-h-[calc(100dvh-4.5rem)] w-full px-5 pt-6 pb-12 outline-none lg:px-8 ${wide ? "max-w-[calc(100vw-2rem)] 2xl:max-w-[1720px]" : "max-w-7xl"}`}>
+        <main id="main-content" tabIndex={-1} className={`mx-auto min-h-[calc(100dvh-4.5rem)] w-full px-4 pb-16 pt-8 outline-none sm:px-6 lg:px-8 lg:pt-12 ${wide ? "max-w-[calc(100vw-2rem)] 2xl:max-w-[1720px]" : "max-w-7xl"}`}>
           {frameless ? (
             <>
               {hideHeader ? null : (
-                <section className="px-1 py-5 md:px-2">
-                  <div className="flex flex-col justify-between gap-5 lg:flex-row lg:items-end">
+                <section className="border-b border-[#DED5C8] px-1 pb-8 pt-3 md:px-2 lg:pb-10">
+                  <div className="flex flex-col justify-between gap-6 lg:flex-row lg:items-end">
                     <div>
-                      <p className={`text-sm font-bold uppercase tracking-wide ${warm ? "text-[#7A263A]" : "text-[#337AB7]"}`}>{eyebrow}</p>
-                      <h1 className={`mt-3 text-4xl tracking-tight md:text-5xl ${warm ? "font-serif font-semibold text-[#171412]" : "font-black text-[#111827]"}`}>{title}</h1>
-                      <p className={`mt-3 max-w-3xl leading-7 ${warm ? "text-[#6F675E]" : "text-[#333333]"}`}>{description}</p>
+                      <p className="text-xs font-bold uppercase tracking-[0.18em] text-[#7A263A]">{eyebrow}</p>
+                      <h1 className="mt-3 font-serif text-4xl font-semibold tracking-[-0.025em] text-[#171412] md:text-5xl lg:text-6xl">{title}</h1>
+                      <p className="mt-4 max-w-3xl leading-7 text-[#6F675E]">{description}</p>
                     </div>
                     {actions ? <div className="flex flex-wrap gap-3">{actions}</div> : null}
                   </div>
                 </section>
               )}
-              <div className={hideHeader ? "" : "mt-4"}>{children}</div>
+              <div className={hideHeader ? "" : "mt-8 lg:mt-10"}>{children}</div>
             </>
           ) : (
             <section className={framedSectionClass}>
               {catalogPanel ? <CatalogPanelLines /> : null}
               <div className={`flex flex-col justify-between gap-5 ${catalogHeaderClass}`}>
                 <div className="relative z-10">
-                  <p className={catalogPanel ? "text-xs font-black uppercase tracking-[0.42em] text-[#242424]" : "text-sm font-bold uppercase tracking-wide text-[#337AB7]"}>
+                  <p className={catalogPanel ? "text-xs font-bold uppercase tracking-[0.28em] text-[#7A263A]" : "text-xs font-bold uppercase tracking-[0.18em] text-[#7A263A]"}>
                     {eyebrow}
                   </p>
-                  <h1 className={catalogPanel ? catalogTitleClass : "mt-3 font-serif text-4xl font-bold text-[#000054]"}>
+                  <h1 className={catalogPanel ? catalogTitleClass : "mt-3 font-serif text-4xl font-semibold tracking-[-0.02em] text-[#171412] md:text-5xl"}>
                     {title}
                   </h1>
-                  <p className={catalogPanel ? catalogDescriptionClass : "mt-3 max-w-3xl leading-7 text-[#333333]"}>
+                  <p className={catalogPanel ? catalogDescriptionClass : "mt-3 max-w-3xl leading-7 text-[#5F574F]"}>
                     {description}
                   </p>
                 </div>
@@ -167,11 +167,11 @@ function AuthStatus({ message }: { message: string }) {
     : { eyebrow: "Authenticating", backHome: "Back home" };
 
   return (
-    <main className="flex min-h-dvh items-center justify-center bg-[#F8F9FA] px-5">
-      <div className="w-full max-w-md rounded-2xl border border-[#EDEDF2] bg-white p-8 text-center shadow-[0_24px_60px_rgba(7,7,88,0.14)]">
-        <p className="text-sm font-bold uppercase tracking-wide text-[#337AB7]">{copy.eyebrow}</p>
-        <h1 className="mt-3 font-serif text-3xl font-bold text-[#000054]">{message}</h1>
-        <Link href="/" className="mt-5 inline-flex rounded-full border border-[#D9DCE8] px-4 py-2 text-sm font-bold text-[#000054]">
+    <main className="flex min-h-dvh items-center justify-center bg-[#F7F3EA] px-5">
+      <div className="w-full max-w-md rounded-2xl border border-[#DED5C8] bg-white p-8 text-center shadow-[0_24px_60px_rgba(43,39,35,0.14)]">
+        <p className="text-sm font-bold uppercase tracking-wide text-[#7A263A]">{copy.eyebrow}</p>
+        <h1 className="mt-3 font-serif text-3xl font-semibold text-[#171412]">{message}</h1>
+        <Link href="/" className="mt-5 inline-flex min-h-11 items-center rounded-xl border border-[#D8CCBC] bg-[#FFFCF5] px-4 py-2 text-sm font-bold text-[#2B2723] transition hover:border-[#7A263A] hover:text-[#7A263A]">
           {copy.backHome}
         </Link>
       </div>
@@ -183,7 +183,7 @@ export function PrimaryAction({ href, children }: { href: string; children: Reac
   return (
     <Link
       href={href}
-      className="rounded-full bg-[#E60028] px-5 py-3 text-sm font-bold text-white shadow-lg shadow-[#E60028]/20 transition hover:-translate-y-0.5"
+      className="inline-flex min-h-11 items-center rounded-xl bg-[#7A263A] px-5 py-3 text-sm font-bold text-white shadow-[0_10px_24px_rgba(122,38,58,0.18)] transition hover:bg-[#5A1C2B]"
     >
       {children}
     </Link>
@@ -194,7 +194,7 @@ export function SecondaryAction({ href, children }: { href: string; children: Re
   return (
     <Link
       href={href}
-      className="rounded-full border border-[#D9DCE8] px-5 py-3 text-sm font-bold text-[#000054] transition hover:border-[#337AB7] hover:text-[#E60028]"
+      className="inline-flex min-h-11 items-center rounded-xl border border-[#D8CCBC] bg-[#FFFCF5] px-5 py-3 text-sm font-bold text-[#2B2723] transition hover:border-[#7A263A] hover:bg-[#F1EADF] hover:text-[#7A263A]"
     >
       {children}
     </Link>
@@ -253,7 +253,7 @@ function DismissibleNotice({
       ? "border-rose-200 bg-rose-50 text-rose-700"
       : tone === "success"
         ? "border-emerald-200 bg-emerald-50 text-emerald-700"
-        : "border-[#D9DCE8] bg-[#F8F9FA] text-[#333333]";
+        : "border-[#DED5C8] bg-[#FFFCF5] text-[#5F574F]";
 
   return (
     <div

@@ -48,7 +48,7 @@ export function TextArea({
       {label && (
         <label
           htmlFor={textareaId}
-          className="mb-2 block text-sm font-bold text-black"
+          className="mb-2 block text-sm font-bold text-[#2B2723]"
         >
           {label}
         </label>
@@ -61,13 +61,13 @@ export function TextArea({
         onChange={handleChange}
         maxLength={maxLength}
         className={`
-          w-full min-h-[120px] rounded-lg border bg-white px-4 py-3 text-black outline-none
+          w-full min-h-[120px] rounded-xl border bg-[#FFFCF5] px-4 py-3 text-[#171412] outline-none
           transition-all duration-200
           ${resizeClasses[resize]}
           ${
             error
               ? "border-red-500 focus:border-red-500 focus:ring-4 focus:ring-red-500/20"
-              : "border-[#D9DCE8] focus:border-2 focus:border-black focus:shadow-[0_0_0_4px_rgba(0,0,0,0.1)]"
+              : "border-[#D8CCBC] focus:border-[#7A263A] focus:shadow-[0_0_0_4px_rgba(122,38,58,0.1)]"
           }
           ${props.disabled ? "bg-gray-100 cursor-not-allowed" : ""}
         `}
@@ -76,7 +76,7 @@ export function TextArea({
 
       {/* Character Count */}
       {showCharCount && maxLength && (
-        <div className="absolute bottom-3 right-3 text-xs font-semibold text-[#6B7280]">
+        <div className="absolute bottom-3 right-3 text-xs font-semibold text-[#776D63]">
           {charCount}/{maxLength}
         </div>
       )}
@@ -85,7 +85,7 @@ export function TextArea({
       {(error || helperText) && (
         <p
           className={`mt-2 text-xs font-semibold ${
-            error ? "text-red-600 animate-fade-up" : "text-[#6B7280]"
+            error ? "text-red-600 animate-fade-up" : "text-[#776D63]"
           }`}
         >
           {error || helperText}

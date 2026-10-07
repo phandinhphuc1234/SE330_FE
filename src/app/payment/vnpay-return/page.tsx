@@ -3,7 +3,7 @@ import { PaymentReturnPage } from "@/features/payments/components/PaymentReturnP
 
 export default function VnpayReturnRoute() {
   return (
-    <Suspense fallback={<main className="min-h-dvh bg-[#F8F9FA]" />}>
+    <Suspense fallback={<main className="min-h-dvh bg-[#F7F3EA]" />}>
       <PaymentReturnPage />
     </Suspense>
   );

@@ -20,8 +20,8 @@ export function CircularProgress({
   className = "",
 }: CircularProgressProps) {
   const colorClasses = {
-    primary: "#E60028",
-    secondary: "#111827",
+    primary: "#7A263A",
+    secondary: "#2B2723",
     success: "#28A745",
     error: "#DC3545",
   };
@@ -46,7 +46,7 @@ export function CircularProgress({
             cy={size / 2}
             r={radius}
             fill="none"
-            stroke="#EDEDF2"
+            stroke="#DED5C8"
             strokeWidth={strokeWidth}
           />
           {/* Progress circle */}
@@ -65,7 +65,7 @@ export function CircularProgress({
         </svg>
         {showLabel && !indeterminate && (
           <div className="absolute inset-0 flex items-center justify-center">
-            <span className="text-xs font-bold text-[#333333]">{clampedValue}%</span>
+            <span className="text-xs font-bold text-[#5F574F]">{clampedValue}%</span>
           </div>
         )}
       </div>

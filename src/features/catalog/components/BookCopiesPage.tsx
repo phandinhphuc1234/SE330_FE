@@ -336,11 +336,11 @@ export function BookCopiesPage({ mode = "staff" }: { mode?: "staff" | "admin" })
         {error ? <Notice tone="error" message={error} /> : null}
       </div>
 
-      <div className="mt-6 rounded-xl border border-[#EDEDF2] bg-white p-5 shadow-[0_16px_40px_rgba(7,7,88,0.06)]">
+      <div className="mt-6 rounded-xl border border-[#DED5C8] bg-white p-5 shadow-[0_16px_40px_rgba(7,7,88,0.06)]">
         <div>
           <div>
-            <h2 className="text-xl font-bold text-[#000054]">Search physical copies</h2>
-            <p className="mt-2 max-w-2xl text-sm leading-6 text-[#333333]">
+            <h2 className="text-xl font-bold text-[#2B2723]">Search physical copies</h2>
+            <p className="mt-2 max-w-2xl text-sm leading-6 text-[#5F574F]">
               Default results show available copies in good condition. Search by barcode, condition, or location, then use the status chips below.
             </p>
           </div>
@@ -349,24 +349,24 @@ export function BookCopiesPage({ mode = "staff" }: { mode?: "staff" | "admin" })
         <form
           key={`${copyFilters.status ?? ""}-${copyFilters.barcode ?? ""}-${copyFilters.condition ?? ""}-${copyFilters.location ?? ""}`}
           onSubmit={handleSearchCopies}
-          className="mt-5 grid gap-3 rounded-xl border border-[#EDEDF2] bg-[#F8F9FA] p-4 lg:grid-cols-[1.2fr_0.9fr_0.9fr_auto_auto]"
+          className="mt-5 grid gap-3 rounded-xl border border-[#DED5C8] bg-[#F7F3EA] p-4 lg:grid-cols-[1.2fr_0.9fr_0.9fr_auto_auto]"
         >
           <label>
-            <span className="text-xs font-bold uppercase tracking-wide text-[#000054]">Barcode</span>
-            <input name="barcode" defaultValue={copyFilters.barcode ?? ""} placeholder="Search partial barcode..." className="mt-2 h-12 w-full rounded-xl border border-[#D9DCE8] bg-white px-4 outline-none transition focus:border-[#337AB7]" />
+            <span className="text-xs font-bold uppercase tracking-wide text-[#2B2723]">Barcode</span>
+            <input name="barcode" defaultValue={copyFilters.barcode ?? ""} placeholder="Search partial barcode..." className="mt-2 h-12 w-full rounded-xl border border-[#D8CCBC] bg-white px-4 outline-none transition focus:border-[#7A263A]" />
           </label>
           <label>
-            <span className="text-xs font-bold uppercase tracking-wide text-[#000054]">Condition</span>
-            <input name="condition" defaultValue={copyFilters.condition ?? ""} placeholder="GOOD" className="mt-2 h-12 w-full rounded-xl border border-[#D9DCE8] bg-white px-4 outline-none transition focus:border-[#337AB7]" />
+            <span className="text-xs font-bold uppercase tracking-wide text-[#2B2723]">Condition</span>
+            <input name="condition" defaultValue={copyFilters.condition ?? ""} placeholder="GOOD" className="mt-2 h-12 w-full rounded-xl border border-[#D8CCBC] bg-white px-4 outline-none transition focus:border-[#7A263A]" />
           </label>
           <label>
-            <span className="text-xs font-bold uppercase tracking-wide text-[#000054]">Location</span>
-            <input name="location" defaultValue={copyFilters.location ?? ""} placeholder="Shelf, room..." className="mt-2 h-12 w-full rounded-xl border border-[#D9DCE8] bg-white px-4 outline-none transition focus:border-[#337AB7]" />
+            <span className="text-xs font-bold uppercase tracking-wide text-[#2B2723]">Location</span>
+            <input name="location" defaultValue={copyFilters.location ?? ""} placeholder="Shelf, room..." className="mt-2 h-12 w-full rounded-xl border border-[#D8CCBC] bg-white px-4 outline-none transition focus:border-[#7A263A]" />
           </label>
-          <button type="submit" className="self-end rounded-full bg-[#000054] px-5 py-3 text-sm font-bold text-white transition hover:-translate-y-0.5">
+          <button type="submit" className="self-end rounded-full bg-[#2B2723] px-5 py-3 text-sm font-bold text-white transition hover:-translate-y-0.5">
             Search
           </button>
-          <button type="button" onClick={resetCopyFilters} className="self-end rounded-full border border-[#D9DCE8] px-5 py-3 text-sm font-bold text-[#000054] transition hover:border-[#337AB7]">
+          <button type="button" onClick={resetCopyFilters} className="self-end rounded-full border border-[#D8CCBC] px-5 py-3 text-sm font-bold text-[#2B2723] transition hover:border-[#7A263A]">
             Default
           </button>
         </form>
@@ -384,11 +384,11 @@ export function BookCopiesPage({ mode = "staff" }: { mode?: "staff" | "admin" })
                 onClick={() => updateStatusFilter(normalizedStatus)}
                 className={`rounded-full px-4 py-2 text-sm font-bold transition ${
                   isActive
-                    ? "bg-[#000054] text-white shadow-lg shadow-[#000054]/15"
-                    : "border border-[#D9DCE8] bg-white text-[#000054] hover:border-[#337AB7] hover:bg-[#337AB7]/5"
+                    ? "bg-[#2B2723] text-white shadow-lg shadow-[#2B2723]/15"
+                    : "border border-[#D8CCBC] bg-white text-[#2B2723] hover:border-[#7A263A] hover:bg-[#7A263A]/5"
                 }`}
               >
-                {statusLabel(normalizedStatus || "ALL")} <span className={isActive ? "text-white/80" : "text-[#337AB7]"}>{item?.count ?? 0}</span>
+                {statusLabel(normalizedStatus || "ALL")} <span className={isActive ? "text-white/80" : "text-[#7A263A]"}>{item?.count ?? 0}</span>
               </button>
             );
           })}
@@ -396,8 +396,8 @@ export function BookCopiesPage({ mode = "staff" }: { mode?: "staff" | "admin" })
       </div>
 
       {!isLoading ? (
-        <div className="mt-6 flex flex-wrap items-center justify-between gap-3 rounded-xl border border-[#EDEDF2] bg-white p-4">
-          <p className="text-sm font-semibold text-[#333333]">
+        <div className="mt-6 flex flex-wrap items-center justify-between gap-3 rounded-xl border border-[#DED5C8] bg-white p-4">
+          <p className="text-sm font-semibold text-[#5F574F]">
             {selectedCopyIds.length ? `${selectedCopyIds.length} selected` : `${copies.length} copies loaded`}
             {dirtyCopyIds.length ? <span className="ml-2 rounded-full bg-amber-50 px-3 py-1 text-xs font-bold text-amber-700">{dirtyCopyIds.length} unsaved</span> : null}
           </p>
@@ -408,11 +408,11 @@ export function BookCopiesPage({ mode = "staff" }: { mode?: "staff" | "admin" })
                 setCreateModalError("");
                 setIsCreateModalOpen(true);
               }}
-              className="rounded-full bg-[#E60028] px-4 py-2 text-sm font-bold text-white shadow-lg shadow-[#E60028]/20 transition hover:-translate-y-0.5"
+              className="rounded-full bg-[#7A263A] px-4 py-2 text-sm font-bold text-white shadow-lg shadow-[#7A263A]/20 transition hover:-translate-y-0.5"
             >
               Create Copy
             </button>
-            <button type="button" onClick={() => exportCopies(selectedCopies.length ? selectedCopies : sortedCopies)} className="rounded-full border border-[#D9DCE8] px-4 py-2 text-sm font-bold text-[#000054] hover:border-[#337AB7]">
+            <button type="button" onClick={() => exportCopies(selectedCopies.length ? selectedCopies : sortedCopies)} className="rounded-full border border-[#D8CCBC] px-4 py-2 text-sm font-bold text-[#2B2723] hover:border-[#7A263A]">
               Export {selectedCopies.length ? "selected" : "visible"}
             </button>
             {isAdmin ? (
@@ -424,12 +424,12 @@ export function BookCopiesPage({ mode = "staff" }: { mode?: "staff" | "admin" })
         </div>
       ) : null}
 
-      <div className="mt-6 overflow-hidden rounded-xl border border-[#EDEDF2]">
+      <div className="mt-6 overflow-hidden rounded-xl border border-[#DED5C8]">
         <table className="w-full min-w-[860px] border-collapse bg-white text-left text-sm">
-          <thead className="bg-[#000054] text-white">
+          <thead className="bg-[#2B2723] text-white">
             <tr>
               <th className="w-12 px-4 py-3">
-                <input type="checkbox" checked={allVisibleSelected} onChange={toggleVisibleSelection} aria-label="Select all visible copies" className="h-4 w-4 accent-[#E60028]" />
+                <input type="checkbox" checked={allVisibleSelected} onChange={toggleVisibleSelection} aria-label="Select all visible copies" className="h-4 w-4 accent-[#7A263A]" />
               </th>
               <th className="px-4 py-3"><SortableHeader active={tableSort.key === "barcode"} direction={tableSort.direction} onClick={() => updateSort("barcode")}>Barcode</SortableHeader></th>
               <th className="px-4 py-3"><SortableHeader active={tableSort.key === "status"} direction={tableSort.direction} onClick={() => updateSort("status")}>Status</SortableHeader></th>
@@ -443,25 +443,25 @@ export function BookCopiesPage({ mode = "staff" }: { mode?: "staff" | "admin" })
               const copyId = entityIdOf(copy);
 
               return (
-              <tr key={copyId || copy.barcode} className="border-t border-[#EDEDF2]">
+              <tr key={copyId || copy.barcode} className="border-t border-[#DED5C8]">
                 <td className="px-4 py-4">
-                  <input type="checkbox" checked={selectedCopyIds.includes(copyId)} onChange={() => toggleCopySelection(copyId)} aria-label={`Select copy ${copy.barcode}`} className="h-4 w-4 accent-[#E60028]" />
+                  <input type="checkbox" checked={selectedCopyIds.includes(copyId)} onChange={() => toggleCopySelection(copyId)} aria-label={`Select copy ${copy.barcode}`} className="h-4 w-4 accent-[#7A263A]" />
                 </td>
-                <td className="px-4 py-4 font-bold text-[#000054]">{copy.barcode}</td>
+                <td className="px-4 py-4 font-bold text-[#2B2723]">{copy.barcode}</td>
                 <td className="px-4 py-4">
-                  <span className="rounded-full bg-[#000054]/8 px-3 py-1 text-xs font-bold text-[#000054]">{copy.status || "UNKNOWN"}</span>
+                  <span className="rounded-full bg-[#2B2723]/8 px-3 py-1 text-xs font-bold text-[#2B2723]">{copy.status || "UNKNOWN"}</span>
                 </td>
                 <td className="px-4 py-4">
                   <form id={`copy-${copyId}`} onSubmit={(event) => event.preventDefault()}>
-                    <input name="condition" defaultValue={copy.condition ?? ""} onChange={() => markCopyDirty(copyId)} className="w-full rounded-lg border border-[#D9DCE8] px-3 py-2 outline-none focus:border-[#337AB7]" />
+                    <input name="condition" defaultValue={copy.condition ?? ""} onChange={() => markCopyDirty(copyId)} className="w-full rounded-lg border border-[#D8CCBC] px-3 py-2 outline-none focus:border-[#7A263A]" />
                   </form>
                 </td>
                 <td className="px-4 py-4">
-                  <input form={`copy-${copyId}`} name="location" defaultValue={copy.location ?? ""} onChange={() => markCopyDirty(copyId)} className="w-full rounded-lg border border-[#D9DCE8] px-3 py-2 outline-none focus:border-[#337AB7]" />
+                  <input form={`copy-${copyId}`} name="location" defaultValue={copy.location ?? ""} onChange={() => markCopyDirty(copyId)} className="w-full rounded-lg border border-[#D8CCBC] px-3 py-2 outline-none focus:border-[#7A263A]" />
                 </td>
                 <td className="px-4 py-4">
                   <div className="flex gap-2">
-                    <button type="button" onClick={() => handleInlineUpdate(copy, document.getElementById(`copy-${copyId}`) as HTMLFormElement)} className="rounded-full border border-[#D9DCE8] px-3 py-1.5 font-bold text-[#000054]">
+                    <button type="button" onClick={() => handleInlineUpdate(copy, document.getElementById(`copy-${copyId}`) as HTMLFormElement)} className="rounded-full border border-[#D8CCBC] px-3 py-1.5 font-bold text-[#2B2723]">
                       {dirtyCopyIds.includes(copyId) ? "Save changes" : "Save"}
                     </button>
                     {isAdmin ? (
@@ -500,29 +500,29 @@ export function BookCopiesPage({ mode = "staff" }: { mode?: "staff" | "admin" })
           </div>
         ) : null}
         <div className="grid gap-6 lg:grid-cols-2">
-          <form onSubmit={handleAddCopy} className="rounded-xl border border-[#EDEDF2] bg-[#F8F9FA] p-5">
-            <h2 className="text-lg font-bold text-[#000054]">Add one copy</h2>
+          <form onSubmit={handleAddCopy} className="rounded-xl border border-[#DED5C8] bg-[#F7F3EA] p-5">
+            <h2 className="text-lg font-bold text-[#2B2723]">Add one copy</h2>
             <div className="mt-4 grid gap-4">
               <CopyInput name="barcode" label="Barcode" required />
               <CopyInput name="condition" label="Condition" />
               <CopyInput name="location" label="Location" />
-              <button disabled={isSubmittingCreate} className="rounded-full bg-[#E60028] px-5 py-3 text-sm font-bold text-white transition hover:-translate-y-0.5 disabled:cursor-not-allowed disabled:opacity-60 disabled:hover:translate-y-0" type="submit">
+              <button disabled={isSubmittingCreate} className="rounded-full bg-[#7A263A] px-5 py-3 text-sm font-bold text-white transition hover:-translate-y-0.5 disabled:cursor-not-allowed disabled:opacity-60 disabled:hover:translate-y-0" type="submit">
                 {isSubmittingCreate ? "Adding..." : "Add copy"}
               </button>
             </div>
           </form>
 
-          <form onSubmit={handleBulkAdd} className="rounded-xl border border-[#EDEDF2] bg-[#F8F9FA] p-5">
-            <h2 className="text-lg font-bold text-[#000054]">Bulk add copies</h2>
+          <form onSubmit={handleBulkAdd} className="rounded-xl border border-[#DED5C8] bg-[#F7F3EA] p-5">
+            <h2 className="text-lg font-bold text-[#2B2723]">Bulk add copies</h2>
             <div className="mt-4 grid gap-4">
               <CopyInput name="quantity" label="Quantity" type="number" />
               <label>
-                <span className="text-xs font-bold uppercase tracking-wide text-[#000054]">Barcodes</span>
-                <textarea name="barcodes" rows={4} placeholder="One barcode per line, or comma separated" className="mt-2 w-full rounded-xl border border-[#D9DCE8] bg-white px-4 py-3 outline-none focus:border-[#337AB7]" />
+                <span className="text-xs font-bold uppercase tracking-wide text-[#2B2723]">Barcodes</span>
+                <textarea name="barcodes" rows={4} placeholder="One barcode per line, or comma separated" className="mt-2 w-full rounded-xl border border-[#D8CCBC] bg-white px-4 py-3 outline-none focus:border-[#7A263A]" />
               </label>
               <CopyInput name="condition" label="Condition" />
               <CopyInput name="location" label="Location" />
-              <button disabled={isSubmittingCreate} className="rounded-full bg-[#000054] px-5 py-3 text-sm font-bold text-white transition hover:-translate-y-0.5 disabled:cursor-not-allowed disabled:opacity-60 disabled:hover:translate-y-0" type="submit">
+              <button disabled={isSubmittingCreate} className="rounded-full bg-[#2B2723] px-5 py-3 text-sm font-bold text-white transition hover:-translate-y-0.5 disabled:cursor-not-allowed disabled:opacity-60 disabled:hover:translate-y-0" type="submit">
                 {isSubmittingCreate ? "Submitting..." : "Bulk add"}
               </button>
             </div>
@@ -552,8 +552,8 @@ function getCopiesAccessMessage(role?: string) {
 function CopyInput({ name, label, type = "text", required = false }: { name: string; label: string; type?: string; required?: boolean }) {
   return (
     <label>
-      <span className="text-xs font-bold uppercase tracking-wide text-[#000054]">{label}</span>
-      <input name={name} type={type} required={required} className="mt-2 w-full rounded-xl border border-[#D9DCE8] bg-white px-4 py-3 outline-none focus:border-[#337AB7]" />
+      <span className="text-xs font-bold uppercase tracking-wide text-[#2B2723]">{label}</span>
+      <input name={name} type={type} required={required} className="mt-2 w-full rounded-xl border border-[#D8CCBC] bg-white px-4 py-3 outline-none focus:border-[#7A263A]" />
     </label>
   );
 }

@@ -37,9 +37,9 @@ export function Checkbox({
             id={checkboxId}
             className={`
               ${sizeClasses[size]}
-              appearance-none rounded border-2 border-[#D9DCE8] bg-white
+              appearance-none rounded border-2 border-[#D8CCBC] bg-white
               cursor-pointer transition-all duration-200
-              checked:border-[#E60028] checked:bg-[#E60028]
+              checked:border-[#7A263A] checked:bg-[#7A263A]
               hover:border-black
               focus:outline-none focus:ring-4 focus:ring-black/10
               disabled:cursor-not-allowed disabled:bg-gray-100 disabled:border-gray-300
@@ -84,7 +84,7 @@ export function Checkbox({
       {(error || helperText) && (
         <p
           className={`mt-2 text-xs font-semibold ${
-            error ? "text-red-600 animate-fade-up" : "text-[#6B7280]"
+            error ? "text-red-600 animate-fade-up" : "text-[#776D63]"
           }`}
         >
           {error || helperText}

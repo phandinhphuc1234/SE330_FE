@@ -50,15 +50,15 @@ export function Button({
   };
 
   const baseStyles =
-    "relative overflow-hidden inline-flex items-center justify-center font-bold transition-all duration-200 focus:outline-none focus:ring-4 disabled:cursor-not-allowed disabled:opacity-60";
+    "relative min-h-11 overflow-hidden inline-flex items-center justify-center font-bold transition-all duration-200 focus:outline-none focus:ring-4 disabled:cursor-not-allowed disabled:opacity-60";
 
   const variantStyles = {
     primary:
-      "bg-gradient-to-r from-[#E60028] to-[#c90022] text-white shadow-lg shadow-[#E60028]/25 hover:-translate-y-0.5 hover:shadow-[#E60028]/35 focus:ring-[#E60028]/20 disabled:from-gray-300 disabled:to-gray-400 disabled:shadow-none disabled:hover:translate-y-0",
+      "bg-[#7A263A] text-white shadow-[0_10px_24px_rgba(122,38,58,0.18)] hover:bg-[#5A1C2B] focus:ring-[#7A263A]/20 disabled:bg-[#BEB2A3] disabled:shadow-none",
     secondary:
-      "border-2 border-[#D9DCE8] bg-white text-black hover:border-black hover:bg-black hover:text-white focus:ring-black/10 disabled:border-gray-300 disabled:text-gray-400 disabled:hover:bg-white disabled:hover:text-gray-400",
+      "border border-[#D8CCBC] bg-[#FFFCF5] text-[#2B2723] hover:border-[#7A263A] hover:bg-[#F1EADF] hover:text-[#7A263A] focus:ring-[#7A263A]/10 disabled:border-gray-300 disabled:text-gray-400 disabled:hover:bg-[#FFFCF5] disabled:hover:text-gray-400",
     ghost:
-      "text-black hover:bg-black/[0.06] focus:ring-black/10 disabled:text-gray-400 disabled:hover:bg-transparent",
+      "text-[#2B2723] hover:bg-[#7A263A]/8 hover:text-[#7A263A] focus:ring-[#7A263A]/10 disabled:text-gray-400 disabled:hover:bg-transparent",
     danger:
       "bg-gradient-to-r from-red-600 to-red-700 text-white shadow-lg shadow-red-600/25 hover:-translate-y-0.5 hover:shadow-red-600/35 focus:ring-red-600/20 disabled:from-gray-300 disabled:to-gray-400 disabled:shadow-none disabled:hover:translate-y-0",
     success:
@@ -68,9 +68,9 @@ export function Button({
   const sizeStyles = {
     xs: "px-3 py-1.5 text-xs rounded-lg gap-1.5",
     sm: "px-4 py-2 text-sm rounded-lg gap-2",
-    md: "px-5 py-3 text-sm rounded-full gap-2",
-    lg: "px-6 py-3.5 text-base rounded-full gap-2.5",
-    xl: "px-8 py-4 text-lg rounded-full gap-3",
+    md: "px-5 py-3 text-sm rounded-xl gap-2",
+    lg: "px-6 py-3.5 text-base rounded-xl gap-2.5",
+    xl: "px-8 py-4 text-lg rounded-xl gap-3",
   };
 
   return (

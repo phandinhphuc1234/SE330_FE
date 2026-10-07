@@ -47,7 +47,7 @@ export function Toast({
       progressBg: "bg-[#4CAF50]",
     },
     error: {
-      bg: "bg-[#E60028]",
+      bg: "bg-[#7A263A]",
       icon: "alert-circle" as const,
       progressBg: "bg-[#FF4458]",
     },

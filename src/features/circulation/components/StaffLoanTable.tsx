@@ -56,16 +56,16 @@ export function StaffLoanTable({ loans, emptyMessage }: StaffLoanTableProps) {
   const text = copy[locale];
   if (!loans.length) {
     return (
-      <div className="rounded-xl border border-[#EDEDF2] bg-[#F8F9FA] p-5 text-sm font-semibold text-[#333333]">
+      <div className="rounded-xl border border-[#DED5C8] bg-[#F7F3EA] p-5 text-sm font-semibold text-[#5F574F]">
         {emptyMessage ?? text.empty}
       </div>
     );
   }
 
   return (
-    <div className="overflow-hidden rounded-xl border border-[#EDEDF2]">
+    <div className="overflow-hidden rounded-xl border border-[#DED5C8]">
       <table className="w-full min-w-[1360px] border-collapse bg-white text-left text-sm">
-        <thead className="bg-[#000054] text-white">
+        <thead className="bg-[#2B2723] text-white">
           <tr>
             {text.headings.map((heading) => (
               <th key={heading} className="px-4 py-3 font-bold">
@@ -82,63 +82,63 @@ export function StaffLoanTable({ loans, emptyMessage }: StaffLoanTableProps) {
             const dueValue = isEbook ? loan.expiredAt ?? loan.dueDate ?? loan.dueAt : loan.dueDate ?? loan.dueAt;
 
             return (
-              <tr key={loanKey(loan)} className="border-t border-[#EDEDF2] align-top transition hover:bg-[#F8F9FA]">
-                <td className="px-4 py-4 font-mono text-xs font-black text-[#000054]">{renderLoanIdentifier(loan)}</td>
+              <tr key={loanKey(loan)} className="border-t border-[#DED5C8] align-top transition hover:bg-[#F7F3EA]">
+                <td className="px-4 py-4 font-mono text-xs font-black text-[#2B2723]">{renderLoanIdentifier(loan)}</td>
                 <td className="px-4 py-4">
                   <LoanTypeBadge loanType={loan.loanType} />
                 </td>
                 <td className="px-4 py-4">
-                  <div className="font-bold text-[#000054]">
+                  <div className="font-bold text-[#2B2723]">
                     {memberId ? (
-                      <Link href={`/staff/members/${memberId}`} className="hover:text-[#337AB7]">
+                      <Link href={`/staff/members/${memberId}`} className="hover:text-[#7A263A]">
                         {loan.memberName || `${text.member} ${memberId}`}
                       </Link>
                     ) : (
                       loan.memberName || "-"
                     )}
                   </div>
-                  <p className="mt-1 text-xs text-[#333333]/75">{loan.memberEmail || "-"}</p>
+                  <p className="mt-1 text-xs text-[#5F574F]/75">{loan.memberEmail || "-"}</p>
                 </td>
                 <td className="px-4 py-4">
-                  <div className="font-bold text-[#000054]">{loan.bookTitle ?? loan.title ?? "-"}</div>
+                  <div className="font-bold text-[#2B2723]">{loan.bookTitle ?? loan.title ?? "-"}</div>
                   {bookId && isEbook ? (
-                    <Link href={`/books/${bookId}`} className="mt-1 inline-flex text-xs font-bold text-[#337AB7] hover:text-[#E60028]">
+                    <Link href={`/books/${bookId}`} className="mt-1 inline-flex text-xs font-bold text-[#7A263A] hover:text-[#7A263A]">
                       {text.viewBook}
                     </Link>
                   ) : null}
                   {bookId && !isEbook ? (
-                    <Link href={`/staff/books/${bookId}/copies`} className="mt-1 inline-flex text-xs font-bold text-[#337AB7] hover:text-[#E60028]">
+                    <Link href={`/staff/books/${bookId}/copies`} className="mt-1 inline-flex text-xs font-bold text-[#7A263A] hover:text-[#7A263A]">
                       {text.openCopies}
                     </Link>
                   ) : null}
                   {isEbook && loan.paymentId ? (
-                    <span className="ml-3 mt-1 inline-flex text-xs font-bold text-[#333333]/70">
+                    <span className="ml-3 mt-1 inline-flex text-xs font-bold text-[#5F574F]/70">
                       {text.payment} #{loan.paymentId}
                     </span>
                   ) : null}
                 </td>
-                <td className="px-4 py-4 font-mono text-xs font-semibold text-[#333333]">{renderItemCode(loan, text)}</td>
-                <td className="px-4 py-4 text-[#333333]">{formatDate(loan.borrowedAt ?? loan.checkoutAt, locale)}</td>
+                <td className="px-4 py-4 font-mono text-xs font-semibold text-[#5F574F]">{renderItemCode(loan, text)}</td>
+                <td className="px-4 py-4 text-[#5F574F]">{formatDate(loan.borrowedAt ?? loan.checkoutAt, locale)}</td>
                 <td className="px-4 py-4">
-                  <p className="mb-1 text-[11px] font-black uppercase tracking-wide text-[#6B7280]">
+                  <p className="mb-1 text-[11px] font-black uppercase tracking-wide text-[#776D63]">
                     {isEbook ? text.expires : text.dueDate}
                   </p>
-                  <span className={loan.overdue ? "font-bold text-[#E60028]" : "text-[#333333]"}>
+                  <span className={loan.overdue ? "font-bold text-[#7A263A]" : "text-[#5F574F]"}>
                     {formatDate(dueValue, locale)}
                   </span>
-                  {loan.daysOverdue ? <p className="mt-1 text-xs font-bold text-[#E60028]">{loan.daysOverdue} {text.daysOverdue}</p> : null}
+                  {loan.daysOverdue ? <p className="mt-1 text-xs font-bold text-[#7A263A]">{loan.daysOverdue} {text.daysOverdue}</p> : null}
                 </td>
-                <td className="px-4 py-4 text-[#333333]">{formatDate(loan.returnedAt, locale)}</td>
+                <td className="px-4 py-4 text-[#5F574F]">{formatDate(loan.returnedAt, locale)}</td>
                 <td className="px-4 py-4">
                   <StatusBadge status={loan.status} overdue={loan.overdue} />
-                  {!isEbook && loan.copyStatus ? <p className="mt-2 text-xs font-semibold text-[#333333]/75">{text.copy}: {statusLabel(loan.copyStatus, locale)}</p> : null}
+                  {!isEbook && loan.copyStatus ? <p className="mt-2 text-xs font-semibold text-[#5F574F]/75">{text.copy}: {statusLabel(loan.copyStatus, locale)}</p> : null}
                 </td>
-                <td className="px-4 py-4 font-semibold text-[#333333]">
+                <td className="px-4 py-4 font-semibold text-[#5F574F]">
                   {isEbook ? text.notApplicable : `${loan.renewCount ?? 0} / ${loan.maxRenewals ?? "-"}`}
                 </td>
                 <td className="px-4 py-4">
-                  <span className="font-semibold text-[#333333]">{money(loan.fineAmount ?? loan.fine, locale)}</span>
-                  {loan.fineStatus ? <p className="mt-1 text-xs font-bold uppercase text-[#337AB7]">{statusLabel(loan.fineStatus, locale)}</p> : null}
+                  <span className="font-semibold text-[#5F574F]">{money(loan.fineAmount ?? loan.fine, locale)}</span>
+                  {loan.fineStatus ? <p className="mt-1 text-xs font-bold uppercase text-[#7A263A]">{statusLabel(loan.fineStatus, locale)}</p> : null}
                 </td>
               </tr>
             );
@@ -164,13 +164,13 @@ export function StaffPagination({
   const pages = buildPaginationPages(currentPage, safeTotalPages);
 
   return (
-    <nav className="mt-6 flex justify-center rounded-2xl border border-[#EDEDF2] bg-white px-5 py-4 shadow-sm" aria-label={text.pagination}>
+    <nav className="mt-6 flex justify-center rounded-2xl border border-[#DED5C8] bg-white px-5 py-4 shadow-sm" aria-label={text.pagination}>
       <div className="flex flex-wrap items-center justify-center gap-2">
         <button
           type="button"
           onClick={() => onPageChange(currentPage - 1)}
           disabled={currentPage <= 0}
-          className="rounded-full border border-[#D9DCE8] px-4 py-2 text-sm font-bold text-[#000054] transition hover:border-[#337AB7] disabled:cursor-not-allowed disabled:opacity-45"
+          className="rounded-full border border-[#D8CCBC] px-4 py-2 text-sm font-bold text-[#2B2723] transition hover:border-[#7A263A] disabled:cursor-not-allowed disabled:opacity-45"
         >
           {text.previous}
         </button>
@@ -182,8 +182,8 @@ export function StaffPagination({
             aria-current={page === currentPage ? "page" : undefined}
             className={`grid h-10 w-10 place-items-center rounded-full text-sm font-bold transition ${
               page === currentPage
-                ? "bg-[#E60028] text-white shadow-lg shadow-[#E60028]/20"
-                : "border border-[#D9DCE8] text-[#000054] hover:border-[#337AB7]"
+                ? "bg-[#7A263A] text-white shadow-lg shadow-[#7A263A]/20"
+                : "border border-[#D8CCBC] text-[#2B2723] hover:border-[#7A263A]"
             }`}
           >
             {page + 1}
@@ -193,7 +193,7 @@ export function StaffPagination({
           type="button"
           onClick={() => onPageChange(currentPage + 1)}
           disabled={currentPage >= safeTotalPages - 1}
-          className="rounded-full border border-[#D9DCE8] px-4 py-2 text-sm font-bold text-[#000054] transition hover:border-[#337AB7] disabled:cursor-not-allowed disabled:opacity-45"
+          className="rounded-full border border-[#D8CCBC] px-4 py-2 text-sm font-bold text-[#2B2723] transition hover:border-[#7A263A] disabled:cursor-not-allowed disabled:opacity-45"
         >
           {text.next}
         </button>
@@ -216,7 +216,7 @@ export function StatusBadge({ status, overdue }: { status?: string; overdue?: bo
           ? "border-emerald-200 bg-emerald-50 text-emerald-700"
           : normalizedStatus === "LOST" || normalizedStatus === "REVOKED" || normalizedStatus === "EXPIRED"
             ? "border-amber-200 bg-amber-50 text-amber-800"
-            : "border-[#D9DCE8] bg-[#F8F9FA] text-[#333333]";
+            : "border-[#D8CCBC] bg-[#F7F3EA] text-[#5F574F]";
 
   return (
     <span className={`inline-flex rounded-full border px-3 py-1 text-xs font-bold uppercase tracking-wide ${classes}`}>

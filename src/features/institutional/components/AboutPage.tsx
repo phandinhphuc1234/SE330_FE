@@ -107,14 +107,14 @@ export function AboutPage() {
       <SectionBand tone="soft">
         <div className="grid gap-8 lg:grid-cols-[0.75fr_1.25fr] lg:items-start">
           <div>
-            <p className="text-sm font-bold uppercase tracking-wide text-[#337AB7]">{copy.roleEyebrow}</p>
-            <h2 className="mt-3 font-serif text-4xl font-bold text-[#000054]">{copy.roleTitle}</h2>
-            <p className="mt-4 leading-7 text-[#333333]">
+            <p className="text-sm font-bold uppercase tracking-wide text-[#7A263A]">{copy.roleEyebrow}</p>
+            <h2 className="mt-3 font-serif text-4xl font-bold text-[#2B2723]">{copy.roleTitle}</h2>
+            <p className="mt-4 leading-7 text-[#5F574F]">
               {copy.roleDescription}
             </p>
             <div className="mt-6 flex flex-wrap gap-3">
-              <Link href="/books" className="rounded-full bg-[#E60028] px-5 py-3 text-sm font-bold text-white">{copy.exploreBooks}</Link>
-              <Link href="/borrowing-guide" className="rounded-full border border-[#D9DCE8] px-5 py-3 text-sm font-bold text-[#000054]">{copy.borrowingGuide}</Link>
+              <Link href="/books" className="rounded-full bg-[#7A263A] px-5 py-3 text-sm font-bold text-white">{copy.exploreBooks}</Link>
+              <Link href="/borrowing-guide" className="rounded-full border border-[#D8CCBC] px-5 py-3 text-sm font-bold text-[#2B2723]">{copy.borrowingGuide}</Link>
             </div>
           </div>
           <div className="grid gap-5 md:grid-cols-3">
@@ -125,12 +125,12 @@ export function AboutPage() {
 
       <SectionBand>
         <div>
-          <p className="text-sm font-bold uppercase tracking-wide text-[#337AB7]">{copy.spacesEyebrow}</p>
-          <h2 className="mt-3 font-serif text-4xl font-bold text-[#000054]">{copy.spacesTitle}</h2>
+          <p className="text-sm font-bold uppercase tracking-wide text-[#7A263A]">{copy.spacesEyebrow}</p>
+          <h2 className="mt-3 font-serif text-4xl font-bold text-[#2B2723]">{copy.spacesTitle}</h2>
         </div>
         <div className="mt-8 grid gap-6 lg:grid-cols-3">
           {copy.spaces.map((space) => (
-            <article key={space.title} className="overflow-hidden rounded-2xl border border-[#EDEDF2] bg-white shadow-sm transition hover:-translate-y-1 hover:shadow-[0_18px_36px_rgba(7,7,88,0.12)]">
+            <article key={space.title} className="overflow-hidden rounded-2xl border border-[#DED5C8] bg-white shadow-sm transition hover:-translate-y-1 hover:shadow-[0_18px_36px_rgba(7,7,88,0.12)]">
               <div
                 className="h-56 w-full bg-cover bg-center"
                 role="img"
@@ -138,8 +138,8 @@ export function AboutPage() {
                 style={{ backgroundImage: `url(${space.image})` }}
               />
               <div className="p-6">
-                <h3 className="text-xl font-bold text-[#000054]">{space.title}</h3>
-                <p className="mt-3 leading-7 text-[#333333]">{space.body}</p>
+                <h3 className="text-xl font-bold text-[#2B2723]">{space.title}</h3>
+                <p className="mt-3 leading-7 text-[#5F574F]">{space.body}</p>
               </div>
             </article>
           ))}

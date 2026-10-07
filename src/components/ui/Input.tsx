@@ -54,9 +54,9 @@ export function Input({
           className={`absolute left-0 transition-all duration-200 pointer-events-none ${
             floatingLabel
               ? isFloating
-                ? "top-0 text-xs font-bold text-black -translate-y-full mb-2"
-                : "top-1/2 -translate-y-1/2 left-4 text-sm text-[#6B7280]"
-              : "top-0 text-sm font-bold text-black -translate-y-full mb-2"
+                ? "top-0 text-xs font-bold text-[#2B2723] -translate-y-full mb-2"
+                : "top-1/2 -translate-y-1/2 left-4 text-sm text-[#776D63]"
+              : "top-0 text-sm font-bold text-[#2B2723] -translate-y-full mb-2"
           } ${leftIcon && !isFloating ? "left-12" : ""}`}
         >
           {label}
@@ -67,7 +67,7 @@ export function Input({
       <div className="relative">
         {/* Left Icon */}
         {leftIcon && (
-          <div className="absolute left-4 top-1/2 -translate-y-1/2 text-[#6B7280]">
+          <div className="absolute left-4 top-1/2 -translate-y-1/2 text-[#776D63]">
             {leftIcon}
           </div>
         )}
@@ -80,14 +80,14 @@ export function Input({
           onFocus={() => setIsFocused(true)}
           onBlur={() => setIsFocused(false)}
           className={`
-            w-full h-12 rounded-lg border bg-white px-4 text-black outline-none
+            w-full h-12 rounded-xl border bg-[#FFFCF5] px-4 text-[#171412] outline-none
             transition-all duration-200
             ${leftIcon ? "pl-12" : ""}
             ${rightIcon || showClearButton ? "pr-12" : ""}
             ${
               error
                 ? "border-red-500 focus:border-red-500 focus:ring-4 focus:ring-red-500/20"
-                : "border-[#D9DCE8] focus:border-2 focus:border-black focus:shadow-[0_0_0_4px_rgba(0,0,0,0.1)]"
+                : "border-[#D8CCBC] focus:border-[#7A263A] focus:shadow-[0_0_0_4px_rgba(122,38,58,0.1)]"
             }
             ${props.disabled ? "bg-gray-100 cursor-not-allowed" : ""}
           `}
@@ -101,7 +101,7 @@ export function Input({
               <button
                 type="button"
                 onClick={handleClear}
-                className="text-[#6B7280] hover:text-[#E60028] transition-colors"
+                className="text-[#776D63] hover:text-[#7A263A] transition-colors"
                 tabIndex={-1}
               >
                 <svg
@@ -119,7 +119,7 @@ export function Input({
                 </svg>
               </button>
             ) : (
-              <div className="text-[#6B7280]">{rightIcon}</div>
+              <div className="text-[#776D63]">{rightIcon}</div>
             )}
           </div>
         )}
@@ -129,7 +129,7 @@ export function Input({
       {(error || helperText) && (
         <p
           className={`mt-2 text-xs font-semibold ${
-            error ? "text-red-600 animate-fade-up" : "text-[#6B7280]"
+            error ? "text-red-600 animate-fade-up" : "text-[#776D63]"
           }`}
         >
           {error || helperText}

@@ -216,15 +216,15 @@ export function StaffHoldsPage() {
     >
       {!canUseStaffApi ? <Notice tone="error" message={text.accessDenied} /> : null}
 
-      <form ref={filterFormRef} onSubmit={handleSubmit} onChange={handleFilterChange} className="rounded-2xl border border-[#EDEDF2] bg-[#F8F9FA] p-4 shadow-sm">
+      <form ref={filterFormRef} onSubmit={handleSubmit} onChange={handleFilterChange} className="rounded-2xl border border-[#DED5C8] bg-[#F7F3EA] p-4 shadow-sm">
         <div className="grid gap-3 md:grid-cols-[minmax(260px,0.5fr)_1fr]">
-          <select name="status" defaultValue="READY_FOR_PICKUP" className="h-14 rounded-xl border border-[#D9DCE8] bg-white px-4 text-sm font-semibold text-[#111827] outline-none transition focus:border-[#337AB7]">
+          <select name="status" defaultValue="READY_FOR_PICKUP" className="h-14 rounded-xl border border-[#D8CCBC] bg-white px-4 text-sm font-semibold text-[#2B2723] outline-none transition focus:border-[#7A263A]">
             <option value="READY_FOR_PICKUP">{statusLabel("READY_FOR_PICKUP", locale)}</option>
             <option value="WAITING">{statusLabel("WAITING", locale)}</option>
             <option value="FULFILLED">{statusLabel("FULFILLED", locale)}</option>
             <option value="EXPIRED">{statusLabel("EXPIRED", locale)}</option>
           </select>
-          <div className="flex items-center rounded-xl border border-[#D9DCE8] bg-white px-4 text-sm font-semibold text-[#333333]">
+          <div className="flex items-center rounded-xl border border-[#D8CCBC] bg-white px-4 text-sm font-semibold text-[#5F574F]">
             {text.showingPrefix} {holdStatusLabel(filters.status, locale)} {text.showingSuffix}
           </div>
         </div>
@@ -258,16 +258,16 @@ function StaffHoldTable({ holds }: { holds: StaffHoldRecord[] }) {
 
   if (!holds.length) {
     return (
-      <div className="rounded-xl border border-[#EDEDF2] bg-[#F8F9FA] p-5 text-sm font-semibold text-[#333333]">
+      <div className="rounded-xl border border-[#DED5C8] bg-[#F7F3EA] p-5 text-sm font-semibold text-[#5F574F]">
         {text.empty}
       </div>
     );
   }
 
   return (
-    <div className="overflow-hidden rounded-xl border border-[#EDEDF2]">
+    <div className="overflow-hidden rounded-xl border border-[#DED5C8]">
       <table className="w-full min-w-[1180px] border-collapse bg-white text-left text-sm">
-        <thead className="bg-[#000054] text-white">
+        <thead className="bg-[#2B2723] text-white">
           <tr>
             {text.headings.map((heading) => (
               <th key={heading} className="px-4 py-3 font-bold">
@@ -284,43 +284,43 @@ function StaffHoldTable({ holds }: { holds: StaffHoldRecord[] }) {
             const status = normalizeStatus(hold.status);
 
             return (
-              <tr key={holdId || `${memberId}-${bookId}-${hold.queuePosition ?? "queue"}`} className="border-t border-[#EDEDF2] align-top transition hover:bg-[#F8F9FA]">
+              <tr key={holdId || `${memberId}-${bookId}-${hold.queuePosition ?? "queue"}`} className="border-t border-[#DED5C8] align-top transition hover:bg-[#F7F3EA]">
                 <td className="px-4 py-4">
-                  <div className="font-bold text-[#000054]">
+                  <div className="font-bold text-[#2B2723]">
                     {memberId ? (
-                      <Link href={`/staff/members/${memberId}`} className="hover:text-[#337AB7]">
+                      <Link href={`/staff/members/${memberId}`} className="hover:text-[#7A263A]">
                         {hold.memberName || `${text.member} ${memberId}`}
                       </Link>
                     ) : (
                       hold.memberName || "-"
                     )}
                   </div>
-                  <p className="mt-1 text-xs text-[#333333]/75">{hold.memberEmail || "-"}</p>
+                  <p className="mt-1 text-xs text-[#5F574F]/75">{hold.memberEmail || "-"}</p>
                 </td>
                 <td className="px-4 py-4">
-                  <div className="font-bold text-[#000054]">{hold.bookTitle ?? hold.title ?? "-"}</div>
+                  <div className="font-bold text-[#2B2723]">{hold.bookTitle ?? hold.title ?? "-"}</div>
                   {bookId ? (
-                    <Link href={`/staff/books/${bookId}/copies`} className="mt-1 inline-flex text-xs font-bold text-[#337AB7] hover:text-[#E60028]">
+                    <Link href={`/staff/books/${bookId}/copies`} className="mt-1 inline-flex text-xs font-bold text-[#7A263A] hover:text-[#7A263A]">
                       {text.openCopies}
                     </Link>
                   ) : null}
                 </td>
                 <td className="px-4 py-4"><HoldStatusBadge status={hold.status} /></td>
-                <td className="px-4 py-4 font-semibold text-[#333333]">{hold.queuePosition ?? "-"}</td>
+                <td className="px-4 py-4 font-semibold text-[#5F574F]">{hold.queuePosition ?? "-"}</td>
                 <td className="px-4 py-4">
-                  <p className="font-mono text-xs font-semibold text-[#333333]">{hold.assignedCopyBarcode ?? hold.assignedBarcode ?? hold.barcode ?? "-"}</p>
-                  {hold.assignedCopyId ? <p className="mt-1 text-xs font-bold text-[#337AB7]">{text.copyNumber} #{hold.assignedCopyId}</p> : null}
+                  <p className="font-mono text-xs font-semibold text-[#5F574F]">{hold.assignedCopyBarcode ?? hold.assignedBarcode ?? hold.barcode ?? "-"}</p>
+                  {hold.assignedCopyId ? <p className="mt-1 text-xs font-bold text-[#7A263A]">{text.copyNumber} #{hold.assignedCopyId}</p> : null}
                 </td>
-                <td className="px-4 py-4 text-[#333333]">{formatDate(hold.reservedAt, locale)}</td>
-                <td className="px-4 py-4 text-[#333333]">{formatDate(hold.notifiedAt, locale)}</td>
-                <td className="px-4 py-4 text-[#333333]">{formatDate(hold.expiresAt, locale)}</td>
+                <td className="px-4 py-4 text-[#5F574F]">{formatDate(hold.reservedAt, locale)}</td>
+                <td className="px-4 py-4 text-[#5F574F]">{formatDate(hold.notifiedAt, locale)}</td>
+                <td className="px-4 py-4 text-[#5F574F]">{formatDate(hold.expiresAt, locale)}</td>
                 <td className="px-4 py-4">
                   {holdId && status === "READY_FOR_PICKUP" ? (
-                    <Link href={`/staff/holds/pickup?holdId=${holdId}`} className="inline-flex rounded-full bg-[#E60028] px-4 py-2 text-xs font-bold text-white shadow-sm transition hover:-translate-y-0.5 hover:shadow-lg">
+                    <Link href={`/staff/holds/pickup?holdId=${holdId}`} className="inline-flex rounded-full bg-[#7A263A] px-4 py-2 text-xs font-bold text-white shadow-sm transition hover:-translate-y-0.5 hover:shadow-lg">
                       {text.checkout}
                     </Link>
                   ) : (
-                    <span className="text-xs font-semibold text-[#333333]/70">{text.noDeskAction}</span>
+                    <span className="text-xs font-semibold text-[#5F574F]/70">{text.noDeskAction}</span>
                   )}
                 </td>
               </tr>
@@ -342,7 +342,7 @@ function HoldStatusBadge({ status }: { status?: string }) {
         ? "border-rose-200 bg-rose-50 text-rose-700"
         : normalizedStatus === "FULFILLED"
           ? "border-blue-200 bg-blue-50 text-blue-700"
-          : "border-[#D9DCE8] bg-[#F8F9FA] text-[#333333]";
+          : "border-[#D8CCBC] bg-[#F7F3EA] text-[#5F574F]";
 
   return (
     <span className={`inline-flex rounded-full border px-3 py-1 text-xs font-bold uppercase tracking-wide ${classes}`}>
@@ -353,9 +353,9 @@ function HoldStatusBadge({ status }: { status?: string }) {
 
 function MetricCard({ label, value, tone = "normal" }: { label: string; value: string; tone?: "normal" | "success" }) {
   return (
-    <div className={`rounded-xl border p-4 ${tone === "success" ? "border-emerald-200 bg-emerald-50" : "border-[#EDEDF2] bg-white"}`}>
-      <p className={`text-xs font-bold uppercase tracking-wide ${tone === "success" ? "text-emerald-700" : "text-[#337AB7]"}`}>{label}</p>
-      <p className="mt-2 text-2xl font-bold text-[#000054]">{value}</p>
+    <div className={`rounded-xl border p-4 ${tone === "success" ? "border-emerald-200 bg-emerald-50" : "border-[#DED5C8] bg-white"}`}>
+      <p className={`text-xs font-bold uppercase tracking-wide ${tone === "success" ? "text-emerald-700" : "text-[#7A263A]"}`}>{label}</p>
+      <p className="mt-2 text-2xl font-bold text-[#2B2723]">{value}</p>
     </div>
   );
 }

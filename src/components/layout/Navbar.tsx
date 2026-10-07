@@ -23,6 +23,7 @@ const publicNavLabelKeys: Record<string, TranslationKey> = {
   "/user/holds": "nav.reservations",
   "/notices": "nav.libraryNotices",
   "/about": "nav.about",
+  "/user/ebook-loans": "menu.myEbooks",
 };
 
 export function Navbar() {
@@ -36,6 +37,7 @@ export function Navbar() {
   } = useAuth();
   const { t } = useLanguage();
   const pathname = usePathname();
+  const [isPublicMenuOpen, setIsPublicMenuOpen] = useState(false);
   const staffNavItems: TopNavItem[] = [
     { labelKey: "nav.books", href: "/staff/books", originalHref: "/books" },
     { labelKey: "nav.borrowingGuide", href: "/borrowing-guide" },
@@ -54,15 +56,15 @@ export function Navbar() {
 
   return (
     <header
-      className={`sticky inset-x-0 top-0 z-30 border-b text-[#111827] ${hasAdminAccess ? "border-[#DED5C8] bg-[#FFFCF5] shadow-[0_4px_16px_rgba(23,20,18,0.04)]" : "border-[#EDEDF2] bg-white shadow-[0_12px_30px_rgba(7,7,88,0.12)]"}`}
+      className="sticky inset-x-0 top-0 z-30 border-b border-[#DED5C8] bg-[#FFFCF5]/95 text-[#2B2723] shadow-[0_8px_24px_rgba(43,39,35,0.08)] backdrop-blur-xl"
     >
-      <nav className={`mx-auto min-h-16 w-full max-w-7xl items-center px-4 py-3 sm:px-6 ${hasAdminAccess ? "grid grid-cols-[auto_minmax(0,1fr)_auto] gap-x-2 xl:gap-x-4" : "flex flex-wrap gap-x-4 gap-y-2"}`}>
+      <nav className={`mx-auto min-h-16 w-full max-w-7xl items-center px-4 py-3 sm:px-6 ${hasAdminAccess ? "grid grid-cols-[auto_minmax(0,1fr)_auto] gap-x-2 xl:gap-x-4" : "grid grid-cols-[minmax(0,1fr)_auto] gap-x-3 lg:grid-cols-[auto_minmax(0,1fr)_auto] lg:gap-x-5"}`}>
         <BrandMark tone="dark" showSymbol />
         {hasAdminAccess ? (
           <AdminNavigation key={pathname} mobileActions={<LanguageToggle />} />
         ) : (
-          <div className="order-3 min-w-0 basis-full overflow-x-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden xl:order-2 xl:flex-1 xl:basis-0">
-            <div className="flex w-max min-w-full items-center gap-0.5 xl:justify-center">
+          <div className="hidden min-w-0 lg:block">
+            <div className="flex items-center justify-center gap-0.5">
               {topNavItems.map((item) => {
                 const originalHref = item.originalHref ?? item.href;
                 const isActive = isActiveNavItem(pathname, originalHref, item.href, hasStaffAccess);
@@ -72,14 +74,15 @@ export function Navbar() {
                     key={item.href}
                     href={item.href}
                     aria-current={isActive ? "page" : undefined}
-                    className={`group relative flex min-h-11 shrink-0 items-center whitespace-nowrap rounded-full px-2 py-2 font-semibold text-[#111827] transition-colors duration-150 hover:bg-[#F1F2F4] hover:text-black focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-[#7A263A] ${
-                      isActive ? "bg-[#F1F2F4] text-black" : ""
+                    onClick={() => setIsPublicMenuOpen(false)}
+                    className={`group relative flex min-h-11 shrink-0 items-center whitespace-nowrap rounded-xl px-3 py-2 font-semibold text-[#2B2723] transition-colors duration-150 hover:bg-[#F1EADF] hover:text-[#7A263A] focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-[#7A263A] ${
+                      isActive ? "bg-[#F1EADF] text-[#7A263A]" : ""
                     }`}
                   >
                     {/* Size the label directly; the global anchor reset inherits font. */}
                     <span className="text-sm leading-5">{t(item.labelKey)}</span>
                     <span
-                      className={`absolute inset-x-3 bottom-1 h-0.5 rounded-full bg-[#E60028] transition-transform duration-200 ${
+                      className={`absolute inset-x-3 bottom-1 h-0.5 rounded-full bg-[#7A263A] transition-transform duration-200 ${
                         isActive ? "scale-x-100" : "scale-x-0 group-hover:scale-x-100"
                       }`}
                     />
@@ -89,12 +92,12 @@ export function Navbar() {
             </div>
           </div>
         )}
-        <div className={`ml-auto flex shrink-0 items-center gap-2 text-sm ${hasAdminAccess ? "col-start-2 row-start-1 xl:col-start-3" : "order-2 xl:order-3"}`}>
-          <div className={hasAdminAccess ? "hidden xl:block" : undefined}>
+        <div className={`ml-auto flex shrink-0 items-center gap-1.5 text-sm ${hasAdminAccess ? "col-start-2 row-start-1 xl:col-start-3" : "col-start-2 row-start-1"}`}>
+          <div className={hasAdminAccess ? "hidden xl:block" : "hidden lg:block"}>
             <LanguageToggle />
           </div>
           {isInitializing ? (
-            <div className="h-9 w-9 animate-pulse rounded-full bg-[#EDEDF2]" aria-label="Checking session" />
+            <div className="h-9 w-9 animate-pulse rounded-full bg-[#DED5C8]" aria-label="Checking session" />
           ) : isAuthenticated ? (
             <>
               <NotificationMenu compact={hasAdminAccess} />
@@ -109,19 +112,69 @@ export function Navbar() {
             <>
               <Link
                 href="/login"
-                className="whitespace-nowrap rounded-full px-3 py-2 text-sm font-semibold text-[#111827] transition-colors duration-75 hover:bg-[#F1F2F4] hover:text-black"
+                className="hidden min-h-11 items-center whitespace-nowrap rounded-xl px-3 py-2 text-sm font-semibold text-[#2B2723] transition-colors duration-75 hover:bg-[#F1EADF] hover:text-[#7A263A] lg:inline-flex"
               >
                 {t("nav.login")}
               </Link>
               <Link
                 href="/register"
-                className="whitespace-nowrap rounded-full bg-gradient-to-r from-[#E60028] to-[#c90022] px-5 py-2 text-sm font-bold text-white shadow-lg shadow-[#E60028]/25 transition-all duration-150 hover:-translate-y-0.5 hover:shadow-[#E60028]/35"
+                className="hidden min-h-11 items-center whitespace-nowrap rounded-xl bg-[#7A263A] px-5 py-2 text-sm font-bold text-white shadow-[0_8px_20px_rgba(122,38,58,0.18)] transition-colors duration-150 hover:bg-[#5A1C2B] lg:inline-flex"
               >
                 {t("nav.register")}
               </Link>
             </>
           )}
+          {!hasAdminAccess ? (
+            <button
+              type="button"
+              aria-label={isPublicMenuOpen ? "Close navigation" : "Open navigation"}
+              aria-expanded={isPublicMenuOpen}
+              aria-controls="public-mobile-navigation"
+              onClick={() => setIsPublicMenuOpen((open) => !open)}
+              className="grid h-11 w-11 place-items-center rounded-xl border border-[#DED5C8] bg-[#FFFCF5] text-[#2B2723] transition hover:border-[#7A263A] hover:text-[#7A263A] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#7A263A] lg:hidden"
+            >
+              <Icon name={isPublicMenuOpen ? "x" : "menu"} size={20} aria-hidden="true" />
+            </button>
+          ) : null}
         </div>
+        {!hasAdminAccess && isPublicMenuOpen ? (
+          <div id="public-mobile-navigation" className="col-span-2 mt-3 border-t border-[#DED5C8] pt-3 lg:hidden">
+            <div className="grid gap-1">
+              {topNavItems.map((item) => {
+                const originalHref = item.originalHref ?? item.href;
+                const isActive = isActiveNavItem(pathname, originalHref, item.href, hasStaffAccess);
+
+                return (
+                  <Link
+                    key={item.href}
+                    href={item.href}
+                    aria-current={isActive ? "page" : undefined}
+                    onClick={() => setIsPublicMenuOpen(false)}
+                    className={`flex min-h-11 items-center justify-between rounded-xl px-4 py-2.5 text-sm font-semibold transition ${
+                      isActive ? "bg-[#F1EADF] text-[#7A263A]" : "text-[#2B2723] hover:bg-[#F7F3EA] hover:text-[#7A263A]"
+                    }`}
+                  >
+                    {t(item.labelKey)}
+                    <Icon name="chevron-right" size={16} aria-hidden="true" />
+                  </Link>
+                );
+              })}
+            </div>
+            <div className="mt-3 flex items-center justify-between gap-3 border-t border-[#DED5C8] pt-3">
+              <LanguageToggle />
+              {!isInitializing && !isAuthenticated ? (
+                <div className="flex items-center gap-2">
+                  <Link href="/login" onClick={() => setIsPublicMenuOpen(false)} className="inline-flex min-h-11 items-center rounded-xl px-4 text-sm font-semibold text-[#2B2723] hover:bg-[#F1EADF] hover:text-[#7A263A]">
+                    {t("nav.login")}
+                  </Link>
+                  <Link href="/register" onClick={() => setIsPublicMenuOpen(false)} className="inline-flex min-h-11 items-center rounded-xl bg-[#7A263A] px-4 text-sm font-bold text-white hover:bg-[#5A1C2B]">
+                    {t("nav.register")}
+                  </Link>
+                </div>
+              ) : null}
+            </div>
+          </div>
+        ) : null}
       </nav>
     </header>
   );
@@ -138,7 +191,7 @@ function NotificationMenu({ compact = false }: { compact?: boolean }) {
         type="button"
         aria-label={t("notifications.open")}
         title={t("notifications.open")}
-        className="relative grid h-9 w-9 place-items-center rounded-full text-[#111827] transition-colors duration-150 hover:bg-[#F1F2F4] hover:text-black focus:outline-none focus:ring-4 focus:ring-black/10"
+        className="relative grid h-9 w-9 place-items-center rounded-full text-[#2B2723] transition-colors duration-150 hover:bg-[#F1F2F4] hover:text-black focus:outline-none focus:ring-4 focus:ring-black/10"
       >
         <Icon name="bell" size={18} aria-hidden="true" />
         {unreadCount ? (

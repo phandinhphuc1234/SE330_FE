@@ -29,7 +29,7 @@ export function Select({
       {label && (
         <label
           htmlFor={selectId}
-          className="mb-2 block text-sm font-bold text-black"
+          className="mb-2 block text-sm font-bold text-[#2B2723]"
         >
           {label}
         </label>
@@ -39,7 +39,7 @@ export function Select({
       <div className="relative">
         {/* Left Icon */}
         {leftIcon && (
-          <div className="absolute left-4 top-1/2 -translate-y-1/2 text-[#6B7280] pointer-events-none">
+          <div className="absolute left-4 top-1/2 -translate-y-1/2 text-[#776D63] pointer-events-none">
             {leftIcon}
           </div>
         )}
@@ -48,7 +48,7 @@ export function Select({
         <select
           id={selectId}
           className={`
-            w-full h-12 rounded-lg border bg-white px-4 text-black outline-none
+            w-full h-12 rounded-xl border bg-[#FFFCF5] px-4 text-[#171412] outline-none
             appearance-none cursor-pointer
             transition-all duration-200
             ${leftIcon ? "pl-12" : ""}
@@ -56,7 +56,7 @@ export function Select({
             ${
               error
                 ? "border-red-500 focus:border-red-500 focus:ring-4 focus:ring-red-500/20"
-                : "border-[#D9DCE8] focus:border-2 focus:border-black focus:shadow-[0_0_0_4px_rgba(0,0,0,0.1)]"
+                : "border-[#D8CCBC] focus:border-[#7A263A] focus:shadow-[0_0_0_4px_rgba(122,38,58,0.1)]"
             }
             ${props.disabled ? "bg-gray-100 cursor-not-allowed" : ""}
           `}
@@ -66,7 +66,7 @@ export function Select({
         </select>
 
         {/* Dropdown Arrow */}
-        <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none text-[#6B7280]">
+        <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none text-[#776D63]">
           <svg
             className="h-5 w-5"
             fill="none"
@@ -87,7 +87,7 @@ export function Select({
       {(error || helperText) && (
         <p
           className={`mt-2 text-xs font-semibold ${
-            error ? "text-red-600 animate-fade-up" : "text-[#6B7280]"
+            error ? "text-red-600 animate-fade-up" : "text-[#776D63]"
           }`}
         >
           {error || helperText}

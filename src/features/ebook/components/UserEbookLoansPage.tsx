@@ -122,8 +122,8 @@ export function UserEbookLoansPage() {
           onClick={() => { setShowHistory(false); setMessage(""); setError(""); }}
           className={`px-4 py-1.5 rounded-full text-sm font-semibold transition-colors ${
             !showHistory
-              ? "bg-[#000054] text-white"
-              : "border border-[#EDEDF2] text-[#555] hover:bg-gray-50"
+              ? "bg-[#2B2723] text-white"
+              : "border border-[#DED5C8] text-[#555] hover:bg-gray-50"
           }`}
         >
           Active loans
@@ -132,8 +132,8 @@ export function UserEbookLoansPage() {
           onClick={() => { setShowHistory(true); setMessage(""); setError(""); }}
           className={`px-4 py-1.5 rounded-full text-sm font-semibold transition-colors ${
             showHistory
-              ? "bg-[#000054] text-white"
-              : "border border-[#EDEDF2] text-[#555] hover:bg-gray-50"
+              ? "bg-[#2B2723] text-white"
+              : "border border-[#DED5C8] text-[#555] hover:bg-gray-50"
           }`}
         >
           History
@@ -149,9 +149,9 @@ export function UserEbookLoansPage() {
 
       {/* Table */}
       {!isLoading && (
-        <div className="overflow-x-auto rounded-xl border border-[#EDEDF2]">
+        <div className="overflow-x-auto rounded-xl border border-[#DED5C8]">
           <table className="w-full min-w-[860px] border-collapse bg-white text-left text-sm">
-            <thead className="bg-[#000054] text-white">
+            <thead className="bg-[#2B2723] text-white">
               <tr>
                 {["Book", "ISBN", "Borrowed", "Expires", "Time left", "Status", "Renewals", "Action"].map(
                   (h) => (
@@ -177,15 +177,15 @@ export function UserEbookLoansPage() {
                   const expiryDate = loan.expiredAt || loan.expiresAt;
 
                   return (
-                    <tr key={id} className="border-t border-[#EDEDF2] hover:bg-[#F8F9FA] transition-colors">
-                      <td className="px-4 py-3 font-medium text-[#000054] max-w-[220px]">
+                    <tr key={id} className="border-t border-[#DED5C8] hover:bg-[#F7F3EA] transition-colors">
+                      <td className="px-4 py-3 font-medium text-[#2B2723] max-w-[220px]">
                         <div className="truncate" title={loan.bookTitle}>
                           {loan.bookTitle ?? "–"}
                         </div>
                         {isActive && loan.bookId ? (
                           <Link
                             href={`/books/${loan.bookId}/read`}
-                            className="mt-1 inline-flex items-center gap-1 text-xs text-[#337AB7] hover:underline"
+                            className="mt-1 inline-flex items-center gap-1 text-xs text-[#7A263A] hover:underline"
                           >
                             Read now
                           </Link>
@@ -222,7 +222,7 @@ export function UserEbookLoansPage() {
                             {loan.bookId ? (
                               <Link
                                 href={`/books/${loan.bookId}/read`}
-                                className="rounded-lg bg-[#000054] px-3 py-1 text-xs font-semibold text-white transition-colors hover:bg-[#E60028]"
+                                className="rounded-lg bg-[#2B2723] px-3 py-1 text-xs font-semibold text-white transition-colors hover:bg-[#7A263A]"
                               >
                                 Read
                               </Link>
@@ -231,7 +231,7 @@ export function UserEbookLoansPage() {
                               <button
                                 disabled={isActioning}
                                 onClick={() => handleRenew(loan)}
-                                className="rounded-lg border border-[#000054] px-3 py-1 text-xs font-semibold text-[#000054] hover:bg-[#000054] hover:text-white transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
+                                className="rounded-lg border border-[#2B2723] px-3 py-1 text-xs font-semibold text-[#2B2723] hover:bg-[#2B2723] hover:text-white transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
                               >
                                 {isActioning ? "..." : "Renew"}
                               </button>

@@ -57,14 +57,14 @@ export function AdminReceiptDetailPage() {
           <button
             onClick={handlePrint}
             disabled={!receipt}
-            className="inline-flex items-center gap-2 rounded-full border border-[#D9DCE8] bg-white px-5 py-3 text-sm font-bold text-[#000054] transition-all hover:-translate-y-0.5 hover:shadow-lg disabled:opacity-50"
+            className="inline-flex items-center gap-2 rounded-full border border-[#D8CCBC] bg-white px-5 py-3 text-sm font-bold text-[#2B2723] transition-all hover:-translate-y-0.5 hover:shadow-lg disabled:opacity-50"
           >
             <Icon name="printer" size={17} />
             Print Receipt
           </button>
           <Link
             href="/admin/payments"
-            className="inline-flex items-center justify-center gap-2 rounded-full bg-[#111827] px-5 py-3 text-sm font-bold text-white transition-all hover:-translate-y-0.5 hover:bg-black"
+            className="inline-flex items-center justify-center gap-2 rounded-full bg-[#2B2723] px-5 py-3 text-sm font-bold text-white transition-all hover:-translate-y-0.5 hover:bg-black"
           >
             Back to Dashboard
           </Link>
@@ -101,37 +101,37 @@ export function AdminReceiptDetailPage() {
               <div>
                 <div className="flex items-center gap-2 text-[#B30D2D]">
                   <Icon name="book-open" size={32} />
-                  <span className="font-serif text-2xl font-black tracking-tight text-[#0B1026]">ATHENAEUM</span>
+                  <span className="font-serif text-2xl font-black tracking-tight text-[#171412]">ATHENAEUM</span>
                 </div>
                 <p className="mt-2 text-sm font-semibold text-[#59637A]">Secure Library Management System</p>
               </div>
               <div className="text-left md:text-right">
-                <h1 className="font-serif text-3xl font-bold text-[#0B1026]">OFFICIAL RECEIPT</h1>
-                <p className="mt-1 font-mono text-sm font-bold text-[#6B7280]">#{receipt.receiptNumber}</p>
+                <h1 className="font-serif text-3xl font-bold text-[#171412]">OFFICIAL RECEIPT</h1>
+                <p className="mt-1 font-mono text-sm font-bold text-[#776D63]">#{receipt.receiptNumber}</p>
               </div>
             </div>
 
             {/* Bill To / Info */}
             <div className="grid gap-8 py-8 md:grid-cols-2">
               <div>
-                <p className="text-[10px] font-black uppercase tracking-wider text-[#6B7280]">Billed To</p>
+                <p className="text-[10px] font-black uppercase tracking-wider text-[#776D63]">Billed To</p>
                 <div className="mt-2">
-                  <p className="text-lg font-bold text-[#0B1026]">{receipt.memberName}</p>
+                  <p className="text-lg font-bold text-[#171412]">{receipt.memberName}</p>
                   <p className="text-sm font-medium text-[#59637A]">{receipt.memberEmail}</p>
-                  <p className="text-xs font-semibold text-[#6B7280] mt-1">Member ID: #{receipt.memberId}</p>
+                  <p className="text-xs font-semibold text-[#776D63] mt-1">Member ID: #{receipt.memberId}</p>
                 </div>
               </div>
               <div className="md:text-right">
-                <p className="text-[10px] font-black uppercase tracking-wider text-[#6B7280]">Payment Details</p>
+                <p className="text-[10px] font-black uppercase tracking-wider text-[#776D63]">Payment Details</p>
                 <div className="mt-2 space-y-1">
                   <p className="text-sm font-semibold text-[#59637A]">
-                    Date: <span className="text-[#0B1026]">{formatDateTime(receipt.paidAt)}</span>
+                    Date: <span className="text-[#171412]">{formatDateTime(receipt.paidAt)}</span>
                   </p>
                   <p className="text-sm font-semibold text-[#59637A]">
-                    Code: <span className="text-[#0B1026]">{receipt.paymentCode}</span>
+                    Code: <span className="text-[#171412]">{receipt.paymentCode}</span>
                   </p>
                   <p className="text-sm font-semibold text-[#59637A]">
-                    Provider: <span className="text-[#0B1026] uppercase">{receipt.provider}</span>
+                    Provider: <span className="text-[#171412] uppercase">{receipt.provider}</span>
                   </p>
                 </div>
               </div>
@@ -141,27 +141,27 @@ export function AdminReceiptDetailPage() {
             <div className="mt-4 overflow-hidden rounded-2xl border border-[#D8DEE8]">
               <table className="w-full text-left text-sm">
                 <thead>
-                  <tr className="bg-[#F8FAFC] border-b border-[#D8DEE8]">
-                    <th className="px-6 py-4 font-black uppercase tracking-wider text-[#6B7280] text-[10px]">Description</th>
-                    <th className="px-6 py-4 text-right font-black uppercase tracking-wider text-[#6B7280] text-[10px]">Amount</th>
+                  <tr className="bg-[#FBF8F1] border-b border-[#D8DEE8]">
+                    <th className="px-6 py-4 font-black uppercase tracking-wider text-[#776D63] text-[10px]">Description</th>
+                    <th className="px-6 py-4 text-right font-black uppercase tracking-wider text-[#776D63] text-[10px]">Amount</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-[#D8DEE8]">
                   <tr>
                     <td className="px-6 py-6">
-                      <p className="font-bold text-[#0B1026] text-base">{receipt.itemTitle}</p>
+                      <p className="font-bold text-[#171412] text-base">{receipt.itemTitle}</p>
                       <p className="text-xs font-semibold text-[#59637A] mt-1">
                         Purpose: {receipt.purpose.replace(/_/g, " ")} • {receipt.targetType} #{receipt.targetId}
                       </p>
                     </td>
-                    <td className="px-6 py-6 text-right font-black text-[#0B1026] text-lg">
+                    <td className="px-6 py-6 text-right font-black text-[#171412] text-lg">
                       {formatCurrency(receipt.amount, receipt.currency)}
                     </td>
                   </tr>
                 </tbody>
                 <tfoot>
-                  <tr className="bg-[#F8FAFC]">
-                    <td className="px-6 py-4 text-right font-black uppercase tracking-wider text-[#6B7280] text-[10px]">Total Paid</td>
+                  <tr className="bg-[#FBF8F1]">
+                    <td className="px-6 py-4 text-right font-black uppercase tracking-wider text-[#776D63] text-[10px]">Total Paid</td>
                     <td className="px-6 py-4 text-right font-black text-[#B30D2D] text-xl">
                       {formatCurrency(receipt.amount, receipt.currency)}
                     </td>
@@ -177,7 +177,7 @@ export function AdminReceiptDetailPage() {
                   <Icon name="check-circle" size={14} />
                   Payment {receipt.status}
                 </span>
-                <p className="mt-3 text-[10px] font-bold text-[#6B7280] uppercase tracking-widest">
+                <p className="mt-3 text-[10px] font-bold text-[#776D63] uppercase tracking-widest">
                   Transaction ID: {receipt.providerTransactionId || "N/A"}
                 </p>
               </div>

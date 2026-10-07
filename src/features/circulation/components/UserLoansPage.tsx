@@ -101,9 +101,9 @@ export function UserLoansPage() {
         {message ? <Notice tone="success" message={message} /> : null}
         {error ? <Notice tone="error" message={error} /> : null}
       </div>
-      <div className="mt-6 overflow-x-auto rounded-xl border border-[#EDEDF2]">
+      <div className="mt-6 overflow-x-auto rounded-xl border border-[#DED5C8]">
         <table className="w-full min-w-[980px] border-collapse bg-white text-left text-sm">
-          <thead className="bg-[#000054] text-white">
+          <thead className="bg-[#2B2723] text-white">
             <tr>
               {text.headings.map((heading) => (
                 <th key={heading} className="px-4 py-3 font-bold">{heading}</th>
@@ -117,14 +117,14 @@ export function UserLoansPage() {
               const isActive = loan.status === "ACTIVE";
 
               return (
-                <tr key={id || loan.barcode || loan.ebookLoanId} className="border-t border-[#EDEDF2] hover:bg-[#F8FAFC] transition-colors group">
+                <tr key={id || loan.barcode || loan.ebookLoanId} className="border-t border-[#DED5C8] hover:bg-[#FBF8F1] transition-colors group">
                   <td className="px-4 py-4">
                     <div className="flex items-start gap-3">
                       <div className={`mt-0.5 grid h-8 w-8 shrink-0 place-items-center rounded-lg ${isEbook ? 'bg-indigo-50 text-indigo-600' : 'bg-rose-50 text-rose-600'}`}>
                         <Icon name={isEbook ? "smartphone" : "book"} size={16} />
                       </div>
                       <div>
-                        <div className="font-bold text-[#0B1026] line-clamp-2 max-w-[280px]" title={titleOf(loan)}>
+                        <div className="font-bold text-[#171412] line-clamp-2 max-w-[280px]" title={titleOf(loan)}>
                           {titleOf(loan)}
                         </div>
                         <div className="mt-1.5 flex items-center gap-2">
@@ -137,7 +137,7 @@ export function UserLoansPage() {
                           {isEbook && isActive && loan.bookId && (
                             <Link
                               href={`/books/${loan.bookId}/read`}
-                              className="inline-flex items-center gap-1 text-[10px] font-bold text-[#337AB7] hover:text-[#000054] transition hover:underline border-l border-slate-200 pl-2"
+                              className="inline-flex items-center gap-1 text-[10px] font-bold text-[#7A263A] hover:text-[#2B2723] transition hover:underline border-l border-slate-200 pl-2"
                             >
                               <Icon name="book-open" size={12} />
                               {locale === "vi" ? "Đọc ngay" : "Read now"}
@@ -164,7 +164,7 @@ export function UserLoansPage() {
                             type="button"
                             onClick={() => void handleRenew(id)}
                             disabled={Boolean(renewingBorrowId)}
-                            className="rounded-lg border border-[#D8DEE8] bg-white px-3 py-1.5 text-xs font-bold text-[#0B1026] transition hover:border-[#337AB7] hover:text-[#337AB7] disabled:cursor-wait disabled:opacity-55"
+                            className="rounded-lg border border-[#D8DEE8] bg-white px-3 py-1.5 text-xs font-bold text-[#171412] transition hover:border-[#7A263A] hover:text-[#7A263A] disabled:cursor-wait disabled:opacity-55"
                           >
                             {renewingBorrowId === id ? text.renewing : text.renew}
                           </button>
