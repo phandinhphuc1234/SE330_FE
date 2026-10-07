@@ -37,7 +37,7 @@ export function CatalogShell({ eyebrow, title, description, children, actions, p
 
   return (
     <ProtectedGate enabled={protectedPage}>
-      <div className={`min-h-dvh ${warm ? "bg-[#F7F3EA]" : "bg-[#F8F9FA]"}`}>
+      <div className="min-h-dvh bg-[#F7F7F7]">
         <Navbar />
         <main id="main-content" tabIndex={-1} className={`mx-auto min-h-[calc(100dvh-4.5rem)] w-full px-5 pt-6 pb-12 outline-none lg:px-8 ${wide ? "max-w-[calc(100vw-2rem)] 2xl:max-w-[1720px]" : "max-w-7xl"}`}>
           {frameless ? (
@@ -46,9 +46,9 @@ export function CatalogShell({ eyebrow, title, description, children, actions, p
                 <section className="px-1 py-5 md:px-2">
                   <div className="flex flex-col justify-between gap-5 lg:flex-row lg:items-end">
                     <div>
-                      <p className={`text-sm font-bold uppercase tracking-wide ${warm ? "text-[#7A263A]" : "text-[#337AB7]"}`}>{eyebrow}</p>
-                      <h1 className={`mt-3 text-4xl tracking-tight md:text-5xl ${warm ? "font-serif font-semibold text-[#171412]" : "font-black text-[#111827]"}`}>{title}</h1>
-                      <p className={`mt-3 max-w-3xl leading-7 ${warm ? "text-[#6F675E]" : "text-[#333333]"}`}>{description}</p>
+                      <p className="text-sm font-bold uppercase tracking-wide text-[#404040]">{eyebrow}</p>
+                      <h1 className={`mt-3 text-4xl tracking-tight text-[#111111] md:text-5xl ${warm ? "font-serif font-semibold" : "font-black"}`}>{title}</h1>
+                      <p className="mt-3 max-w-3xl leading-7 text-[#525252]">{description}</p>
                     </div>
                     {actions ? <div className="flex flex-wrap gap-3">{actions}</div> : null}
                   </div>
@@ -183,7 +183,7 @@ export function PrimaryAction({ href, children }: { href: string; children: Reac
   return (
     <Link
       href={href}
-      className="rounded-full bg-[#E60028] px-5 py-3 text-sm font-bold text-white shadow-lg shadow-[#E60028]/20 transition hover:-translate-y-0.5"
+      className="rounded-full bg-black px-5 py-3 text-sm font-bold text-white shadow-lg shadow-black/20 transition hover:-translate-y-0.5 hover:bg-[#262626]"
     >
       {children}
     </Link>
@@ -194,7 +194,7 @@ export function SecondaryAction({ href, children }: { href: string; children: Re
   return (
     <Link
       href={href}
-      className="rounded-full border border-[#D9DCE8] px-5 py-3 text-sm font-bold text-[#000054] transition hover:border-[#337AB7] hover:text-[#E60028]"
+      className="rounded-full border border-[#A3A3A3] bg-white px-5 py-3 text-sm font-bold text-[#171717] transition hover:border-black hover:bg-black hover:text-white"
     >
       {children}
     </Link>
@@ -250,10 +250,10 @@ function DismissibleNotice({
 
   const classes =
     tone === "error"
-      ? "border-rose-200 bg-rose-50 text-rose-700"
+      ? "border-black bg-[#E5E5E5] text-black"
       : tone === "success"
-        ? "border-emerald-200 bg-emerald-50 text-emerald-700"
-        : "border-[#D9DCE8] bg-[#F8F9FA] text-[#333333]";
+        ? "border-[#737373] bg-[#F0F0F0] text-[#171717]"
+        : "border-[#D4D4D4] bg-[#F7F7F7] text-[#333333]";
 
   return (
     <div

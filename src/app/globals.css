@@ -1,15 +1,16 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #111827;
-  --brand-ink: #111827;
-  --brand-ink-soft: #27272a;
+  --background: #f7f7f7;
+  --foreground: #0a0a0a;
+  --brand-ink: #0a0a0a;
+  --brand-ink-soft: #262626;
   --brand-paper: #ffffff;
-  --brand-muted: #f6f6f3;
-  --brand-border: #dedede;
-  --brand-red: #e60028;
-  --brand-red-dark: #c90022;
+  --brand-muted: #f2f2f2;
+  --brand-border: #d4d4d4;
+  /* Legacy names are retained for existing components, but the active theme is monochrome. */
+  --brand-red: #111111;
+  --brand-red-dark: #000000;
 }
 
 @theme inline {
@@ -317,7 +318,7 @@ a {
    ============================================ */
 
 .gradient-primary {
-  background: linear-gradient(135deg, #e60028 0%, #c90022 100%);
+  background: linear-gradient(135deg, #111111 0%, #000000 100%);
 }
 
 .gradient-secondary {
@@ -325,7 +326,7 @@ a {
 }
 
 .gradient-success {
-  background: linear-gradient(135deg, #28a745 0%, #22863a 100%);
+  background: linear-gradient(135deg, #3f3f46 0%, #18181b 100%);
 }
 
 .gradient-navy {
@@ -334,7 +335,7 @@ a {
 
 .gradient-mesh {
   background: radial-gradient(at 15% 10%, rgba(255, 255, 255, 0.14) 0%, transparent 50%),
-    radial-gradient(at 85% 90%, rgba(230, 0, 40, 0.12) 0%, transparent 50%),
+    radial-gradient(at 85% 90%, rgba(255, 255, 255, 0.08) 0%, transparent 50%),
     linear-gradient(135deg, #050505 0%, #171717 100%);
 }
 
@@ -354,7 +355,7 @@ a {
 
 /* Text gradients */
 .text-gradient-primary {
-  background: linear-gradient(135deg, #e60028, #c90022);
+  background: linear-gradient(135deg, #000000, #525252);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -368,7 +369,7 @@ a {
 }
 
 .text-gradient-rainbow {
-  background: linear-gradient(135deg, #e60028, #111827, #52525b);
+  background: linear-gradient(135deg, #000000, #262626, #737373);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -408,7 +409,7 @@ a {
 
 /* Colored shadows */
 .shadow-primary {
-  box-shadow: 0 8px 24px rgba(230, 0, 40, 0.25);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
 }
 
 .shadow-secondary {
@@ -416,7 +417,7 @@ a {
 }
 
 .shadow-success {
-  box-shadow: 0 8px 24px rgba(40, 167, 69, 0.25);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.18);
 }
 
 /* ============================================
@@ -513,7 +514,7 @@ a {
 }
 
 .hover-glow:hover {
-  box-shadow: 0 0 20px rgba(230, 0, 40, 0.4);
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.24);
 }
 
 /* Scrollbar styling */
@@ -537,17 +538,17 @@ a {
 }
 
 /* ============================================
-   MONOCHROME BRAND PASS
-   Keeps the old blue/navy utility classes from making
-   the interface look mixed while red stays reserved for actions.
+   MONOCHROME THEME
+   Normalizes legacy blue, red, burgundy, green, gold and warm-paper
+   utility classes into a single black, white and gray hierarchy.
    ============================================ */
 
 .auth-link-blue {
-  color: #337ab7;
+  color: #171717;
 }
 
 .auth-link-blue:hover {
-  color: #e60028;
+  color: #000000;
 }
 
 [class~="text-[#000054]"],
@@ -676,6 +677,452 @@ button[class~="rounded-full"][class~="border-[#D9DCE8]"]:not(:disabled):hover {
 .auth-link-blue,
 .auth-link-blue:hover {
   -webkit-text-fill-color: currentColor;
+}
+
+/* Catch remaining base arbitrary colors without touching hover/focus-only utilities. */
+[class^="text-[#"],
+[class*=" text-[#"] {
+  color: #171717;
+}
+
+[class^="bg-[#"],
+[class*=" bg-[#"] {
+  background-color: #f7f7f7;
+}
+
+[class^="border-[#"],
+[class*=" border-[#"] {
+  border-color: #d4d4d4;
+}
+
+/* Dark legacy accents become the same near-black ink/action color. */
+[class~="text-[#000054]"],
+[class~="text-[#0B1026]"],
+[class~="text-[#071330]"],
+[class~="text-[#337AB7]"],
+[class~="text-[#337ab7]"],
+[class~="text-[#E60028]"],
+[class~="text-[#e60028]"],
+[class~="text-[#C1122F]"],
+[class~="text-[#B30D2D]"],
+[class~="text-[#7A263A]"],
+[class~="text-[#5A1C2B]"],
+[class~="text-[#A33A3A]"],
+[class~="text-[#7F2D2D]"],
+[class~="text-[#243B53]"],
+[class~="text-[#173A73]"],
+[class~="text-[#2F5D50]"],
+[class~="text-[#2F7D47]"],
+[class~="text-[#28a745]"],
+[class~="text-[#B8872B]"],
+[class~="text-[#8A641F]"],
+[class~="text-[#854F0B]"] {
+  color: #171717;
+}
+
+[class~="text-[#FFFFFF]"],
+[class~="text-[#ffffff]"],
+[class~="text-[#FFFCF5]"],
+[class~="text-[#F7F3EA]"],
+[class~="text-[#E1C38B]"],
+[class~="text-[#51D2FF]"] {
+  color: #ffffff;
+}
+
+[class~="text-[#DFD4C5]"],
+[class~="text-[#D4C8B7]"],
+[class~="text-[#D4D4D4]"],
+[class~="text-[#E8E0D4]"],
+[class~="text-[#CABBA5]/60"] {
+  color: #d4d4d4;
+}
+
+/* Muted copy keeps hierarchy without introducing a hue. */
+[class~="text-[#6F675E]"],
+[class~="text-[#59637A]"],
+[class~="text-[#6B7280]"],
+[class~="text-[#61708F]"],
+[class~="text-[#51617E]"],
+[class~="text-[#64708B]"],
+[class~="text-[#7A8AA6]"],
+[class~="text-[#7B736B]"],
+[class~="text-[#4B5563]"] {
+  color: #525252;
+}
+
+[class~="text-[#9A9187]"],
+[class~="text-[#9CA3AF]"],
+[class~="text-[#94A3B8]"],
+[class~="text-[#A8AFBD]"] {
+  color: #737373;
+}
+
+/* Primary fills and status fills use black; status meaning remains in icon and copy. */
+[class~="bg-[#000054]"],
+[class~="bg-[#0B1026]"],
+[class~="bg-[#071330]"],
+[class~="bg-[#337AB7]"],
+[class~="bg-[#337ab7]"],
+[class~="bg-[#E60028]"],
+[class~="bg-[#e60028]"],
+[class~="bg-[#c90022]"],
+[class~="bg-[#C1122F]"],
+[class~="bg-[#B30D2D]"],
+[class~="bg-[#910A24]"],
+[class~="bg-[#7A263A]"],
+[class~="bg-[#5A1C2B]"],
+[class~="bg-[#A33A3A]"],
+[class~="bg-[#7F2D2D]"],
+[class~="bg-[#243B53]"],
+[class~="bg-[#173A73]"],
+[class~="bg-[#2F5D50]"],
+[class~="bg-[#2F7D47]"],
+[class~="bg-[#28a745]"],
+[class~="bg-[#B8872B]"],
+[class~="bg-[#8A641F]"],
+[class~="bg-[#111827]"],
+[class~="bg-[#26231F]"],
+[class~="bg-[#27231F]"],
+[class~="bg-[#27211C]"],
+[class~="bg-[#262626]"],
+[class~="bg-[#404040]"],
+[class~="bg-[#151515]"],
+[class~="bg-[#050726]"],
+[class~="bg-[#050816]"],
+[class~="bg-[#000080]"],
+[class~="bg-[#090970]"],
+[class~="bg-[#15264C]"],
+[class~="bg-[#2E7D62]"],
+[class~="bg-[#3B6D11]"],
+[class~="bg-[#4CAF50]"] {
+  background-color: #171717;
+}
+
+[class~="bg-[#000054]/5"],
+[class~="bg-[#000054]/8"],
+[class~="bg-[#000054]/10"],
+[class~="bg-[#000054]/12"],
+[class~="bg-[#337AB7]/5"],
+[class~="bg-[#337AB7]/8"],
+[class~="bg-[#337AB7]/10"],
+[class~="bg-[#337AB7]/12"],
+[class~="bg-[#28A745]/10"],
+[class~="bg-[#28A745]/12"] {
+  background-color: rgba(0, 0, 0, 0.07);
+}
+
+[class~="bg-[#211B17]/80"] {
+  background-color: rgba(0, 0, 0, 0.8);
+}
+
+[class~="bg-[#0B1026]/55"] {
+  background-color: rgba(0, 0, 0, 0.55);
+}
+
+/* Tinted and warm surfaces collapse into neutral paper levels. */
+[class~="bg-[#F7F3EA]"],
+[class~="bg-[#F8F9FA]"],
+[class~="bg-[#F8FAFC]"],
+[class~="bg-[#FBF8F1]"],
+[class~="bg-[#FFFCF5]"],
+[class~="bg-[#F6F8FC]"],
+[class~="bg-[#F4F6FA]"] {
+  background-color: #f7f7f7;
+}
+
+[class~="bg-[#EFE6D6]"],
+[class~="bg-[#F3E5E8]"],
+[class~="bg-[#E5F0EB]"],
+[class~="bg-[#F4E8CC]"],
+[class~="bg-[#F6E4E1]"],
+[class~="bg-[#E7EEF4]"],
+[class~="bg-[#EDEDF2]"],
+[class~="bg-[#F1F2F4]"],
+[class~="bg-[#EEF1F6]"],
+[class~="bg-[#F1F5F9]"],
+[class~="bg-[#F3F4F6]"],
+[class~="bg-[#ECEBE8]"] {
+  background-color: #f0f0f0;
+}
+
+[class~="bg-[#FFF9F8]"],
+[class~="bg-[#F9FAFB]"] {
+  background-color: #fafafa;
+}
+
+[class~="bg-[#F3EEE5]"],
+[class~="bg-[#EEF2F7]"],
+[class~="bg-[#ECFDF5]"] {
+  background-color: #eeeeee;
+}
+
+/* Borders share two neutral strengths. */
+[class~="border-[#DED5C8]"],
+[class~="border-[#E5DCD0]"],
+[class~="border-[#EDEDF2]"],
+[class~="border-[#D9DCE8]"],
+[class~="border-[#D8DEE8]"],
+[class~="border-[#D5DBE8]"],
+[class~="border-[#E1E6F0]"],
+[class~="border-[#E5E7EB]"],
+[class~="border-[#E5E8F0]"] {
+  border-color: #d4d4d4;
+}
+
+[class~="border-[#D9E1EE]"],
+[class~="border-[#C9D1DE]"],
+[class~="border-[#D1D5DB]"],
+[class~="border-[#D8CCBC]"],
+[class~="border-[#E4EAF4]"],
+[class~="border-[#E8E0D5]"],
+[class~="border-[#E2B8B2]"] {
+  border-color: #d4d4d4;
+}
+
+[class~="border-[#CBBEAE]"],
+[class~="border-[#CABBA5]"],
+[class~="border-[#AAB7CA]"],
+[class~="border-[#7A263A]"],
+[class~="border-[#E60028]"],
+[class~="border-[#e60028]"],
+[class~="border-[#337AB7]"],
+[class~="border-[#000054]"] {
+  border-color: #737373;
+}
+
+/* Tailwind semantic colors are intentionally rendered as monochrome states. */
+[class~="text-rose-600"], [class~="text-rose-700"],
+[class~="text-red-600"], [class~="text-red-700"],
+[class~="text-emerald-600"], [class~="text-emerald-700"],
+[class~="text-green-600"], [class~="text-green-700"], [class~="text-green-800"],
+[class~="text-amber-600"], [class~="text-amber-700"], [class~="text-amber-800"], [class~="text-amber-900"],
+[class~="text-yellow-600"], [class~="text-blue-700"],
+[class~="text-indigo-600"], [class~="text-indigo-700"], [class~="text-purple-700"] {
+  color: #171717;
+}
+
+[class~="bg-rose-50"], [class~="bg-rose-100"], [class~="bg-rose-200"],
+[class~="bg-red-50"], [class~="bg-red-100"],
+[class~="bg-emerald-50"], [class~="bg-emerald-100"],
+[class~="bg-green-50"], [class~="bg-green-100"],
+[class~="bg-amber-50"], [class~="bg-amber-100"], [class~="bg-yellow-100"],
+[class~="bg-blue-50"], [class~="bg-indigo-50"], [class~="bg-indigo-100"], [class~="bg-purple-50"] {
+  background-color: #f0f0f0;
+}
+
+[class~="bg-rose-500"], [class~="bg-emerald-500"], [class~="bg-emerald-600"],
+[class~="bg-amber-500"], [class~="bg-indigo-500"], [class~="bg-sky-500"], [class~="bg-violet-500"] {
+  background-color: #171717;
+}
+
+[class~="border-rose-200"], [class~="border-rose-300"],
+[class~="border-red-500"], [class~="border-emerald-200"], [class~="border-emerald-300"],
+[class~="border-green-500"], [class~="border-amber-200"], [class~="border-amber-300"],
+[class~="border-yellow-500"], [class~="border-blue-200"], [class~="border-indigo-200"],
+[class~="border-purple-200"] {
+  border-color: #a3a3a3;
+}
+
+[class~="ring-rose-200"], [class~="ring-red-500"], [class~="ring-red-600"],
+[class~="ring-emerald-200"], [class~="ring-amber-200"], [class~="ring-amber-400"],
+[class~="ring-green-600"] {
+  --tw-ring-color: #525252;
+}
+
+/* Normalize interactive variants and gradient stops. */
+[class~="hover:text-[#E60028]"]:hover,
+[class~="hover:text-[#e60028]"]:hover,
+[class~="hover:text-[#7A263A]"]:hover,
+[class~="hover:text-[#5A1C2B]"]:hover,
+[class~="hover:text-[#A33A3A]"]:hover,
+[class~="hover:text-[#2F5D50]"]:hover,
+[class~="hover:text-[#B8872B]"]:hover {
+  color: #000000;
+}
+
+[class~="hover:text-[#B30D2D]"]:hover,
+[class~="hover:text-[#337AB7]"]:hover,
+[class~="hover:text-[#000054]"]:hover,
+[class~="hover:text-[#111827]"]:hover {
+  color: #000000;
+}
+
+[class~="hover:text-[#5A1C2B]"]:hover,
+[class~="hover:text-[#7F2D2D]"]:hover,
+[class~="hover:text-[#9F0F27]"]:hover,
+[class~="hover:text-[#071330]"]:hover,
+[class~="hover:text-[#0B1026]"]:hover,
+[class~="hover:text-[#2B2723]"]:hover {
+  color: #000000;
+}
+
+[class~="hover:text-[#E1C38B]"]:hover,
+[class~="hover:text-[#51D2FF]"]:hover {
+  color: #ffffff;
+}
+
+[class~="hover:text-[#D4D4D4]"]:hover {
+  color: #d4d4d4;
+}
+
+[class~="hover:bg-[#E60028]"]:hover,
+[class~="hover:bg-[#e60028]"]:hover,
+[class~="hover:bg-[#c90022]"]:hover,
+[class~="hover:bg-[#7A263A]"]:hover,
+[class~="hover:bg-[#5A1C2B]"]:hover,
+[class~="hover:bg-[#A33A3A]"]:hover {
+  background-color: #000000;
+}
+
+[class~="hover:bg-[#910A24]"]:hover,
+[class~="hover:bg-[#B30D2D]"]:hover,
+[class~="hover:bg-[#111827]"]:hover {
+  background-color: #000000;
+}
+
+[class~="hover:bg-[#C90024]"]:hover,
+[class~="hover:bg-[#000080]"]:hover,
+[class~="hover:bg-[#090970]"]:hover,
+[class~="hover:bg-[#151515]"]:hover,
+[class~="hover:bg-[#15264C]"]:hover,
+[class~="hover:bg-[#337AB7]"]:hover,
+[class~="hover:bg-[#9F0F27]"]:hover,
+[class~="hover:bg-[#B30D2D]"]:hover,
+[class~="focus:bg-[#E60028]"]:focus {
+  background-color: #000000;
+}
+
+[class~="hover:bg-[#F3E5E8]"]:hover,
+[class~="hover:bg-[#F6E4E1]"]:hover,
+[class~="hover:bg-[#E5F0EB]"]:hover,
+[class~="hover:bg-[#F4E8CC]"]:hover,
+[class~="hover:bg-[#E7EEF4]"]:hover,
+[class~="hover:bg-[#EFE6D6]"]:hover,
+[class~="hover:bg-[#FBF8F1]"]:hover,
+[class~="hover:bg-[#F1F2F4]"]:hover {
+  background-color: #e5e5e5;
+}
+
+[class~="hover:bg-[#FFF7F8]"]:hover,
+[class~="hover:bg-[#FAFBFE]"]:hover,
+[class~="hover:bg-[#F1F4F9]"]:hover,
+[class~="hover:bg-[#F3F4F6]"]:hover,
+[class~="hover:bg-[#F4F6FA]"]:hover,
+[class~="hover:bg-[#F7F7F5]"]:hover,
+[class~="hover:bg-[#FAFAFA]"]:hover,
+[class~="hover:bg-[#FFF8F6]"]:hover,
+[class~="hover:bg-[#FFF8F9]"]:hover {
+  background-color: #e5e5e5;
+}
+
+[class~="hover:bg-[#E60028]/8"]:hover,
+[class~="hover:bg-[#337AB7]/5"]:hover,
+[class~="hover:bg-[#337AB7]/8"]:hover,
+[class~="hover:bg-[#000054]/5"]:hover,
+[class~="hover:bg-[#000054]/8"]:hover,
+[class~="hover:bg-[#FFFCF5]/10"]:hover {
+  background-color: rgba(0, 0, 0, 0.08);
+}
+
+[class~="hover:border-[#337AB7]"]:hover,
+[class~="hover:border-[#111827]"]:hover,
+[class~="hover:border-[#B30D2D]"]:hover,
+[class~="hover:border-[#AAB7CA]"]:hover,
+[class~="hover:border-[#7A263A]"]:hover,
+[class~="hover:border-[#BDA88F]"]:hover,
+[class~="hover:border-[#C1122F]"]:hover,
+[class~="hover:border-[#CFA9B3]"]:hover,
+[class~="hover:border-[#E1C38B]"]:hover,
+[class~="hover:border-[#E60028]"]:hover,
+[class~="hover:border-[#000054]"]:hover,
+[class~="hover:border-[#D9DCE8]"]:hover,
+[class~="hover:border-[#337AB7]/35"]:hover,
+[class~="hover:border-[#337AB7]/40"]:hover,
+[class~="hover:border-[#000054]/35"]:hover,
+[class~="hover:border-[#000054]/40"]:hover {
+  border-color: #525252;
+}
+
+[class~="focus:ring-[#7A263A]"]:focus,
+[class~="focus:ring-[#7A263A]"]:focus-visible,
+[class~="focus-visible:ring-[#7A263A]"]:focus-visible,
+[class~="focus:ring-[#A33A3A]"]:focus,
+[class~="focus-visible:outline-[#7A263A]"]:focus-visible {
+  --tw-ring-color: #171717;
+  outline-color: #171717;
+}
+
+[class~="focus-visible:outline-[#E1C38B]"]:focus-visible {
+  outline-color: #ffffff;
+}
+
+[class~="focus:border-[#337AB7]"]:focus,
+[class~="focus:border-[#111827]"]:focus,
+[class~="focus:border-[#173A73]"]:focus,
+[class~="focus:border-[#B30D2D]"]:focus,
+[class~="focus:border-[#000054]"]:focus {
+  border-color: #171717;
+}
+
+[class~="focus:ring-[#337AB7]"]:focus,
+[class~="focus-visible:ring-[#E60028]/25"]:focus-visible,
+[class~="focus-visible:ring-[#E60028]/20"]:focus-visible,
+[class~="focus-visible:ring-[#111827]/20"]:focus-visible,
+[class~="focus-visible:ring-[#337AB7]/20"]:focus-visible,
+[class~="focus-visible:ring-[#7F2D2D]"]:focus-visible,
+[class~="focus-visible:ring-[#A33A3A]"]:focus-visible,
+[class~="focus:ring-[#E60028]/30"]:focus,
+[class~="focus:ring-[#E60028]/20"]:focus,
+[class~="focus:ring-[#B30D2D]/10"]:focus,
+[class~="focus:ring-[#C1122F]/20"]:focus {
+  --tw-ring-color: rgba(23, 23, 23, 0.24);
+}
+
+[class~="hover:bg-rose-50"]:hover,
+[class~="hover:bg-red-50"]:hover,
+[class~="hover:bg-amber-100"]:hover,
+[class~="hover:bg-emerald-100"]:hover {
+  background-color: #e5e5e5;
+}
+
+[class~="hover:border-amber-300"]:hover,
+[class~="hover:border-emerald-300"]:hover,
+[class~="hover:border-rose-300"]:hover,
+[class~="focus:border-red-500"]:focus {
+  border-color: #525252;
+}
+
+[class~="focus:ring-red-500"]:focus,
+[class~="focus:ring-red-600"]:focus,
+[class~="focus:ring-green-600"]:focus,
+[class~="focus-visible:ring-amber-400"]:focus-visible,
+[class~="focus-visible:ring-red-500"]:focus-visible,
+[class~="focus-visible:ring-rose-200"]:focus-visible {
+  --tw-ring-color: rgba(23, 23, 23, 0.24);
+}
+
+[class~="from-[#E60028]"], [class~="from-[#e60028]"],
+[class~="from-[#7A263A]"], [class~="from-[#337AB7]"],
+[class~="from-red-600"], [class~="from-green-500"], [class~="from-green-600"],
+[class~="from-yellow-500"], [class~="from-amber-400"] {
+  --tw-gradient-from: #171717 var(--tw-gradient-from-position);
+  --tw-gradient-to: rgb(23 23 23 / 0) var(--tw-gradient-to-position);
+}
+
+[class~="to-[#c90022]"], [class~="to-[#C90022]"],
+[class~="to-[#5A1C2B]"], [class~="to-[#000054]"],
+[class~="to-[#E60028]"], [class~="to-[#337AB7]"], [class~="to-[#51D2FF]"],
+[class~="to-red-700"], [class~="to-green-500"], [class~="to-green-700"],
+[class~="to-yellow-500"], [class~="to-yellow-600"], [class~="to-amber-500"] {
+  --tw-gradient-to: #000000 var(--tw-gradient-to-position);
+}
+
+/* Replace historical colored arbitrary shadows with neutral elevation. */
+[class*="rgba(230,0,40"],
+[class*="rgba(122,38,58"],
+[class*="rgba(40,167,69"],
+[class*="rgba(51,122,183"] {
+  box-shadow: 0 10px 26px rgba(0, 0, 0, 0.14);
 }
 
 .books-filter-fields {
