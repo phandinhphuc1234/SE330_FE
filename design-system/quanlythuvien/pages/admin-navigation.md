@@ -14,7 +14,7 @@ Applies to the shared navbar when the authenticated user has ADMIN access.
 - Use one compact horizontal row on wide desktop screens, with no horizontal scrolling container or carousel.
 - On narrower screens, replace the navigation row with a 44px menu button and a right-aligned vertical disclosure.
 - Opening a disclosure must not cause horizontal page overflow. Bound its height on small screens and allow vertical scrolling only when needed.
-- Preserve the monochrome theme: white header, black active destination, gray hover surfaces, and visible black focus rings.
+- Preserve existing brand styling, library neutrals, and burgundy emphasis for the active admin destination.
 
 ## Interaction
 
