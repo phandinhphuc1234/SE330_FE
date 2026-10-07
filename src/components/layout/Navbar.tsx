@@ -463,20 +463,15 @@ function UserMenu({
           isOpen ? "visible translate-y-0 opacity-100" : "invisible -translate-y-1 opacity-0"
         }`}
       >
-        <div className="rounded-xl bg-[#F7F3EA] p-3">
-          <div className="flex items-center gap-3">
-            <span className="grid h-11 w-11 shrink-0 place-items-center rounded-xl bg-[#7A263A] font-serif text-sm font-bold tracking-wide text-white shadow-[0_4px_14px_rgba(122,38,58,0.2)]">
-              {initials}
-            </span>
-            <div className="min-w-0">
-              <p className="truncate text-sm font-bold text-[#171412]">{displayName}</p>
-              {currentUser?.email ? (
-                <p className="mt-0.5 truncate text-xs font-medium text-[#6F675E]">{currentUser.email}</p>
-              ) : null}
-              <p className="mt-1 inline-flex rounded-md bg-[#F3E5E8] px-2 py-0.5 text-[10px] font-bold uppercase tracking-[0.08em] text-[#7A263A]">
-                {displayRole}
-              </p>
-            </div>
+        <div className="rounded-xl bg-[#F7F3EA] px-4 py-3">
+          <div className="min-w-0">
+            <p className="truncate text-sm font-bold text-[#171412]">{displayName}</p>
+            {currentUser?.email ? (
+              <p className="mt-0.5 truncate text-xs font-medium text-[#6F675E]">{currentUser.email}</p>
+            ) : null}
+            <p className="mt-1 inline-flex rounded-md bg-[#F3E5E8] px-2 py-0.5 text-[10px] font-bold uppercase tracking-[0.08em] text-[#7A263A]">
+              {displayRole}
+            </p>
           </div>
         </div>
 
