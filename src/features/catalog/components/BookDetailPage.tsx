@@ -35,6 +35,8 @@ const copy = {
     eyebrow: "Book detail",
     fallbackTitle: "Library record",
     description: "Inspect metadata, physical availability, and ebook access for this title.",
+    home: "Home",
+    books: "Books",
     back: "Back to books",
     loadError: "Could not load book details.",
     loginFirst: "Please log in before placing a hold.",
@@ -79,6 +81,7 @@ const copy = {
     freeAccess: "Free access",
     paidAccess: "Paid access",
     onlineReaderOnly: "Online reader only",
+    securePayment: "Secure payment powered by VNPAY",
     borrowEbook: "Borrow Ebook",
     borrowingEbook: "Borrowing...",
     readEbook: "Read ebook",
@@ -104,6 +107,10 @@ const copy = {
     activeLoanBody: "Your online reading session is ready.",
     expires: "Expires",
     actions: "Actions",
+    borrowingOptions: "Borrowing options",
+    printBook: "Print book",
+    onShelf: "On shelf",
+    exploreBook: "Explore this title",
     addWishlist: "Add to wishlist",
     shareBook: "Share this book",
     reportIssue: "Report an issue",
@@ -111,9 +118,9 @@ const copy = {
     aboutEbookText: "Ebooks can only be read online through our secure reader. Downloading, printing, and sharing are disabled to protect copyright.",
     lastUpdated: "Last updated",
     summaryText:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer vitae libero vel lectus facilisis tincidunt. Curabitur non lorem at erat pretium malesuada. Suspendisse potenti. Donec lacinia, nibh a gravida pretium, massa arcu volutpat arcu, vitae convallis justo tortor in mi.",
+      "This title is part of The Athenaeum collection. Explore its ideas, context, and perspective to understand why it remains a meaningful choice for curious readers.",
     authorFallback:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. This author profile is being completed by the library team and will include biographical notes, publication context, and related works.",
+      "The library is preparing a richer author profile with biographical notes, publication context, and related works.",
     bibliographic: "Bibliographic details",
     fields: {
       publishedDate: "Published date",
@@ -129,6 +136,8 @@ const copy = {
     eyebrow: "Chi tiết sách",
     fallbackTitle: "Hồ sơ thư viện",
     description: "Xem thông tin mô tả, tình trạng bản in và quyền truy cập ebook của đầu sách này.",
+    home: "Trang chủ",
+    books: "Sách",
     back: "Quay lại danh sách",
     loadError: "Không thể tải chi tiết sách.",
     loginFirst: "Vui lòng đăng nhập trước khi đặt giữ sách.",
@@ -173,6 +182,7 @@ const copy = {
     freeAccess: "Miễn phí",
     paidAccess: "Có phí",
     onlineReaderOnly: "Chỉ đọc online",
+    securePayment: "Thanh toán bảo mật qua VNPAY",
     borrowEbook: "Mượn ebook",
     borrowingEbook: "Đang mượn...",
     readEbook: "Đọc ebook",
@@ -198,6 +208,10 @@ const copy = {
     activeLoanBody: "Phiên đọc online của bạn đã sẵn sàng.",
     expires: "Hết hạn",
     actions: "Thao tác",
+    borrowingOptions: "Cách mượn sách",
+    printBook: "Sách in",
+    onShelf: "Trên kệ",
+    exploreBook: "Khám phá đầu sách",
     addWishlist: "Thêm vào yêu thích",
     shareBook: "Chia sẻ sách",
     reportIssue: "Báo lỗi",
@@ -205,9 +219,9 @@ const copy = {
     aboutEbookText: "Ebook chỉ được đọc online qua trình đọc bảo mật. Tải xuống, in ấn và chia sẻ bị tắt để bảo vệ bản quyền.",
     lastUpdated: "Cập nhật",
     summaryText:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer vitae libero vel lectus facilisis tincidunt. Curabitur non lorem at erat pretium malesuada. Suspendisse potenti. Donec lacinia, nibh a gravida pretium, massa arcu volutpat arcu, vitae convallis justo tortor in mi.",
+      "Đầu sách này thuộc bộ sưu tập The Athenaeum. Hãy khám phá tư tưởng, bối cảnh và góc nhìn của tác phẩm để hiểu vì sao cuốn sách vẫn có ý nghĩa với độc giả hôm nay.",
     authorFallback:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Hồ sơ tác giả đang được thư viện hoàn thiện và sẽ bổ sung tiểu sử, bối cảnh xuất bản cùng các tác phẩm liên quan.",
+      "Thư viện đang hoàn thiện hồ sơ tác giả với tiểu sử, bối cảnh xuất bản và những tác phẩm liên quan.",
     bibliographic: "Thông tin thư mục",
     fields: {
       publishedDate: "Ngày xuất bản",
@@ -291,33 +305,50 @@ export function BookDetailPage() {
       title={book?.title ?? text.fallbackTitle}
       description={text.description}
     >
-      <div className="mx-auto w-full max-w-[1296px]">
-        <section className="mb-2 flex flex-col justify-between gap-4 px-1 py-1 lg:flex-row lg:items-start">
-          <div className="min-w-0">
-            <p className="text-sm font-black text-[#7A263A]">‹ {text.eyebrow}</p>
-            <h1 className="mt-2 break-words font-serif text-4xl font-bold leading-tight text-[#171412] md:text-5xl">{book?.title ?? text.fallbackTitle}</h1>
-            <p className="mt-2 text-sm font-medium text-[#59637A]">{text.description}</p>
-          </div>
-          <AnimatedActionLink href="/books">{text.back}</AnimatedActionLink>
-        </section>
+      <div className="relative -mx-4 -mt-8 overflow-hidden bg-[#F9F5ED] px-4 pb-6 pt-8 sm:-mx-6 sm:px-6 lg:-mx-8 lg:-mt-12 lg:px-8 lg:pb-10 lg:pt-10">
+        <div
+          aria-hidden="true"
+          className="pointer-events-none absolute inset-x-0 top-0 h-[760px] bg-[url('/landing/library-services-background.png')] bg-[length:auto_760px] bg-top bg-repeat-x opacity-70"
+        />
+        <div aria-hidden="true" className="pointer-events-none absolute inset-x-0 top-[520px] h-80 bg-gradient-to-b from-transparent via-[#F9F5ED]/90 to-[#F9F5ED]" />
 
-        {error && (
-          <div className="mb-5">
-            <Notice tone="error" message={error} />
-          </div>
-        )}
+        <div className="relative mx-auto w-full max-w-[1480px]">
+          <nav aria-label="Breadcrumb" className="flex flex-wrap items-center gap-2 text-xs font-semibold text-[#766D64] sm:text-sm">
+            <Link href="/" className="transition hover:text-[#7A263A]">{text.home}</Link>
+            <Icon name="chevron-right" size={14} aria-hidden="true" />
+            <Link href="/books" className="transition hover:text-[#7A263A]">{text.books}</Link>
+            {book ? (
+              <>
+                <Icon name="chevron-right" size={14} aria-hidden="true" />
+                <span className="max-w-[min(64vw,520px)] truncate text-[#2B2723]" title={book.title}>{book.title}</span>
+              </>
+            ) : null}
+          </nav>
 
-        {isLoading ? (
-          <BookDetailSkeleton />
-        ) : book ? (
-          <BookDetailContent
-            book={book}
-            relatedBooks={relatedBooks}
-            text={text}
-            ebookInfo={ebookInfo}
-            ebookInfoError={ebookInfoError}
-          />
-        ) : null}
+          <div className="mt-5">
+            <AnimatedActionLink href="/books">{text.back}</AnimatedActionLink>
+          </div>
+
+          {error && (
+            <div className="mt-5">
+              <Notice tone="error" message={error} />
+            </div>
+          )}
+
+          <div className="mt-5">
+            {isLoading ? (
+              <BookDetailSkeleton />
+            ) : book ? (
+              <BookDetailContent
+                book={book}
+                relatedBooks={relatedBooks}
+                text={text}
+                ebookInfo={ebookInfo}
+                ebookInfoError={ebookInfoError}
+              />
+            ) : null}
+          </div>
+        </div>
       </div>
     </CatalogShell>
   );
@@ -474,11 +505,14 @@ function BookDetailContent({
   }
 
   return (
-    <div className="space-y-4">
-      <section className="rounded-2xl border border-[#D8DEE8] bg-white p-4 pt-6 shadow-[0_22px_70px_rgba(15,23,42,0.07)] md:p-5 lg:p-6">
-        <div className="grid items-start gap-6 lg:grid-cols-[300px_minmax(0,1fr)] xl:grid-cols-[320px_minmax(0,1fr)]">
-          <div className="mx-auto w-full max-w-[280px] lg:max-w-[300px] xl:max-w-[320px]">
-            <div className="relative aspect-[2/3] w-full overflow-hidden rounded-md bg-[#F3F4F6] shadow-[0_24px_55px_rgba(15,23,42,0.16)] ring-1 ring-black/5">
+    <div className="space-y-6 lg:space-y-8">
+      <section className="relative overflow-hidden rounded-[30px] border border-[#DFD2C2]/90 bg-[#FFFCF6]/90 p-5 shadow-[0_28px_80px_rgba(72,48,35,0.10)] backdrop-blur-[2px] sm:p-7 lg:p-9 xl:p-11">
+        <div aria-hidden="true" className="pointer-events-none absolute -right-24 -top-28 h-80 w-80 rounded-full border border-[#B8872B]/15" />
+        <div aria-hidden="true" className="pointer-events-none absolute -right-10 -top-10 h-56 w-56 rounded-full border border-[#7A263A]/10" />
+
+        <div className="relative grid items-start gap-8 lg:grid-cols-[310px_minmax(0,1fr)] xl:grid-cols-[350px_minmax(0,1fr)] xl:gap-12">
+          <div className="mx-auto w-full max-w-[300px] lg:max-w-none">
+            <div className="relative aspect-[2/3] w-full overflow-hidden rounded-[10px] bg-[#EFE7DA] shadow-[0_28px_65px_rgba(43,31,24,0.24)] ring-1 ring-[#2B2723]/10">
               {coverUrl ? (
                 <Image
                   src={coverUrl}
@@ -486,7 +520,7 @@ function BookDetailContent({
                   fill
                   priority
                   unoptimized
-                  sizes="(min-width: 1280px) 320px, (min-width: 1024px) 300px, 280px"
+                  sizes="(min-width: 1280px) 350px, (min-width: 1024px) 310px, 300px"
                   className="object-cover"
                 />
               ) : (
@@ -496,75 +530,89 @@ function BookDetailContent({
                   <span className="text-xs font-semibold uppercase tracking-wide text-white/60">The Athenaeum</span>
                 </div>
               )}
-              <div className="pointer-events-none absolute inset-y-0 left-0 w-7 bg-gradient-to-r from-black/20 to-transparent" />
+               <div className="pointer-events-none absolute inset-y-0 left-0 w-8 bg-gradient-to-r from-black/25 to-transparent" />
             </div>
+            <p className="mt-4 text-center text-[11px] font-bold uppercase tracking-[0.22em] text-[#9A7A51]">The Athenaeum Collection</p>
           </div>
 
-          <div className="min-w-0">
+          <div className="min-w-0 lg:pt-2">
             <div className="min-w-0">
               <div className="flex flex-wrap items-center gap-2">
-                <span className="rounded-full bg-[#2B2723] px-3 py-1 text-[11px] font-black uppercase tracking-wide text-white">
+                <span className="rounded-full bg-[#7A263A] px-4 py-1.5 text-[11px] font-black uppercase tracking-[0.12em] text-white shadow-[0_8px_18px_rgba(122,38,58,0.18)]">
                   {categoryLabel(book.category)}
                 </span>
-                <span className="rounded-full border border-[#D8DEE8] bg-white px-3 py-1 text-[11px] font-black uppercase tracking-wide text-[#776D63]">
+                <span className="rounded-full border border-[#D8CCBC] bg-[#FFFDF9] px-4 py-1.5 text-[11px] font-black uppercase tracking-[0.12em] text-[#8A6A43]">
                   {text.original}
                 </span>
               </div>
 
-              <h2 className="mt-2 max-w-4xl break-words font-serif text-4xl font-bold leading-tight text-[#171412] md:text-[2.75rem] xl:text-[3rem]">
+              <h1 className="mt-5 max-w-5xl break-words font-serif text-[2.6rem] font-semibold leading-[1.03] tracking-[-0.035em] text-[#171412] sm:text-5xl xl:text-[4rem]">
                 {book.title}
-              </h2>
-              <p className="mt-2 text-sm font-semibold text-[#59637A]">
-                {text.by}: <span className="text-[#2B2723]">{authorNames}</span>
-                {book.publishedDate ? <span> | {text.published}: {book.publishedDate}</span> : null}
+              </h1>
+              <p className="mt-4 text-base font-medium text-[#6F675E] sm:text-lg">
+                {text.by} <span className="font-semibold text-[#394259]">{authorNames}</span>
+              </p>
+              <div className="mt-5 flex flex-wrap gap-x-7 gap-y-3 text-sm font-semibold text-[#665D54]">
+                <span className="inline-flex items-center gap-2">
+                  <Icon name="calendar" size={18} aria-hidden="true" className="text-[#9A3A50]" />
+                  {text.published}: {book.publishedDate ? formatDateValue(book.publishedDate, text) : text.none}
+                </span>
+                <span className="inline-flex items-center gap-2">
+                  <Icon name="book-open" size={18} aria-hidden="true" className="text-[#9A3A50]" />
+                  {book.edition || text.original}
+                </span>
+              </div>
+              <p className="mt-6 max-w-4xl text-[15px] font-medium leading-7 text-[#5F574F] sm:text-base sm:leading-8">
+                {bookSummary}
               </p>
             </div>
 
-            <DetailActionGroup text={text} />
+            <DetailActionGroup text={text} hasEbook={Boolean(ebookInfo)} />
 
-            <div className="mt-4 grid gap-3 sm:grid-cols-2 2xl:grid-cols-4">
+            <div className="mt-7 grid gap-px overflow-hidden rounded-2xl border border-[#E3D7C9] bg-[#E3D7C9] sm:grid-cols-2 2xl:grid-cols-4">
               <BookMetaPill icon="book-open" label={text.isbn} value={book.isbn} tone="rose" />
               <BookMetaPill icon="clock" label={text.availableCopies} value={String(book.availableCopies ?? 0)} tone="amber" />
               <BookMetaPill icon="book" label={text.totalCopies} value={String(book.totalCopies ?? 0)} tone="slate" />
               <BookMetaPill icon="bookmark" label={text.editionLabel} value={book.edition || text.none} tone="rose" />
             </div>
-
-            <div className="mt-2">
-              <PhysicalAvailabilityPanel
-                book={book}
-                userHolds={userHolds}
-                isPlacingHold={isPlacingHold}
-                holdError={holdError}
-                holdSuccess={holdSuccess}
-                text={text}
-                onPlaceHold={handlePlaceHold}
-              />
-            </div>
-
-            <div className="mt-2">
-              <EbookAccessPanel
-                ebookInfo={ebookInfo}
-                ebookInfoError={ebookInfoError}
-                loan={ebookLoan}
-                bookId={numericBookId}
-                isAuthenticated={isAuthenticated}
-                isBorrowing={isBorrowingEbook}
-                isCreatingPayment={isCreatingPayment}
-                borrowError={ebookBorrowError}
-                paymentError={paymentError}
-                text={text}
-                onBorrow={handleBorrowEbook}
-                onPay={handleCreateEbookPayment}
-              />
-            </div>
           </div>
         </div>
       </section>
 
-      <div className="grid gap-3 lg:grid-cols-[1.2fr_0.95fr]">
+      <div id="physical-access" className="scroll-mt-28">
+        <PhysicalAvailabilityPanel
+          book={book}
+          userHolds={userHolds}
+          isPlacingHold={isPlacingHold}
+          holdError={holdError}
+          holdSuccess={holdSuccess}
+          text={text}
+          onPlaceHold={handlePlaceHold}
+        />
+      </div>
+
+      {ebookInfo || ebookInfoError ? (
+        <div id="ebook-access" className="scroll-mt-28">
+          <EbookAccessPanel
+            ebookInfo={ebookInfo}
+            ebookInfoError={ebookInfoError}
+            loan={ebookLoan}
+            bookId={numericBookId}
+            isAuthenticated={isAuthenticated}
+            isBorrowing={isBorrowingEbook}
+            isCreatingPayment={isCreatingPayment}
+            borrowError={ebookBorrowError}
+            paymentError={paymentError}
+            text={text}
+            onBorrow={handleBorrowEbook}
+            onPay={handleCreateEbookPayment}
+          />
+        </div>
+      ) : null}
+
+      <div className="grid gap-5 lg:grid-cols-[1.15fr_0.85fr]">
         <InfoPanel title={text.bookSummary}>
           <p>{bookSummary}</p>
-          {bookSummary === text.summaryText ? <p>{text.summaryText}</p> : null}
         </InfoPanel>
         <AuthorPanel authorNames={authorNames} authorBio={authorBio} authorImageUrl={authorImageUrl} text={text} />
       </div>
@@ -572,14 +620,17 @@ function BookDetailContent({
       <BookReviewSection bookId={String(bookIdOf(book))} />
 
       {relatedBooks.length ? (
-        <section className="rounded-2xl border border-[#D8DEE8] bg-white p-5 shadow-[0_18px_50px_rgba(15,23,42,0.06)]">
+        <section className="rounded-[28px] border border-[#DFD2C2] bg-[#FFFCF6]/95 p-5 shadow-[0_20px_56px_rgba(72,48,35,0.08)] sm:p-7 lg:p-8">
           <div className="flex items-center justify-between gap-4">
-            <h3 className="text-xl font-black text-[#2B2723]">{text.relatedBooks}</h3>
-            <Link href={`/books?categoryId=${categoryIdOf(book)}`} className="text-sm font-black text-[#7A263A] transition hover:text-[#2B2723]">
-              {text.viewAll}
+            <div>
+              <p className="text-[11px] font-bold uppercase tracking-[0.24em] text-[#9A3A50]">{text.exploreBook}</p>
+              <h3 className="mt-2 font-serif text-3xl font-semibold text-[#171412]">{text.relatedBooks}</h3>
+            </div>
+            <Link href={`/books?categoryId=${categoryIdOf(book)}`} className="inline-flex items-center gap-2 text-sm font-black text-[#7A263A] transition hover:text-[#2B2723]">
+              {text.viewAll}<Icon name="arrow-right" size={17} aria-hidden="true" />
             </Link>
           </div>
-          <div className="mt-5 grid gap-5 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-6">
+          <div className="mt-6 grid gap-5 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-6">
             {relatedBooks.map((relatedBook) => (
               <RelatedBookCard key={bookIdOf(relatedBook) || relatedBook.isbn} book={relatedBook} />
             ))}
@@ -592,10 +643,11 @@ function BookDetailContent({
 
 function InfoPanel({ title, children }: { title: string; children: ReactNode }) {
   return (
-    <section className="relative min-h-[205px] overflow-hidden rounded-2xl border border-[#D8DEE8] bg-white p-5 shadow-[0_18px_46px_rgba(15,23,42,0.055)]">
-      <h3 className="text-base font-black text-[#171412]">{title}</h3>
-      <div className="mt-3 h-0.5 w-28 bg-[#7A263A]" />
-      <div className="mt-4 max-w-4xl space-y-2 text-[13px] font-medium leading-6 text-[#59637A]">{children}</div>
+    <section className="relative min-h-[250px] overflow-hidden rounded-[26px] border border-[#DFD2C2] bg-[#FFFCF7]/95 p-6 shadow-[0_18px_50px_rgba(72,48,35,0.07)] sm:p-8">
+      <div aria-hidden="true" className="absolute -bottom-24 -right-20 h-52 w-52 rounded-full bg-[#E9DDCD]/35" />
+      <h3 className="relative font-serif text-2xl font-semibold tracking-[-0.02em] text-[#171412] sm:text-3xl">{title}</h3>
+      <div className="relative mt-3 h-0.5 w-24 bg-[#7A263A]" />
+      <div className="relative mt-5 max-w-4xl space-y-3 text-[15px] font-medium leading-7 text-[#625A52]">{children}</div>
     </section>
   );
 }
@@ -614,23 +666,23 @@ function AuthorPanel({
   const tags = authorTags(authorNames, text);
 
   return (
-    <section className="min-h-[205px] rounded-2xl border border-[#D8DEE8] bg-white p-5 shadow-[0_18px_46px_rgba(15,23,42,0.055)]">
-      <h3 className="text-base font-black text-[#171412]">{text.aboutAuthor}</h3>
-      <div className="mt-3 h-0.5 w-28 bg-[#7A263A]" />
-      <div className="mt-4 flex gap-4">
-        <div className="relative grid h-16 w-16 shrink-0 place-items-center overflow-hidden rounded-full bg-[#EEF2F7] text-lg font-black text-[#171412] ring-1 ring-[#D8DEE8]">
+    <section className="min-h-[250px] rounded-[26px] border border-[#DFD2C2] bg-[#FFFCF7]/95 p-6 shadow-[0_18px_50px_rgba(72,48,35,0.07)] sm:p-8">
+      <h3 className="font-serif text-2xl font-semibold tracking-[-0.02em] text-[#171412] sm:text-3xl">{text.aboutAuthor}</h3>
+      <div className="mt-3 h-0.5 w-24 bg-[#7A263A]" />
+      <div className="mt-5 flex flex-col gap-5 sm:flex-row">
+        <div className="relative grid h-20 w-20 shrink-0 place-items-center overflow-hidden rounded-full bg-[#F4E8E8] font-serif text-2xl font-semibold text-[#7A263A] ring-1 ring-[#D8CCBC]">
           {authorImageUrl ? (
-            <Image src={authorImageUrl} alt={`${authorNames} portrait`} fill unoptimized sizes="64px" className="object-cover" />
+            <Image src={authorImageUrl} alt={`${authorNames} portrait`} fill unoptimized sizes="80px" className="object-cover" />
           ) : (
             authorInitials(authorNames)
           )}
         </div>
         <div className="min-w-0">
-          <h4 className="text-sm font-black text-[#171412]">{authorNames}</h4>
-          <p className="mt-1 line-clamp-4 text-[13px] font-medium leading-5 text-[#59637A]">{authorBio}</p>
+          <h4 className="text-base font-black text-[#2B2723]">{authorNames}</h4>
+          <p className="mt-2 line-clamp-5 text-sm font-medium leading-6 text-[#625A52]">{authorBio}</p>
           <div className="mt-4 flex flex-wrap gap-2">
             {tags.map((tag) => (
-              <span key={tag} className="rounded-full border border-[#D8DEE8] bg-white px-3 py-1 text-xs font-bold text-[#61708F]">
+              <span key={tag} className="rounded-full border border-[#D8CCBC] bg-[#FFFDF9] px-3 py-1 text-xs font-bold text-[#7A263A]">
                 {tag}
               </span>
             ))}
@@ -705,26 +757,42 @@ function rememberPendingEbookPayment(paymentCode: string | undefined, paymentId:
   }
 }
 
-function DetailActionGroup({ text }: { text: typeof copy.en }) {
+function DetailActionGroup({ text, hasEbook }: { text: typeof copy.en; hasEbook: boolean }) {
+  const actionClass =
+    "inline-flex min-h-12 items-center justify-center gap-2.5 rounded-xl border border-[#D8CCBC] bg-[#FFFDF9] px-5 text-sm font-black text-[#2B2723] shadow-[0_8px_20px_rgba(72,48,35,0.05)] transition hover:-translate-y-0.5 hover:border-[#7A263A] hover:text-[#7A263A]";
+
   return (
-    <div className="mt-4 flex flex-wrap gap-2 sm:justify-end">
-      <DetailActionButton icon="heart" label={text.addWishlist} />
-      <DetailActionButton icon="arrow-right" label={text.shareBook} />
-      <DetailActionButton icon="alert-circle" label={text.reportIssue} />
+    <div className="mt-7 flex flex-wrap gap-3">
+      <a
+        href="#physical-access"
+        className="inline-flex min-h-12 items-center justify-center gap-2.5 rounded-xl bg-[#7A263A] px-6 text-sm font-black text-white shadow-[0_16px_34px_rgba(122,38,58,0.24)] transition hover:-translate-y-0.5 hover:bg-[#5F1D2D]"
+      >
+        <Icon name="book-open" size={20} aria-hidden="true" />
+        {text.borrowingOptions}
+      </a>
+      {hasEbook ? (
+        <a href="#ebook-access" className={actionClass}>
+          <Icon name="book" size={20} aria-hidden="true" />
+          {text.ebookAccess}
+        </a>
+      ) : null}
+      <button type="button" onClick={() => void shareCurrentPage()} className={actionClass}>
+        <Icon name="arrow-up-right" size={20} aria-hidden="true" />
+        {text.shareBook}
+      </button>
     </div>
   );
 }
 
-function DetailActionButton({ icon, label }: { icon: "heart" | "arrow-right" | "alert-circle"; label: string }) {
-  return (
-    <button
-      type="button"
-      className="inline-flex h-8 items-center justify-center gap-1.5 rounded-full border border-[#D8DEE8] bg-white px-3 text-[11px] font-black leading-none text-[#171412] shadow-[0_6px_14px_rgba(15,23,42,0.04)] transition hover:-translate-y-0.5 hover:border-[#B30D2D] hover:text-[#B30D2D]"
-    >
-      <Icon name={icon} size={14} aria-hidden="true" className="shrink-0" />
-      <span className="whitespace-nowrap">{label}</span>
-    </button>
-  );
+async function shareCurrentPage() {
+  if (typeof window === "undefined") return;
+
+  if (navigator.share) {
+    await navigator.share({ title: document.title, url: window.location.href }).catch(() => undefined);
+    return;
+  }
+
+  await navigator.clipboard?.writeText(window.location.href).catch(() => undefined);
 }
 
 function BookMetaPill({
@@ -746,13 +814,13 @@ function BookMetaPill({
         : "bg-[#F4F6FA] text-[#171412]";
 
   return (
-    <div className="flex min-h-[66px] items-center gap-3 rounded-xl border border-[#E1E6F0] bg-white px-4 py-3 shadow-[0_10px_28px_rgba(15,23,42,0.045)]">
-      <span className={`grid h-9 w-9 shrink-0 place-items-center rounded-xl ${toneClass}`}>
-        <Icon name={icon} size={20} aria-hidden="true" />
+    <div className="flex min-h-[78px] items-center gap-3 bg-[#FFFCF7] px-4 py-3.5">
+      <span className={`grid h-10 w-10 shrink-0 place-items-center rounded-full ${toneClass}`}>
+        <Icon name={icon} size={19} aria-hidden="true" />
       </span>
       <div className="min-w-0">
-        <p className="text-[10px] font-black uppercase tracking-wide text-[#776D63]">{label}</p>
-        <p className="mt-1 truncate text-base font-black text-[#2B2723]">{value}</p>
+        <p className="text-[10px] font-black uppercase tracking-[0.12em] text-[#8B8074]">{label}</p>
+        <p className="mt-1 truncate text-sm font-black text-[#2B2723] sm:text-base">{value}</p>
       </div>
     </div>
   );
@@ -790,17 +858,17 @@ function EbookAccessPanel({
   const hasActiveLoan = loan?.status === "ACTIVE";
 
   return (
-    <section className="rounded-xl border border-[#E1E6F0] bg-white p-3 shadow-[0_14px_36px_rgba(15,23,42,0.05)]">
-      <div className="grid gap-4 xl:grid-cols-[minmax(0,1fr)_250px]">
+    <section className="rounded-[26px] border border-[#DFD2C2] bg-[#FFFCF7]/95 p-5 shadow-[0_18px_50px_rgba(72,48,35,0.07)] sm:p-7">
+      <div className="grid gap-6 xl:grid-cols-[minmax(0,1fr)_290px]">
         <div className="min-w-0">
           <div className="flex items-center gap-3">
-            <span className="grid h-9 w-9 place-items-center rounded-xl bg-[#FDF0F3] text-[#B30D2D]">
-              <Icon name="book-open" size={19} aria-hidden="true" />
+            <span className="grid h-11 w-11 place-items-center rounded-full bg-[#F4E8E8] text-[#7A263A]">
+              <Icon name="book-open" size={21} aria-hidden="true" />
             </span>
             <div>
-              <h3 className="font-serif text-xl font-bold leading-tight text-[#171412]">{text.ebookAccess}</h3>
+              <h3 className="font-serif text-2xl font-semibold leading-tight text-[#171412]">{text.ebookAccess}</h3>
               {ebookInfo?.updatedAt ? (
-                <p className="mt-0.5 text-xs font-semibold text-[#61708F]">
+                <p className="mt-1 text-xs font-semibold text-[#766D64]">
                   {text.lastUpdated}: {formatDateValue(ebookInfo.updatedAt, text)}
                 </p>
               ) : null}
@@ -813,7 +881,7 @@ function EbookAccessPanel({
             </p>
           ) : null}
 
-          <div className="mt-2 divide-y divide-[#E1E6F0]">
+          <div className="mt-4 divide-y divide-[#E4D9CB]">
             <EbookInfoRow icon="check" label={text.availabilityStatus} value={isAvailable ? text.availableNow : text.unavailableNow} />
             <EbookInfoRow icon="users" label={text.maxLicenses} value={formatLicenseLimit(ebookInfo, text)} />
             <EbookInfoRow icon="clock" label={text.loanDuration} value={formatLoanDuration(ebookInfo?.loanDurationDays, text)} />
@@ -822,10 +890,10 @@ function EbookAccessPanel({
           </div>
         </div>
 
-        <div className="flex min-h-full flex-col justify-center border-t border-[#E1E6F0] pt-4 xl:border-l xl:border-t-0 xl:pl-4 xl:pt-0">
-          <div className="mb-2 inline-flex w-fit items-center gap-2 self-center rounded-lg bg-[#F7F3FF] px-4 py-2 text-xs font-bold leading-tight text-[#6D5BD0]">
+        <div className="flex min-h-full flex-col justify-center border-t border-[#E4D9CB] pt-5 xl:border-l xl:border-t-0 xl:pl-6 xl:pt-0">
+          <div className="mb-3 inline-flex w-fit items-center gap-2 self-center rounded-full bg-[#F4E8E8] px-4 py-2 text-xs font-bold leading-tight text-[#7A263A]">
             <Icon name="check" size={14} aria-hidden="true" />
-            <span>Secure payment<br />powered by VNPAY</span>
+            <span className="text-center">{text.securePayment}</span>
           </div>
           <div className="mx-auto w-full max-w-[214px]">
             {hasActiveLoan ? (
@@ -883,7 +951,7 @@ function EbookAccessPanel({
               </Link>
             )}
           </div>
-          <p className="mt-2 text-center text-xs font-medium leading-5 text-[#61708F]">
+          <p className="mt-3 text-center text-xs font-medium leading-5 text-[#766D64]">
             {hasActiveLoan ? text.ebookBorrowed : requiresPayment ? text.paymentPendingHelp : isAvailable ? text.onlineReaderOnly : text.ebookUnavailableBody}
           </p>
           {borrowError || paymentError ? (
@@ -900,11 +968,11 @@ function EbookAccessPanel({
 function EbookInfoRow({ icon, label, value }: { icon: "check" | "users" | "clock" | "bookmark" | "file"; label: string; value: string }) {
   return (
     <div className="flex items-center justify-between gap-4 py-1 text-xs leading-4">
-      <div className="flex min-w-0 items-center gap-3 text-[#59637A]">
+      <div className="flex min-w-0 items-center gap-3 text-[#6F675E]">
         <Icon name={icon} size={14} aria-hidden="true" className="shrink-0 text-[#171412]" />
         <span className="truncate font-medium">{label}</span>
       </div>
-      <span className="min-w-0 max-w-[65%] truncate text-right font-black text-[#171412]" title={value}>{value}</span>
+      <span className="min-w-0 max-w-[65%] truncate text-right font-black text-[#2B2723]" title={value}>{value}</span>
     </div>
   );
 }
@@ -989,7 +1057,7 @@ function formatDateValue(value: string, text: typeof copy.en) {
     return value || text.none;
   }
 
-  return date.toLocaleDateString(undefined, {
+  return date.toLocaleDateString(text.home === "Trang chủ" ? "vi-VN" : "en-US", {
     year: "numeric",
     month: "short",
     day: "numeric",
@@ -1000,8 +1068,8 @@ function RelatedBookCard({ book }: { book: Book }) {
   const coverUrl = bookCoverUrl(book, "thumbnail");
 
   return (
-    <Link href={`/books/${bookIdOf(book)}`} className="group block outline-none">
-      <div className="relative aspect-[2/3] overflow-hidden rounded-sm bg-[#F3F4F6] shadow-[0_10px_24px_rgba(17,24,39,0.14)] transition duration-300 group-hover:-translate-y-1 group-hover:shadow-[0_16px_30px_rgba(17,24,39,0.2)] group-focus-visible:ring-4 group-focus-visible:ring-[#7A263A]/25">
+    <Link href={`/books/${bookIdOf(book)}`} className="group block rounded-2xl border border-[#E2D7CA] bg-[#FFFDF9] p-3 outline-none transition duration-300 hover:-translate-y-1 hover:border-[#C8A77B] hover:shadow-[0_18px_34px_rgba(72,48,35,0.12)] focus-visible:ring-4 focus-visible:ring-[#7A263A]/20">
+      <div className="relative aspect-[2/3] overflow-hidden rounded-xl bg-[#EFE7DA] shadow-[0_10px_24px_rgba(72,48,35,0.12)]">
         {coverUrl ? (
           <Image
             src={coverUrl}
@@ -1017,7 +1085,7 @@ function RelatedBookCard({ book }: { book: Book }) {
           </div>
         )}
       </div>
-      <h4 className="mt-3 line-clamp-2 text-sm font-black leading-snug text-[#2B2723] transition group-hover:text-[#7A263A]">
+      <h4 className="mt-3 line-clamp-2 font-serif text-base font-semibold leading-snug text-[#2B2723] transition group-hover:text-[#7A263A]">
         {book.title}
       </h4>
       {/* Star rating */}
@@ -1044,7 +1112,7 @@ function AnimatedActionLink({ href, children }: { href: string; children: string
   return (
     <Link
       href={href}
-      className="group inline-flex items-center justify-center gap-2 rounded-full border border-[#D8CCBC] px-5 py-3 text-sm font-bold text-[#2B2723] outline-none transition-all duration-200 hover:-translate-y-0.5 hover:border-[#7A263A] hover:bg-white hover:text-[#7A263A] hover:shadow-lg hover:shadow-[#2B2723]/10 active:translate-y-0 active:scale-[0.98] focus-visible:ring-4 focus-visible:ring-[#7A263A]/20"
+      className="group inline-flex items-center justify-center gap-2 text-sm font-black text-[#7A263A] outline-none transition-all duration-200 hover:-translate-x-0.5 hover:text-[#2B2723] focus-visible:rounded-lg focus-visible:ring-4 focus-visible:ring-[#7A263A]/20"
     >
       <span aria-hidden="true" className="transition-transform duration-200 group-hover:-translate-x-1">
         ←
@@ -1076,27 +1144,27 @@ function PhysicalAvailabilityPanel({
 
   return (
     <section
-      className="relative overflow-hidden rounded-xl border px-4 py-2"
+      className="relative overflow-hidden rounded-[26px] border px-5 py-5 shadow-[0_18px_50px_rgba(72,48,35,0.07)] sm:px-7 sm:py-6"
       style={{
-        backgroundColor: isOutOfStock ? "rgba(255, 251, 235, 0.78)" : "rgba(236, 253, 245, 0.82)",
-        borderColor: isOutOfStock ? "#FDE68A" : "#BBF7D0",
+        backgroundColor: isOutOfStock ? "rgba(255, 248, 232, 0.94)" : "rgba(244, 251, 242, 0.94)",
+        borderColor: isOutOfStock ? "#E8C98E" : "#BCD9BD",
       }}
     >
       <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
-        <div className="min-w-0 flex-1 xl:pr-24">
+        <div className="min-w-0 flex-1 xl:pr-28">
           <div className="flex items-center gap-3">
             <span
-              className={`grid h-9 w-9 shrink-0 place-items-center rounded-full ${
+              className={`grid h-12 w-12 shrink-0 place-items-center rounded-full ${
                 isOutOfStock ? "bg-amber-50 text-amber-600" : "bg-emerald-50 text-emerald-600"
               }`}
             >
-              <Icon name={isOutOfStock ? "clock" : "check"} size={19} aria-hidden="true" />
+              <Icon name={isOutOfStock ? "clock" : "check"} size={22} aria-hidden="true" />
             </span>
             <div>
-              <h3 className="text-base font-black text-[#171412]">
+              <h3 className="font-serif text-xl font-semibold text-[#171412] sm:text-2xl">
                 {isOutOfStock ? text.unavailableTitle : text.availableTitle}
               </h3>
-              <p className="mt-0.5 text-xs font-medium leading-5 text-[#61708F]">
+              <p className="mt-1 max-w-3xl text-sm font-medium leading-6 text-[#625A52]">
                 {isOutOfStock ? text.unavailableBody : text.availableBody}
               </p>
             </div>
@@ -1159,32 +1227,42 @@ function PhysicalAvailabilityPanel({
 
 function BookDetailSkeleton() {
   return (
-    <div className="grid gap-6 lg:grid-cols-[1.1fr_0.9fr]">
-      <section className="border border-[#DED5C8] bg-[#F7F3EA] p-6">
-        <Skeleton variant="rectangular" className="h-6 w-32 rounded-full" />
-        <Skeleton variant="text" className="mt-5 h-9 w-3/4" />
-        <Skeleton variant="text" className="mt-3 h-5 w-1/2" />
-        <Skeleton variant="rectangular" className="mt-6 h-8 w-40 rounded-full" />
-      </section>
-
-      <section className="border border-[#DED5C8] bg-white p-6">
-        <Skeleton variant="text" className="h-6 w-32" />
-        <Skeleton variant="rectangular" className="mt-4 h-8 w-40 rounded-full" />
-        <Skeleton variant="rectangular" className="mt-5 h-12 w-full rounded-full" />
-        <Skeleton variant="rectangular" className="mt-3 h-12 w-full rounded-full" />
-      </section>
-
-      <section className="border border-[#DED5C8] bg-white p-6 lg:col-span-2">
-        <Skeleton variant="text" className="h-6 w-48" />
-        <div className="mt-5 grid gap-4 md:grid-cols-2">
-          {Array.from({ length: 6 }).map((_, index) => (
-            <div key={index} className="rounded-lg border border-[#DED5C8] bg-[#F7F3EA] p-4">
-              <Skeleton variant="text" className="h-3 w-24" />
-              <Skeleton variant="text" className="mt-2 h-5 w-32" />
+    <div className="space-y-6">
+      <section className="rounded-[30px] border border-[#DFD2C2] bg-[#FFFCF6]/90 p-5 shadow-[0_28px_80px_rgba(72,48,35,0.08)] sm:p-7 lg:p-9 xl:p-11">
+        <div className="grid gap-8 lg:grid-cols-[310px_minmax(0,1fr)] xl:grid-cols-[350px_minmax(0,1fr)] xl:gap-12">
+          <Skeleton variant="rectangular" className="mx-auto aspect-[2/3] w-full max-w-[300px] rounded-[10px] lg:max-w-none" />
+          <div className="pt-2">
+            <div className="flex gap-2">
+              <Skeleton variant="rectangular" className="h-7 w-36 rounded-full" />
+              <Skeleton variant="rectangular" className="h-7 w-24 rounded-full" />
             </div>
-          ))}
+            <Skeleton variant="text" className="mt-6 h-14 w-4/5" />
+            <Skeleton variant="text" className="mt-4 h-6 w-2/5" />
+            <Skeleton variant="text" className="mt-6 h-5 w-full" />
+            <Skeleton variant="text" className="mt-3 h-5 w-11/12" />
+            <Skeleton variant="text" className="mt-3 h-5 w-4/5" />
+            <div className="mt-7 flex flex-wrap gap-3">
+              <Skeleton variant="rectangular" className="h-12 w-44 rounded-xl" />
+              <Skeleton variant="rectangular" className="h-12 w-44 rounded-xl" />
+              <Skeleton variant="rectangular" className="h-12 w-36 rounded-xl" />
+            </div>
+            <div className="mt-7 grid gap-px overflow-hidden rounded-2xl bg-[#E3D7C9] sm:grid-cols-2 xl:grid-cols-4">
+              {Array.from({ length: 4 }).map((_, index) => (
+                <div key={index} className="bg-[#FFFCF7] p-4">
+                  <Skeleton variant="text" className="h-3 w-20" />
+                  <Skeleton variant="text" className="mt-2 h-5 w-28" />
+                </div>
+              ))}
+            </div>
+          </div>
         </div>
       </section>
+
+      <Skeleton variant="rectangular" className="h-32 w-full rounded-[26px]" />
+      <div className="grid gap-5 lg:grid-cols-2">
+        <Skeleton variant="rectangular" className="h-64 w-full rounded-[26px]" />
+        <Skeleton variant="rectangular" className="h-64 w-full rounded-[26px]" />
+      </div>
     </div>
   );
 }

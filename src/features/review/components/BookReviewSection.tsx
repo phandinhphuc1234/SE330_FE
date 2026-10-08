@@ -125,15 +125,15 @@ export function BookReviewSection({ bookId }: { bookId: string }) {
 
   return (
     <motion.div
-      className="mt-10 border-t border-[#E1E6F0] pt-8"
+      className="rounded-[28px] border border-[#DFD2C2] bg-[#FFFCF7]/95 p-5 shadow-[0_20px_56px_rgba(72,48,35,0.08)] sm:p-7 lg:p-8"
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.4, delay: 0.1 }}
     >
       {/* Section title */}
       <div className="flex items-center gap-4">
-        <h3 className="text-xl font-black text-[#2B2723]">{text.sectionTitle}</h3>
-        <div className="h-px flex-1 bg-gradient-to-r from-[#E1E6F0] to-transparent" />
+        <h3 className="font-serif text-3xl font-semibold tracking-[-0.02em] text-[#171412]">{text.sectionTitle}</h3>
+        <div className="h-px flex-1 bg-gradient-to-r from-[#CDAEB5] to-transparent" />
       </div>
 
       {isLoading ? (
@@ -144,33 +144,29 @@ export function BookReviewSection({ bookId }: { bookId: string }) {
         </div>
       ) : (
         <div className="mt-6 space-y-6">
-          {/* Stats */}
-          {stats && stats.totalReviews > 0 && <ReviewStats stats={stats} />}
+          <div className="grid items-stretch gap-5 lg:grid-cols-2">
+            {stats ? <ReviewStats stats={stats} /> : <div className="min-h-40 rounded-2xl border border-[#E3D7C9] bg-[#FBF6EE]" />}
 
-          {/* Review Form */}
-          {isAuthenticated && (!myReview || isEditing) && (
-            <ReviewForm
-              bookId={bookId}
-              existingReview={isEditing ? myReview : undefined}
-              onSubmitted={handleReviewSubmitted}
-              onCancelled={isEditing ? () => setIsEditing(false) : undefined}
-            />
-          )}
+            {isAuthenticated && (!myReview || isEditing) ? (
+              <ReviewForm
+                bookId={bookId}
+                existingReview={isEditing ? myReview : undefined}
+                onSubmitted={handleReviewSubmitted}
+                onCancelled={isEditing ? () => setIsEditing(false) : undefined}
+              />
+            ) : null}
 
-          {/* Login prompt */}
-          {!isAuthenticated && (
-            <div className="rounded-xl border border-dashed border-[#D1D5DB] bg-[#F9FAFB] px-5 py-4 text-center">
-              <p className="text-sm text-[#776D63]">
-                {text.loginPrompt}{" "}
-                <a
-                  href="/login"
-                  className="font-bold text-[#7A263A] transition-colors hover:text-[#2B2723]"
-                >
-                  {text.loginLink}
-                </a>
-              </p>
-            </div>
-          )}
+            {!isAuthenticated ? (
+              <div className="flex min-h-40 items-center justify-center rounded-2xl border border-dashed border-[#D8CCBC] bg-[#FBF6EE] px-6 py-8 text-center">
+                <p className="text-sm text-[#776D63]">
+                  {text.loginPrompt}{" "}
+                  <a href="/login" className="font-bold text-[#7A263A] transition-colors hover:text-[#2B2723]">
+                    {text.loginLink}
+                  </a>
+                </p>
+              </div>
+            ) : null}
+          </div>
 
           {/* Review list */}
           <ReviewList
