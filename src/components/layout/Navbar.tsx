@@ -23,7 +23,6 @@ const publicNavLabelKeys: Record<string, TranslationKey> = {
   "/user/holds": "nav.reservations",
   "/notices": "nav.libraryNotices",
   "/about": "nav.about",
-  "/user/ebook-loans": "menu.myEbooks",
 };
 
 export function Navbar() {
