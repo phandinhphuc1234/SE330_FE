@@ -5,78 +5,118 @@ import { Icon } from "@/components/ui/Icon";
 import { useLanguage } from "@/features/i18n/context/LanguageContext";
 import { InstitutionalShell } from "./InstitutionalShell";
 
-const borrowingGuideCopy = {
-  en: {
-    eyebrow: "Borrowing guide",
-    title: "Clear rules for borrowing, renewal, holds, and returns.",
-    description: "A practical guide for using The Athenaeum collection with confidence, from first checkout to final return.",
-    summaryEyebrow: "The Athenaeum",
-    summaryTitle: "Borrowing at a glance",
-    summaryDescription: "Generous access, clear policies, and friendly support — so you can focus on what’s next.",
-    stats: [
-      ["Standard loan", "21 days", "Most books and circulating materials."],
-      ["Renewals", "2x", "Most eligible items can be renewed twice."],
-      ["Hold pickup", "3 days", "Items are held for 3 days after notification."],
-      ["Desk support", "Daily", "Get help from our team every day."],
-    ],
-    loanEyebrow: "Loan periods",
-    loanTitle: "Borrow by material type",
-    loanDescription: "Loan policies are built to balance generous access with fair circulation for high-demand materials.",
-    myLoans: "My Borrows",
-    myHolds: "My Holds",
-    headings: ["Material", "Loan period", "Renewal", "Notes"],
-    loanRules: [
-      ["Books", "21 days", "2 renewals", "Place holds when all copies are out."],
-      ["Reference", "In library", "No renewals", "Ask staff for scans or support."],
-      ["Course reserve", "2 hours", "No renewals", "High-demand access at the desk."],
-      ["Media kits", "7 days", "1 renewal", "Return directly to circulation."],
-    ],
-    stepsEyebrow: "How it works",
-    stepsTitle: "From discovery to return",
-    browseCatalog: "Browse catalog",
-    steps: [
-      ["Find", "Search the catalog by title, author, ISBN, or subject."],
-      ["Borrow", "Bring available copies to the desk or ask a librarian for checkout support."],
-      ["Renew", "Extend eligible loans before the due date from your account."],
-      ["Return", "Return books on time so the next reader can access them."],
-    ],
+type GuideLocale = "en" | "vi";
+type Localized<T> = Record<GuideLocale, T>;
+
+const guideText = {
+  eyebrow: { en: "Borrowing guide", vi: "Hướng dẫn mượn" },
+  title: {
+    en: "Clear rules for borrowing, renewal, holds, and returns.",
+    vi: "Quy định rõ ràng cho mượn sách, gia hạn, đặt giữ và trả sách.",
   },
-  vi: {
-    eyebrow: "Hướng dẫn mượn",
-    title: "Quy định rõ ràng cho mượn sách, gia hạn, đặt giữ và trả sách.",
-    description: "Hướng dẫn thực tế để sử dụng bộ sưu tập The Athenaeum tự tin từ lần mượn đầu đến khi hoàn trả.",
-    summaryEyebrow: "The Athenaeum",
-    summaryTitle: "Thông tin mượn sách tổng quan",
-    summaryDescription: "Quyền truy cập thuận tiện, chính sách rõ ràng và hỗ trợ thân thiện để bạn an tâm đọc sách.",
-    stats: [
-      ["Thời hạn mượn chuẩn", "21 ngày", "Áp dụng cho hầu hết sách và tài liệu lưu thông."],
-      ["Gia hạn", "2 lần", "Phần lớn tài liệu hợp lệ có thể được gia hạn hai lần."],
-      ["Nhận sách đặt giữ", "3 ngày", "Sách được giữ trong 3 ngày sau khi có thông báo."],
-      ["Hỗ trợ tại quầy", "Hằng ngày", "Nhận hỗ trợ từ đội ngũ thư viện mỗi ngày."],
-    ],
-    loanEyebrow: "Thời hạn mượn",
-    loanTitle: "Mượn theo loại tài liệu",
-    loanDescription: "Chính sách mượn được thiết kế để cân bằng quyền truy cập rộng rãi và lưu thông công bằng cho tài liệu có nhu cầu cao.",
-    myLoans: "Sách đang mượn",
-    myHolds: "Lượt đặt giữ",
-    headings: ["Tài liệu", "Thời hạn mượn", "Gia hạn", "Ghi chú"],
-    loanRules: [
-      ["Sách", "21 ngày", "2 lần gia hạn", "Đặt giữ khi tất cả bản sao đã được mượn."],
-      ["Tài liệu tham khảo", "Tại thư viện", "Không gia hạn", "Hỏi thủ thư để được hỗ trợ quét hoặc tra cứu."],
-      ["Tài liệu học phần", "2 giờ", "Không gia hạn", "Truy cập tài liệu nhu cầu cao tại quầy."],
-      ["Bộ media", "7 ngày", "1 lần gia hạn", "Trả trực tiếp tại quầy lưu thông."],
-    ],
-    stepsEyebrow: "Cách hoạt động",
-    stepsTitle: "Từ tìm kiếm đến hoàn trả",
-    browseCatalog: "Duyệt danh mục",
-    steps: [
-      ["Tìm", "Tìm trong danh mục theo tên sách, tác giả, ISBN hoặc chủ đề."],
-      ["Mượn", "Mang bản sao có sẵn đến quầy hoặc nhờ thủ thư hỗ trợ làm thủ tục."],
-      ["Gia hạn", "Gia hạn các khoản mượn đủ điều kiện trước ngày đến hạn từ tài khoản của bạn."],
-      ["Trả", "Trả sách đúng hạn để người đọc tiếp theo có thể sử dụng."],
-    ],
+  description: {
+    en: "A practical guide for using The Athenaeum collection with confidence, from first checkout to final return.",
+    vi: "Hướng dẫn thực tế để sử dụng bộ sưu tập The Athenaeum tự tin từ lần mượn đầu đến khi hoàn trả.",
   },
-};
+  summaryEyebrow: { en: "The Athenaeum", vi: "The Athenaeum" },
+  summaryTitle: { en: "Borrowing at a glance", vi: "Thông tin mượn sách tổng quan" },
+  summaryDescription: {
+    en: "Generous access, clear policies, and friendly support — so you can focus on what’s next.",
+    vi: "Quyền truy cập thuận tiện, chính sách rõ ràng và hỗ trợ thân thiện để bạn an tâm đọc sách.",
+  },
+  stats: [
+    {
+      en: ["Standard loan", "21 days", "Most books and circulating materials."],
+      vi: ["Thời hạn mượn chuẩn", "21 ngày", "Áp dụng cho hầu hết sách và tài liệu lưu thông."],
+    },
+    {
+      en: ["Renewals", "2x", "Most eligible items can be renewed twice."],
+      vi: ["Gia hạn", "2 lần", "Phần lớn tài liệu hợp lệ có thể được gia hạn hai lần."],
+    },
+    {
+      en: ["Hold pickup", "3 days", "Items are held for 3 days after notification."],
+      vi: ["Nhận sách đặt giữ", "3 ngày", "Sách được giữ trong 3 ngày sau khi có thông báo."],
+    },
+    {
+      en: ["Desk support", "Daily", "Get help from our team every day."],
+      vi: ["Hỗ trợ tại quầy", "Hằng ngày", "Nhận hỗ trợ từ đội ngũ thư viện mỗi ngày."],
+    },
+  ],
+  loanEyebrow: { en: "Loan periods", vi: "Thời hạn mượn" },
+  loanTitle: { en: "Borrow by material type", vi: "Mượn theo loại tài liệu" },
+  loanDescription: {
+    en: "Loan policies are built to balance generous access with fair circulation for high-demand materials.",
+    vi: "Chính sách mượn được thiết kế để cân bằng quyền truy cập rộng rãi và lưu thông công bằng cho tài liệu có nhu cầu cao.",
+  },
+  myLoans: { en: "My Borrows", vi: "Sách đang mượn" },
+  myHolds: { en: "My Holds", vi: "Lượt đặt giữ" },
+  headings: {
+    en: ["Material", "Loan period", "Renewal", "Notes"],
+    vi: ["Tài liệu", "Thời hạn mượn", "Gia hạn", "Ghi chú"],
+  },
+  loanRules: [
+    {
+      en: ["Books", "21 days", "2 renewals", "Place holds when all copies are out."],
+      vi: ["Sách", "21 ngày", "2 lần gia hạn", "Đặt giữ khi tất cả bản sao đã được mượn."],
+    },
+    {
+      en: ["Reference", "In library", "No renewals", "Ask staff for scans or support."],
+      vi: ["Tài liệu tham khảo", "Tại thư viện", "Không gia hạn", "Hỏi thủ thư để được hỗ trợ quét hoặc tra cứu."],
+    },
+    {
+      en: ["Course reserve", "2 hours", "No renewals", "High-demand access at the desk."],
+      vi: ["Tài liệu học phần", "2 giờ", "Không gia hạn", "Truy cập tài liệu nhu cầu cao tại quầy."],
+    },
+    {
+      en: ["Media kits", "7 days", "1 renewal", "Return directly to circulation."],
+      vi: ["Bộ media", "7 ngày", "1 lần gia hạn", "Trả trực tiếp tại quầy lưu thông."],
+    },
+  ],
+  stepsEyebrow: { en: "How it works", vi: "Cách hoạt động" },
+  stepsTitle: { en: "From discovery to return", vi: "Từ tìm kiếm đến hoàn trả" },
+  browseCatalog: { en: "Browse catalog", vi: "Duyệt danh mục" },
+  steps: [
+    {
+      en: ["Find", "Search the catalog by title, author, ISBN, or subject."],
+      vi: ["Tìm", "Tìm trong danh mục theo tên sách, tác giả, ISBN hoặc chủ đề."],
+    },
+    {
+      en: ["Borrow", "Bring available copies to the desk or ask a librarian for checkout support."],
+      vi: ["Mượn", "Mang bản sao có sẵn đến quầy hoặc nhờ thủ thư hỗ trợ làm thủ tục."],
+    },
+    {
+      en: ["Renew", "Extend eligible loans before the due date from your account."],
+      vi: ["Gia hạn", "Gia hạn các khoản mượn đủ điều kiện trước ngày đến hạn từ tài khoản của bạn."],
+    },
+    {
+      en: ["Return", "Return books on time so the next reader can access them."],
+      vi: ["Trả", "Trả sách đúng hạn để người đọc tiếp theo có thể sử dụng."],
+    },
+  ],
+} satisfies Record<string, Localized<string | string[]> | Array<Localized<string[]>>>;
+
+function getBorrowingGuideCopy(locale: GuideLocale) {
+  return {
+    eyebrow: guideText.eyebrow[locale],
+    title: guideText.title[locale],
+    description: guideText.description[locale],
+    summaryEyebrow: guideText.summaryEyebrow[locale],
+    summaryTitle: guideText.summaryTitle[locale],
+    summaryDescription: guideText.summaryDescription[locale],
+    stats: guideText.stats.map((item) => item[locale]),
+    loanEyebrow: guideText.loanEyebrow[locale],
+    loanTitle: guideText.loanTitle[locale],
+    loanDescription: guideText.loanDescription[locale],
+    myLoans: guideText.myLoans[locale],
+    myHolds: guideText.myHolds[locale],
+    headings: guideText.headings[locale],
+    loanRules: guideText.loanRules.map((item) => item[locale]),
+    stepsEyebrow: guideText.stepsEyebrow[locale],
+    stepsTitle: guideText.stepsTitle[locale],
+    browseCatalog: guideText.browseCatalog[locale],
+    steps: guideText.steps.map((item) => item[locale]),
+  };
+}
 
 const statIcons = ["book-open", "refresh-cw", "calendar", "users"] as const;
 const materialIcons = ["book-open", "file-text", "book", "database"] as const;
@@ -96,7 +136,7 @@ function BotanicalSprig({ className = "" }: Readonly<{ className?: string }>) {
 
 export function BorrowingGuidePage() {
   const { locale } = useLanguage();
-  const copy = borrowingGuideCopy[locale];
+  const copy = getBorrowingGuideCopy(locale);
 
   return (
     <InstitutionalShell
