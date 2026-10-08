@@ -21,7 +21,7 @@ export function ReviewStats({ stats }: { stats: BookReviewStats }) {
   const maxCount = Math.max(...Object.values(stats.ratingDistribution), 1);
 
   return (
-    <div className="flex flex-col gap-6 rounded-2xl border border-[#E1E6F0] bg-[#FBF8F1] p-6 sm:flex-row sm:items-start sm:gap-10">
+    <div className="flex h-full min-h-40 flex-col gap-6 rounded-2xl border border-[#E3D7C9] bg-[#FBF6EE] p-6 sm:flex-row sm:items-center sm:gap-10">
       {/* Left: Big average */}
       <div className="flex shrink-0 flex-col items-center text-center sm:min-w-[140px]">
         <span className="text-5xl font-black leading-none text-[#2B2723]">
@@ -47,9 +47,9 @@ export function ReviewStats({ stats }: { stats: BookReviewStats }) {
               <span className="w-8 shrink-0 text-right text-sm font-bold text-[#374151]">
                 {star}★
               </span>
-              <div className="relative h-2.5 flex-1 overflow-hidden rounded-full bg-[#E5E7EB]">
+              <div className="relative h-2.5 flex-1 overflow-hidden rounded-full bg-[#E8DED1]">
                 <div
-                  className="absolute inset-y-0 left-0 rounded-full bg-gradient-to-r from-amber-400 to-amber-500 transition-all duration-500 ease-out"
+                  className="absolute inset-y-0 left-0 rounded-full bg-gradient-to-r from-[#B8872B] to-[#D2A858] transition-all duration-500 ease-out"
                   style={{ width: `${percent}%` }}
                 />
               </div>
