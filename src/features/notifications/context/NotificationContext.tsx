@@ -20,6 +20,7 @@ type NotificationContextValue = {
   notifications: AppNotification[];
   unreadCount: number;
   addNotification: (notification: AddNotificationInput) => void;
+  markRead: (notificationId: string) => void;
   markAllRead: () => void;
   clearNotifications: () => void;
 };
@@ -47,6 +48,14 @@ export function NotificationProvider({ children }: { children: ReactNode }) {
     setNotifications((current) => writeStoredNotifications(current.map((item) => ({ ...item, read: true }))));
   }, []);
 
+  const markRead = useCallback((notificationId: string) => {
+    setNotifications((current) =>
+      writeStoredNotifications(
+        current.map((item) => (item.id === notificationId ? { ...item, read: true } : item)),
+      ),
+    );
+  }, []);
+
   const clearNotifications = useCallback(() => {
     if (typeof window !== "undefined") {
       window.localStorage.removeItem(NOTIFICATION_STORAGE_KEY);
@@ -60,10 +69,11 @@ export function NotificationProvider({ children }: { children: ReactNode }) {
       notifications,
       unreadCount: notifications.filter((item) => !item.read).length,
       addNotification,
+      markRead,
       markAllRead,
       clearNotifications,
     }),
-    [addNotification, clearNotifications, markAllRead, notifications],
+    [addNotification, clearNotifications, markAllRead, markRead, notifications],
   );
 
   return <NotificationContext.Provider value={value}>{children}</NotificationContext.Provider>;
