@@ -4,5 +4,4 @@ export const publicNavItems = [
   { label: "Reservations", href: "/user/holds" },
   { label: "Library Notices", href: "/notices" },
   { label: "About", href: "/about" },
-  { label: "Ebook", href: "/user/ebook-loans" },
 ];
