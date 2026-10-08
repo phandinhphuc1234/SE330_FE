@@ -58,13 +58,13 @@ export function Navbar() {
     <header
       className="sticky inset-x-0 top-0 z-30 border-b border-[#DED5C8] bg-[#FFFCF5]/95 text-[#2B2723] shadow-[0_8px_24px_rgba(43,39,35,0.08)] backdrop-blur-xl"
     >
-      <nav className={`mx-auto min-h-16 w-full max-w-7xl items-center px-4 py-3 sm:px-6 ${hasAdminAccess ? "grid grid-cols-[auto_minmax(0,1fr)_auto] gap-x-2 xl:gap-x-4" : "grid grid-cols-[minmax(0,1fr)_auto] gap-x-3 lg:grid-cols-[auto_minmax(0,1fr)_auto] lg:gap-x-5"}`}>
+      <nav className={`mx-auto min-h-16 w-full max-w-[90rem] items-center px-4 py-3 sm:px-6 lg:px-8 ${hasAdminAccess ? "grid grid-cols-[auto_minmax(0,1fr)_auto] gap-x-3 xl:gap-x-8" : "grid grid-cols-[minmax(0,1fr)_auto] gap-x-4 xl:grid-cols-[auto_minmax(0,1fr)_auto] xl:gap-x-8"}`}>
         <BrandMark tone="dark" showSymbol />
         {hasAdminAccess ? (
           <AdminNavigation key={pathname} mobileActions={<LanguageToggle />} />
         ) : (
-          <div className="hidden min-w-0 lg:col-start-2 lg:row-start-1 lg:block">
-            <div className="flex items-center justify-center gap-0.5">
+          <div className="hidden min-w-0 xl:col-start-2 xl:row-start-1 xl:block">
+            <div className="flex items-center justify-center gap-1">
               {topNavItems.map((item) => {
                 const originalHref = item.originalHref ?? item.href;
                 const isActive = isActiveNavItem(pathname, originalHref, item.href, hasStaffAccess);
@@ -75,7 +75,7 @@ export function Navbar() {
                     href={item.href}
                     aria-current={isActive ? "page" : undefined}
                     onClick={() => setIsPublicMenuOpen(false)}
-                    className={`group relative flex min-h-11 shrink-0 items-center whitespace-nowrap rounded-xl px-3 py-2 font-semibold text-[#2B2723] transition-colors duration-150 hover:bg-[#F1EADF] hover:text-[#7A263A] focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-[#7A263A] ${
+                    className={`group relative flex min-h-11 shrink-0 items-center whitespace-nowrap rounded-xl px-3.5 py-2 font-semibold text-[#2B2723] transition-colors duration-150 hover:bg-[#F1EADF] hover:text-[#7A263A] focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-[#7A263A] ${
                       isActive ? "bg-[#F1EADF] text-[#7A263A]" : ""
                     }`}
                   >
@@ -92,8 +92,8 @@ export function Navbar() {
             </div>
           </div>
         )}
-        <div className={`ml-auto flex shrink-0 items-center gap-1.5 text-sm ${hasAdminAccess ? "col-start-2 row-start-1 xl:col-start-3" : "col-start-2 row-start-1 lg:col-start-3"}`}>
-          <div className={hasAdminAccess ? "hidden xl:block" : "hidden lg:block"}>
+        <div className="col-start-2 row-start-1 ml-auto flex shrink-0 items-center gap-2 text-sm xl:col-start-3">
+          <div className="hidden xl:block">
             <LanguageToggle />
           </div>
           {isInitializing ? (
@@ -112,13 +112,13 @@ export function Navbar() {
             <>
               <Link
                 href="/login"
-                className="hidden min-h-11 items-center whitespace-nowrap rounded-xl px-3 py-2 text-sm font-semibold text-[#2B2723] transition-colors duration-75 hover:bg-[#F1EADF] hover:text-[#7A263A] lg:inline-flex"
+                className="hidden min-h-11 items-center whitespace-nowrap rounded-xl px-3 py-2 text-sm font-semibold text-[#2B2723] transition-colors duration-75 hover:bg-[#F1EADF] hover:text-[#7A263A] xl:inline-flex"
               >
                 {t("nav.login")}
               </Link>
               <Link
                 href="/register"
-                className="hidden min-h-11 items-center whitespace-nowrap rounded-xl bg-[#7A263A] px-5 py-2 text-sm font-bold text-white shadow-[0_8px_20px_rgba(122,38,58,0.18)] transition-colors duration-150 hover:bg-[#5A1C2B] lg:inline-flex"
+                className="hidden min-h-11 items-center whitespace-nowrap rounded-xl bg-[#7A263A] px-5 py-2 text-sm font-bold text-white shadow-[0_8px_20px_rgba(122,38,58,0.18)] transition-colors duration-150 hover:bg-[#5A1C2B] xl:inline-flex"
               >
                 {t("nav.register")}
               </Link>
@@ -131,14 +131,14 @@ export function Navbar() {
               aria-expanded={isPublicMenuOpen}
               aria-controls="public-mobile-navigation"
               onClick={() => setIsPublicMenuOpen((open) => !open)}
-              className="grid h-11 w-11 place-items-center rounded-xl border border-[#DED5C8] bg-[#FFFCF5] text-[#2B2723] transition hover:border-[#7A263A] hover:text-[#7A263A] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#7A263A] lg:hidden"
+              className="grid h-11 w-11 place-items-center rounded-xl border border-[#DED5C8] bg-[#FFFCF5] text-[#2B2723] transition hover:border-[#7A263A] hover:text-[#7A263A] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#7A263A] xl:hidden"
             >
               <Icon name={isPublicMenuOpen ? "x" : "menu"} size={20} aria-hidden="true" />
             </button>
           ) : null}
         </div>
         {!hasAdminAccess && isPublicMenuOpen ? (
-          <div id="public-mobile-navigation" className="col-span-2 mt-3 border-t border-[#DED5C8] pt-3 lg:hidden">
+          <div id="public-mobile-navigation" className="col-span-2 mt-3 border-t border-[#DED5C8] pt-3 xl:hidden">
             <div className="grid gap-1">
               {topNavItems.map((item) => {
                 const originalHref = item.originalHref ?? item.href;
@@ -429,7 +429,7 @@ function UserMenu({
         aria-haspopup="menu"
         aria-controls="navbar-user-menu"
         onClick={() => setIsOpen((open) => !open)}
-        className="group flex h-12 max-w-[18rem] cursor-pointer items-center rounded-full border border-[#E8DED5] bg-white/85 p-1.5 text-left text-[#171412] shadow-[0_8px_24px_rgba(79,55,45,0.08)] backdrop-blur-md transition-[border-color,background-color,box-shadow] duration-200 hover:border-[#D6C5B8] hover:bg-white hover:shadow-[0_12px_30px_rgba(79,55,45,0.12)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#7A263A] focus-visible:ring-offset-2"
+        className="group flex h-12 w-auto max-w-[17rem] cursor-pointer items-center rounded-full border border-[#E8DED5] bg-white/85 p-1.5 pr-1 text-left text-[#171412] shadow-[0_8px_24px_rgba(79,55,45,0.08)] backdrop-blur-md transition-[border-color,background-color,box-shadow] duration-200 hover:border-[#D6C5B8] hover:bg-white hover:shadow-[0_12px_30px_rgba(79,55,45,0.12)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#7A263A] focus-visible:ring-offset-2"
       >
         <span className="relative grid h-9 w-9 shrink-0 place-items-center rounded-full bg-[linear-gradient(145deg,#A8244B,#7A263A)] text-xs font-bold tracking-wide text-white shadow-[0_5px_14px_rgba(122,38,58,0.24)] md:h-10 md:w-10">
           {initials}
@@ -438,14 +438,14 @@ function UserMenu({
             className="absolute -bottom-0.5 -right-0.5 h-3.5 w-3.5 rounded-full border-[3px] border-[#FFFCF5] bg-[#59A66F] shadow-[0_2px_5px_rgba(49,90,56,0.28)]"
           />
         </span>
-        <span className="mx-3 hidden min-w-0 flex-1 md:block">
+        <span className="ml-2.5 mr-1 hidden min-w-0 max-w-[9.5rem] md:block">
           <span className="block truncate text-[13px] font-bold leading-4 text-[#211D1A]">{displayName}</span>
           <span className="mt-1 block truncate text-[11px] font-medium leading-3 text-[#766D65]">
             {displayMeta}
           </span>
         </span>
-        <span aria-hidden="true" className="hidden h-7 w-px shrink-0 bg-[#E7DDD4] md:block" />
-        <span className="hidden h-9 w-10 shrink-0 place-items-center rounded-full text-[#453F39] transition-colors group-hover:bg-[#F5EEE8] group-hover:text-[#7A263A] md:grid">
+        <span aria-hidden="true" className="ml-1 hidden h-7 w-px shrink-0 bg-[#E7DDD4] md:block" />
+        <span className="hidden h-9 w-8 shrink-0 place-items-center rounded-full text-[#453F39] transition-colors group-hover:bg-[#F5EEE8] group-hover:text-[#7A263A] md:grid">
           <Icon
             name="chevron-down"
             size={17}
