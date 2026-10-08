@@ -82,7 +82,7 @@ const statIcons = ["book-open", "refresh-cw", "calendar", "users"] as const;
 const materialIcons = ["book-open", "file-text", "book", "database"] as const;
 const stepIcons = ["search", "book", "refresh-cw", "upload"] as const;
 
-function BotanicalSprig({ className = "" }: { className?: string }) {
+function BotanicalSprig({ className = "" }: Readonly<{ className?: string }>) {
   return (
     <svg aria-hidden="true" viewBox="0 0 180 240" fill="none" className={className}>
       <path d="M28 228C62 183 82 127 92 25" stroke="currentColor" strokeWidth="2" />
