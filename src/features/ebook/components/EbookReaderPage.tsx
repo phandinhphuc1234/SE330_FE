@@ -13,7 +13,7 @@ import { EbookSemanticSearchPanel } from "./EbookSemanticSearchPanel";
 import {
   closeReadingSession,
   createReadingSession,
-  getSignedContent,
+  loadPdfContent,
   refreshReadingSession,
 } from "../services/ebookService";
 import { StoredReaderSession } from "../types/ebook.type";
@@ -112,18 +112,13 @@ export function EbookReaderPage() {
   const loadSignedPdf = useCallback(
     async (activeSession: StoredReaderSession) => {
       setStage("loading-content");
-      const content = await getSignedContent(numericBookId, activeSession.sessionToken, accessToken, refreshAccessToken);
-      const response = await fetch(content.signedUrl);
-
-      if (!response.ok) {
-        throw new ApiError(`Could not load PDF content. Status ${response.status}.`, response.status);
-      }
-
-      const arrayBuffer = await response.arrayBuffer();
+      const arrayBuffer = await loadPdfContent(
+        numericBookId, activeSession.sessionToken, accessToken, refreshAccessToken,
+      );
       
       // Dynamically import pdfjs-dist to avoid SSR DOMMatrix error
       const pdfjsLib = await import("pdfjs-dist");
-      pdfjsLib.GlobalWorkerOptions.workerSrc = `/pdf.worker.min.mjs`;
+      pdfjsLib.GlobalWorkerOptions.workerSrc = `/pdf.worker-${pdfjsLib.version}.min.mjs`;
       
       const loadingTask = pdfjsLib.getDocument({ data: arrayBuffer });
       const doc = await loadingTask.promise;

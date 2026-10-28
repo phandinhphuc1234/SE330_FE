@@ -46,6 +46,7 @@ export type EbookSignedContentResponse = {
   signedUrl: string;
   expiresAt: string;
   serverNow: string;
+  requiresAuthorization?: boolean;
 };
 
 export type EbookReadingSessionRefreshResponse = {
