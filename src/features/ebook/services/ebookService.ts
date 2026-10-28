@@ -2,6 +2,7 @@
 
 import { ApiError, ApiResponse } from "@/types/api.type";
 import { API_URL } from "@/features/auth/services/authService";
+import { fetchReaderPdf, PdfTransportError } from "./pdfTransport";
 import {
   BorrowEbookRequest,
   EbookAnswerRequest,
@@ -233,6 +234,21 @@ export function getSignedContent(
     accessToken,
     refreshAccessToken,
   );
+}
+
+export async function loadPdfContent(
+  bookId: number,
+  sessionToken: string,
+  accessToken: string | null,
+  refreshAccessToken?: AccessTokenRefresher,
+): Promise<ArrayBuffer> {
+  const content = await getSignedContent(bookId, sessionToken, accessToken, refreshAccessToken);
+  try {
+    return await fetchReaderPdf(content, bookId, sessionToken, accessToken, API_URL, refreshAccessToken);
+  } catch (error) {
+    if (error instanceof PdfTransportError) throw new ApiError(error.message, error.status, error.code);
+    throw error;
+  }
 }
 
 export function refreshReadingSession(
