@@ -70,7 +70,7 @@ export async function fetchReaderPdf(
       }
       const bytes = await response.arrayBuffer();
       const prefix = new Uint8Array(bytes, 0, Math.min(bytes.byteLength, 5));
-      if (String.fromCharCode(...prefix) !== "%PDF-") {
+      if (String.fromCodePoint(...prefix) !== "%PDF-") {
         throw new PdfTransportError("The server did not return a valid PDF file.", 502);
       }
       return bytes;
