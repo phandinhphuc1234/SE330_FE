@@ -4,7 +4,10 @@ import { FormEvent, KeyboardEvent, useState } from "react";
 import { Icon } from "@/components/ui/Icon";
 import { ApiError } from "@/types/api.type";
 
-import { askEbookQuestion, semanticSearchEbook } from "../services/ebookService";
+import {
+  askEbookQuestion,
+  semanticSearchEbook,
+} from "../services/ebookService";
 import {
   EbookAnswerCitation,
   EbookAnswerResponse,
@@ -14,6 +17,8 @@ import {
 } from "../types/ebook.type";
 
 type EbookSemanticSearchPanelProps = {
+  embedded?: boolean;
+  requestedMode?: AiMode;
   bookId: number;
   session: StoredReaderSession | null;
   accessToken: string | null;
@@ -47,6 +52,8 @@ const SEARCH_SUGGESTIONS = [
 ];
 
 export function EbookSemanticSearchPanel({
+  embedded = false,
+  requestedMode,
   bookId,
   session,
   accessToken,
@@ -56,15 +63,25 @@ export function EbookSemanticSearchPanel({
   onSessionExpired,
   onClose,
 }: EbookSemanticSearchPanelProps) {
-  const [mode, setMode] = useState<AiMode>("ask");
+  const [localMode, setMode] = useState<AiMode>("ask");
+  const mode = requestedMode ?? localMode;
   const [query, setQuery] = useState("");
-  const [askState, setAskState] = useState<RequestState<EbookAnswerResponse>>(EMPTY_STATE);
-  const [searchState, setSearchState] = useState<RequestState<EbookSemanticSearchResponse>>(EMPTY_STATE);
+  const [askState, setAskState] =
+    useState<RequestState<EbookAnswerResponse>>(EMPTY_STATE);
+  const [searchState, setSearchState] =
+    useState<RequestState<EbookSemanticSearchResponse>>(EMPTY_STATE);
+  const [history, setHistory] = useState<
+    { question: string; response: EbookAnswerResponse }[]
+  >([]);
 
   const trimmedQuery = query.trim();
+  const earlierAnswers =
+    askState.status === "success" ? history.slice(0, -1) : history;
   const activeState = mode === "ask" ? askState : searchState;
   const suggestions = mode === "ask" ? ASK_SUGGESTIONS : SEARCH_SUGGESTIONS;
-  const canSubmit = Boolean(session && trimmedQuery && activeState.status !== "loading");
+  const canSubmit = Boolean(
+    session && trimmedQuery && activeState.status !== "loading",
+  );
 
   async function submitRequest(event?: FormEvent<HTMLFormElement>) {
     event?.preventDefault();
@@ -86,6 +103,10 @@ export function EbookSemanticSearchPanel({
           refreshAccessToken,
         );
         setAskState({ status: "success", result: response, error: "" });
+        setHistory((current) => [
+          ...current.slice(-7),
+          { question: trimmedQuery, response },
+        ]);
       } else {
         const response = await semanticSearchEbook(
           bookId,
@@ -104,7 +125,10 @@ export function EbookSemanticSearchPanel({
         setSearchState({ status: "error", result: null, error: message });
       }
 
-      if (requestError instanceof ApiError && isReadingSessionError(requestError.code)) {
+      if (
+        requestError instanceof ApiError &&
+        isReadingSessionError(requestError.code)
+      ) {
         onSessionExpired();
       }
     }
@@ -119,11 +143,19 @@ export function EbookSemanticSearchPanel({
 
   return (
     <aside
-      id="ebook-ai-reader-panel"
+      id={embedded ? undefined : "ebook-ai-reader-panel"}
       aria-label="AI reading assistant"
-      className="order-first flex min-h-[560px] flex-col overflow-hidden rounded-2xl border border-[#D8CCBC] bg-[#FFFCF5] shadow-[0_18px_50px_rgba(23,20,18,0.09)] xl:order-last"
+      className={
+        embedded
+          ? "flex h-full min-h-0 w-full flex-col overflow-hidden bg-[#FFFCF5]"
+          : "order-first flex min-h-[560px] flex-col overflow-hidden rounded-2xl border border-[#D8CCBC] bg-[#FFFCF5] shadow-[0_18px_50px_rgba(23,20,18,0.09)] xl:order-last"
+      }
     >
-      <header className="border-b border-[#E5DCD0] bg-white px-5 py-4">
+      <header
+        className={
+          embedded ? "hidden" : "border-b border-[#E5DCD0] bg-white px-5 py-4"
+        }
+      >
         <div className="flex items-start justify-between gap-3">
           <div className="flex min-w-0 items-start gap-3">
             <span className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-[#F3E5E8] text-[#7A263A]">
@@ -131,13 +163,16 @@ export function EbookSemanticSearchPanel({
             </span>
             <div>
               <div className="flex flex-wrap items-center gap-2">
-                <h2 className="font-serif text-xl font-bold text-[#171412]">AI reading assistant</h2>
+                <h2 className="font-serif text-xl font-bold text-[#171412]">
+                  AI reading assistant
+                </h2>
                 <span className="rounded-full border border-[#D8CCBC] bg-[#FBF8F1] px-2 py-0.5 text-[10px] font-bold uppercase tracking-[0.12em] text-[#7A263A]">
                   Current ebook
                 </span>
               </div>
               <p className="mt-1 text-xs leading-5 text-[#6F675E]">
-                Ask a grounded question or find the original passages behind an idea.
+                Ask a grounded question or find the original passages behind an
+                idea.
               </p>
             </div>
           </div>
@@ -151,34 +186,72 @@ export function EbookSemanticSearchPanel({
           </button>
         </div>
 
-        <div className="mt-4 grid grid-cols-2 rounded-xl border border-[#DED5C8] bg-[#FBF8F1] p-1" aria-label="AI reader mode">
-          <ModeButton active={mode === "ask"} icon="sparkles" label="Ask this book" onClick={() => setMode("ask")} />
-          <ModeButton active={mode === "search"} icon="search" label="Find passages" onClick={() => setMode("search")} />
+        <div
+          className="mt-4 grid grid-cols-2 rounded-xl border border-[#DED5C8] bg-[#FBF8F1] p-1"
+          aria-label="AI reader mode"
+        >
+          <ModeButton
+            active={mode === "ask"}
+            icon="sparkles"
+            label="Ask this book"
+            onClick={() => setMode("ask")}
+          />
+          <ModeButton
+            active={mode === "search"}
+            icon="search"
+            label="Find passages"
+            onClick={() => setMode("search")}
+          />
         </div>
       </header>
 
-      <form onSubmit={submitRequest} className="border-b border-[#E5DCD0] px-5 py-5">
-        <label htmlFor="ebook-ai-query" className="text-sm font-bold text-[#2B2723]">
-          {mode === "ask" ? "What would you like to understand?" : "What do you want to find?"}
+      <form
+        onSubmit={submitRequest}
+        className={
+          embedded
+            ? "order-2 shrink-0 border-t border-[#E5DCD0] bg-[#FFFCF5] px-4 py-4"
+            : "border-b border-[#E5DCD0] px-5 py-5"
+        }
+      >
+        <label
+          htmlFor="ebook-ai-query"
+          className="text-sm font-bold text-[#2B2723]"
+        >
+          {mode === "ask"
+            ? "What would you like to understand?"
+            : "What do you want to find?"}
         </label>
         <div className="mt-2 rounded-xl border border-[#DED5C8] bg-white p-3 shadow-sm transition focus-within:border-[#7A263A] focus-within:ring-3 focus-within:ring-[#7A263A]/15">
           <textarea
             id="ebook-ai-query"
             value={query}
-            onChange={(event) => setQuery(event.target.value.slice(0, MAX_QUERY_LENGTH))}
+            onChange={(event) =>
+              setQuery(event.target.value.slice(0, MAX_QUERY_LENGTH))
+            }
             onKeyDown={handleQueryKeyDown}
-            rows={3}
+            rows={embedded ? 2 : 3}
             maxLength={MAX_QUERY_LENGTH}
-            placeholder={mode === "ask" ? "Ask a question answered by this ebook..." : "Describe an idea, event, character, or concept..."}
+            placeholder={
+              mode === "ask"
+                ? "Ask a question answered by this ebook..."
+                : "Describe an idea, event, character, or concept..."
+            }
             className="w-full resize-none bg-transparent text-sm leading-6 text-[#171412] outline-none placeholder:text-[#9A9187]"
           />
           <div className="mt-2 flex items-center justify-between gap-3 text-[11px] font-medium text-[#7B736B]">
             <span>Ctrl/⌘ + Enter to submit</span>
-            <span>{query.length}/{MAX_QUERY_LENGTH}</span>
+            <span>
+              {query.length}/{MAX_QUERY_LENGTH}
+            </span>
           </div>
         </div>
 
-        <div className="mt-3 flex flex-wrap gap-2" aria-label={mode === "ask" ? "Suggested questions" : "Suggested searches"}>
+        <div
+          className={embedded ? "hidden" : "mt-3 flex flex-wrap gap-2"}
+          aria-label={
+            mode === "ask" ? "Suggested questions" : "Suggested searches"
+          }
+        >
           {suggestions.map((suggestion) => (
             <button
               key={suggestion}
@@ -197,7 +270,13 @@ export function EbookSemanticSearchPanel({
           className="mt-4 inline-flex h-11 w-full items-center justify-center gap-2 rounded-xl bg-[#7A263A] px-4 text-sm font-bold text-white shadow-[0_6px_16px_rgba(122,38,58,0.18)] outline-none transition hover:bg-[#5A1C2B] focus-visible:ring-2 focus-visible:ring-[#7A263A] focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-55"
         >
           <Icon
-            name={activeState.status === "loading" ? "clock" : mode === "ask" ? "sparkles" : "search"}
+            name={
+              activeState.status === "loading"
+                ? "clock"
+                : mode === "ask"
+                  ? "sparkles"
+                  : "search"
+            }
             size={17}
             animate={activeState.status === "loading" ? "pulse" : "none"}
             aria-hidden="true"
@@ -206,7 +285,41 @@ export function EbookSemanticSearchPanel({
         </button>
       </form>
 
-      <div className="min-h-0 flex-1 overflow-y-auto px-5 py-5" aria-live="polite" aria-busy={activeState.status === "loading"}>
+      <div
+        className="order-1 min-h-0 flex-1 overflow-y-auto overscroll-contain px-4 py-5"
+        aria-live="polite"
+        aria-busy={activeState.status === "loading"}
+      >
+        {embedded && mode === "ask" && earlierAnswers.length > 0 ? (
+          <div className="mb-4 space-y-2">
+            <p className="text-[10px] font-bold uppercase tracking-[0.14em] text-[#6F675E]">
+              Earlier in this tab
+            </p>
+            {earlierAnswers.map((entry, index) => (
+              <details
+                key={index}
+                className="rounded-xl border border-[#E5DCD0] bg-white p-3"
+              >
+                <summary className="cursor-pointer text-xs font-semibold leading-5 text-[#7A263A]">
+                  {entry.question}
+                </summary>
+                <div className="mt-3">
+                  <AskResult
+                    state={{
+                      status: "success",
+                      result: entry.response,
+                      error: "",
+                    }}
+                    sessionAvailable={Boolean(session)}
+                    totalPages={totalPages}
+                    onNavigateToPage={onNavigateToPage}
+                    onRetry={() => undefined}
+                  />
+                </div>
+              </details>
+            ))}
+          </div>
+        ) : null}
         {mode === "ask" ? (
           <AskResult
             state={askState}
@@ -214,6 +327,7 @@ export function EbookSemanticSearchPanel({
             totalPages={totalPages}
             onNavigateToPage={onNavigateToPage}
             onRetry={() => void submitRequest()}
+            onSuggestion={setQuery}
           />
         ) : (
           <SearchResult
@@ -226,7 +340,7 @@ export function EbookSemanticSearchPanel({
         )}
       </div>
 
-      <footer className="border-t border-[#E5DCD0] bg-[#FBF8F1] px-5 py-3 text-[11px] leading-5 text-[#6F675E]">
+      <footer className="order-3 shrink-0 border-t border-[#E5DCD0] bg-[#FBF8F1] px-4 py-2 text-[10px] leading-4 text-[#6F675E]">
         {mode === "ask"
           ? "Answers use retrieved evidence from this ebook. Verify important details on the cited page."
           : "Passage results are evidence from the book, not a generated answer."}
@@ -252,7 +366,9 @@ function ModeButton({
       onClick={onClick}
       aria-pressed={active}
       className={`inline-flex min-h-10 items-center justify-center gap-2 rounded-lg px-3 text-xs font-bold outline-none transition focus-visible:ring-2 focus-visible:ring-[#7A263A] focus-visible:ring-offset-1 ${
-        active ? "bg-white text-[#7A263A] shadow-sm" : "text-[#6F675E] hover:text-[#2B2723]"
+        active
+          ? "bg-white text-[#7A263A] shadow-sm"
+          : "text-[#6F675E] hover:text-[#2B2723]"
       }`}
     >
       <Icon name={icon} size={15} aria-hidden="true" />
@@ -267,16 +383,27 @@ function AskResult({
   totalPages,
   onNavigateToPage,
   onRetry,
+  onSuggestion,
 }: {
   state: RequestState<EbookAnswerResponse>;
   sessionAvailable: boolean;
   totalPages: number;
   onNavigateToPage: (page: number) => void;
   onRetry: () => void;
+  onSuggestion?: (query: string) => void;
 }) {
-  if (state.status === "idle") return <AskIntroduction />;
+  if (state.status === "idle")
+    return <AskIntroduction onSuggestion={onSuggestion} />;
   if (state.status === "loading") return <AssistantLoading mode="ask" />;
-  if (state.status === "error") return <RequestError title="Answer unavailable" message={state.error} onRetry={onRetry} canRetry={sessionAvailable} />;
+  if (state.status === "error")
+    return (
+      <RequestError
+        title="Answer unavailable"
+        message={state.error}
+        onRetry={onRetry}
+        canRetry={sessionAvailable}
+      />
+    );
   if (!state.result) return null;
 
   if (state.result.abstained) {
@@ -287,9 +414,14 @@ function AskResult({
             <Icon name="info" size={18} aria-hidden="true" />
           </span>
           <div>
-            <h3 className="font-serif text-lg font-bold">Not enough evidence in this ebook</h3>
+            <h3 className="font-serif text-lg font-bold">
+              Not enough evidence in this ebook
+            </h3>
             <p className="mt-1 text-sm leading-6">{state.result.answer}</p>
-            <p className="mt-2 text-xs leading-5 text-[#715C2C]">Try asking about a specific chapter, person, event, or concept that appears in the book.</p>
+            <p className="mt-2 text-xs leading-5 text-[#715C2C]">
+              Try asking about a specific chapter, person, event, or concept
+              that appears in the book.
+            </p>
           </div>
         </div>
       </div>
@@ -303,20 +435,26 @@ function AskResult({
           <Icon name="check-circle" size={17} aria-hidden="true" />
           Grounded answer
         </div>
-        <p className="mt-3 whitespace-pre-wrap font-serif text-[17px] leading-7 text-[#171412]">{state.result.answer}</p>
+        <p className="mt-3 whitespace-pre-wrap break-words font-serif text-[17px] leading-7 text-[#171412] [overflow-wrap:anywhere]">
+          {state.result.answer}
+        </p>
       </article>
 
       <div className="mt-5">
         <div className="mb-3 flex items-center justify-between gap-3">
           <p className="text-xs font-bold uppercase tracking-[0.12em] text-[#7A263A]">
-            {state.result.citations.length} {state.result.citations.length === 1 ? "source" : "sources"}
+            {state.result.citations.length}{" "}
+            {state.result.citations.length === 1 ? "source" : "sources"}
           </p>
           <p className="text-xs text-[#7B736B]">Cited evidence</p>
         </div>
         <ol className="space-y-3">
           {state.result.citations.map((citation, index) => (
             <CitationCard
-              key={citation.chunkId || `${citation.documentId}-${citation.chunkIndex}-${index}`}
+              key={
+                citation.chunkId ||
+                `${citation.documentId}-${citation.chunkIndex}-${index}`
+              }
               index={index}
               score={citation.score}
               excerpt={citation.excerpt}
@@ -346,20 +484,33 @@ function SearchResult({
 }) {
   if (state.status === "idle") return <SearchIntroduction />;
   if (state.status === "loading") return <AssistantLoading mode="search" />;
-  if (state.status === "error") return <RequestError title="Search unavailable" message={state.error} onRetry={onRetry} canRetry={sessionAvailable} />;
+  if (state.status === "error")
+    return (
+      <RequestError
+        title="Search unavailable"
+        message={state.error}
+        onRetry={onRetry}
+        canRetry={sessionAvailable}
+      />
+    );
   if (!state.result) return null;
   if (state.result.results.length === 0) return <SearchEmpty />;
 
   return (
     <div>
       <div className="mb-3 flex items-center justify-between gap-3">
-        <p className="text-xs font-bold uppercase tracking-[0.12em] text-[#7A263A]">{state.result.resultCount} passages</p>
+        <p className="text-xs font-bold uppercase tracking-[0.12em] text-[#7A263A]">
+          {state.result.resultCount} passages
+        </p>
         <p className="text-xs text-[#7B736B]">Current ebook only</p>
       </div>
       <ol className="space-y-3">
         {state.result.results.map((hit, index) => (
           <CitationCard
-            key={hit.chunkId || `${hit.citation.documentId}-${hit.citation.chunkIndex}-${index}`}
+            key={
+              hit.chunkId ||
+              `${hit.citation.documentId}-${hit.citation.chunkIndex}-${index}`
+            }
             index={index}
             score={hit.score}
             excerpt={hit.text}
@@ -389,21 +540,31 @@ function CitationCard({
   onNavigateToPage: (page: number) => void;
 }) {
   const pageStart = citation.pageStart;
-  const canNavigate = Boolean(pageStart && pageStart > 0 && (!totalPages || pageStart <= totalPages));
+  const canNavigate = Boolean(
+    pageStart && pageStart > 0 && (!totalPages || pageStart <= totalPages),
+  );
 
   return (
     <li className="rounded-xl border border-[#E5DCD0] bg-white p-4 shadow-sm">
       <div className="flex items-start justify-between gap-3">
-        <span className="grid h-7 w-7 shrink-0 place-items-center rounded-full bg-[#F3E5E8] text-xs font-black text-[#7A263A]">{index + 1}</span>
-        <span className="text-[11px] font-semibold text-[#7B736B]">{formatRelevance(score)} match</span>
+        <span className="grid h-7 w-7 shrink-0 place-items-center rounded-full bg-[#F3E5E8] text-xs font-black text-[#7A263A]">
+          {index + 1}
+        </span>
+        <span className="text-[11px] font-semibold text-[#7B736B]">
+          {formatRelevance(score)} match
+        </span>
       </div>
-      <blockquote className="mt-3 border-l-2 border-[#B8872B] pl-3 text-sm leading-6 text-[#2B2723]">
+      <blockquote className="mt-3 break-words border-l-2 border-[#B8872B] pl-3 text-sm leading-6 text-[#2B2723] [overflow-wrap:anywhere]">
         {excerpt || "This source has no preview text."}
       </blockquote>
       <div className="mt-4 border-t border-[#EFE6D6] pt-3">
-        <p className="text-xs font-bold text-[#4C453F]">{citationTitle(citation)}</p>
+        <p className="text-xs font-bold text-[#4C453F]">
+          {citationTitle(citation)}
+        </p>
         <div className="mt-2 flex flex-wrap items-center justify-between gap-2">
-          <p className="text-[11px] text-[#7B736B]">{pageLabel(citation.pageStart, citation.pageEnd)}</p>
+          <p className="text-[11px] text-[#7B736B]">
+            {pageLabel(citation.pageStart, citation.pageEnd)}
+          </p>
           {canNavigate && pageStart ? (
             <button
               type="button"
@@ -420,16 +581,47 @@ function CitationCard({
   );
 }
 
-function AskIntroduction() {
+function AskIntroduction({
+  onSuggestion,
+}: {
+  onSuggestion?: (query: string) => void;
+}) {
   return (
-    <div className="rounded-xl border border-dashed border-[#CBBEAE] bg-white px-4 py-6 text-center">
-      <span className="mx-auto grid h-11 w-11 place-items-center rounded-xl bg-[#F3E5E8] text-[#7A263A]">
+    <div className="text-left">
+      <span className="grid h-12 w-12 place-items-center rounded-xl bg-[#F3E5E8] text-[#7A263A]">
         <Icon name="sparkles" size={20} aria-hidden="true" />
       </span>
-      <h3 className="mt-3 font-serif text-lg font-bold text-[#171412]">Ask with the book open beside you</h3>
+      <h3 className="mt-4 font-serif text-xl font-semibold text-[#171412]">
+        A little more understanding.
+      </h3>
       <p className="mt-2 text-xs leading-5 text-[#6F675E]">
-        The assistant answers only when it finds supporting passages in this ebook and cites the pages it used.
+        The assistant answers only when it finds supporting passages in this
+        ebook and cites the pages it used.
       </p>
+      {onSuggestion ? (
+        <div className="mt-5 space-y-2" aria-label="Suggested questions">
+          {[
+            ...ASK_SUGGESTIONS,
+            "Which ideas are important to understand first?",
+            "Summarize the key concepts in this book.",
+          ].map((question) => (
+            <button
+              type="button"
+              key={question}
+              onClick={() => onSuggestion(question)}
+              className="flex min-h-11 w-full items-center justify-between gap-3 rounded-xl border border-[#E5DCD0] bg-white px-3 py-3 text-left text-xs leading-5 text-[#4C453F] transition-colors hover:border-[#CFA9B3] hover:bg-[#F3E5E8]"
+            >
+              <span>{question}</span>
+              <Icon
+                name="arrow-right"
+                size={14}
+                className="shrink-0 text-[#7A263A]"
+                aria-hidden="true"
+              />
+            </button>
+          ))}
+        </div>
+      ) : null}
     </div>
   );
 }
@@ -440,23 +632,38 @@ function SearchIntroduction() {
       <span className="mx-auto grid h-11 w-11 place-items-center rounded-xl bg-[#EFE6D6] text-[#7A263A]">
         <Icon name="file-text" size={20} aria-hidden="true" />
       </span>
-      <h3 className="mt-3 font-serif text-lg font-bold text-[#171412]">Find evidence without leaving the page</h3>
-      <p className="mt-2 text-xs leading-5 text-[#6F675E]">Use natural language. Search remains restricted to the ebook in your active reading session.</p>
+      <h3 className="mt-3 font-serif text-lg font-bold text-[#171412]">
+        Find evidence without leaving the page
+      </h3>
+      <p className="mt-2 text-xs leading-5 text-[#6F675E]">
+        Use natural language. Search remains restricted to the ebook in your
+        active reading session.
+      </p>
     </div>
   );
 }
 
 function AssistantLoading({ mode }: { mode: AiMode }) {
   return (
-    <div className="space-y-3" aria-label={mode === "ask" ? "Generating grounded answer" : "Searching ebook"}>
+    <div
+      className="space-y-3"
+      aria-label={
+        mode === "ask" ? "Generating grounded answer" : "Searching ebook"
+      }
+    >
       <div className="rounded-xl border border-[#E5DCD0] bg-white p-4">
         <div className="flex items-center gap-2 text-xs font-bold text-[#7A263A]">
           <Icon name="clock" size={16} animate="pulse" aria-hidden="true" />
-          {mode === "ask" ? "Reading the most relevant passages..." : "Searching this ebook..."}
+          {mode === "ask"
+            ? "Reading the most relevant passages..."
+            : "Searching this ebook..."}
         </div>
       </div>
       {[0, 1, 2].map((item) => (
-        <div key={item} className="animate-pulse rounded-xl border border-[#E5DCD0] bg-white p-4">
+        <div
+          key={item}
+          className="animate-pulse rounded-xl border border-[#E5DCD0] bg-white p-4"
+        >
           <div className="h-3 w-20 rounded bg-[#EFE6D6]" />
           <div className="mt-4 h-3 w-full rounded bg-[#EFE6D6]" />
           <div className="mt-2 h-3 w-10/12 rounded bg-[#EFE6D6]" />
@@ -481,14 +688,23 @@ function RequestError({
   return (
     <div className="rounded-xl border border-[#E2B8B2] bg-[#F6E4E1] p-4 text-[#7F2D2D]">
       <div className="flex items-start gap-3">
-        <Icon name="alert-circle" size={19} className="mt-0.5 shrink-0" aria-hidden="true" />
+        <Icon
+          name="alert-circle"
+          size={19}
+          className="mt-0.5 shrink-0"
+          aria-hidden="true"
+        />
         <div>
           <h3 className="text-sm font-bold">{title}</h3>
           <p className="mt-1 text-xs leading-5">{message}</p>
         </div>
       </div>
       {canRetry ? (
-        <button type="button" onClick={onRetry} className="mt-4 min-h-11 rounded-lg border border-[#C99089] bg-white px-3 text-xs font-bold outline-none transition hover:bg-[#FFF8F6] focus-visible:ring-2 focus-visible:ring-[#7F2D2D] focus-visible:ring-offset-2">
+        <button
+          type="button"
+          onClick={onRetry}
+          className="mt-4 min-h-11 rounded-lg border border-[#C99089] bg-white px-3 text-xs font-bold outline-none transition hover:bg-[#FFF8F6] focus-visible:ring-2 focus-visible:ring-[#7F2D2D] focus-visible:ring-offset-2"
+        >
           Try again
         </button>
       ) : null}
@@ -499,15 +715,27 @@ function RequestError({
 function SearchEmpty() {
   return (
     <div className="rounded-xl border border-dashed border-[#CBBEAE] bg-white px-4 py-6 text-center">
-      <Icon name="search" size={24} className="mx-auto text-[#9A9187]" aria-hidden="true" />
-      <h3 className="mt-3 font-serif text-lg font-bold text-[#171412]">No matching passage found</h3>
-      <p className="mt-2 text-xs leading-5 text-[#6F675E]">Try a more specific concept, character, event, or phrase from the ebook.</p>
+      <Icon
+        name="search"
+        size={24}
+        className="mx-auto text-[#9A9187]"
+        aria-hidden="true"
+      />
+      <h3 className="mt-3 font-serif text-lg font-bold text-[#171412]">
+        No matching passage found
+      </h3>
+      <p className="mt-2 text-xs leading-5 text-[#6F675E]">
+        Try a more specific concept, character, event, or phrase from the ebook.
+      </p>
     </div>
   );
 }
 
 function submitLabel(mode: AiMode, status: RequestStatus) {
-  if (status === "loading") return mode === "ask" ? "Building a grounded answer..." : "Searching this ebook...";
+  if (status === "loading")
+    return mode === "ask"
+      ? "Building a grounded answer..."
+      : "Searching this ebook...";
   return mode === "ask" ? "Ask this book" : "Find relevant passages";
 }
 
@@ -519,7 +747,10 @@ function aiErrorMessage(error: unknown, mode: AiMode) {
     if (isReadingSessionError(error.code)) {
       return "Your secure reading session expired. We are reopening it; please retry in a moment.";
     }
-    if (error.code === "EBOOK_LOAN_REQUIRED" || error.code === "EBOOK_LOAN_EXPIRED") {
+    if (
+      error.code === "EBOOK_LOAN_REQUIRED" ||
+      error.code === "EBOOK_LOAN_EXPIRED"
+    ) {
       return "AI reading features require an active ebook loan for this title.";
     }
     if (error.code === "RAG_SERVICE_ERROR") {
@@ -538,10 +769,12 @@ function aiErrorMessage(error: unknown, mode: AiMode) {
 }
 
 function isReadingSessionError(code?: string) {
-  return code === "READING_SESSION_NOT_ACTIVE"
-    || code === "READING_SESSION_REQUIRED"
-    || code === "READING_SESSION_NOT_FOUND"
-    || code === "READING_SESSION_FORBIDDEN";
+  return (
+    code === "READING_SESSION_NOT_ACTIVE" ||
+    code === "READING_SESSION_REQUIRED" ||
+    code === "READING_SESSION_NOT_FOUND" ||
+    code === "READING_SESSION_FORBIDDEN"
+  );
 }
 
 function formatRelevance(score: number) {
@@ -549,9 +782,12 @@ function formatRelevance(score: number) {
   return `${Math.max(0, Math.min(100, Math.round(normalized)))}%`;
 }
 
-function citationTitle(citation: EbookAnswerCitation | EbookSemanticSearchCitation) {
+function citationTitle(
+  citation: EbookAnswerCitation | EbookSemanticSearchCitation,
+) {
   if (citation.chapterTitle) return citation.chapterTitle;
-  if (citation.chapterIndex != null) return `Chapter ${citation.chapterIndex + 1}`;
+  if (citation.chapterIndex != null)
+    return `Chapter ${citation.chapterIndex + 1}`;
   return "Passage from this ebook";
 }
 

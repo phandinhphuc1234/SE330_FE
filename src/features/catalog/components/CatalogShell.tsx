@@ -104,7 +104,7 @@ function CatalogPanelLines() {
   );
 }
 
-function ProtectedGate({ enabled, children }: { enabled: boolean; children: ReactNode }) {
+export function ProtectedGate({ enabled, children }: { enabled: boolean; children: ReactNode }) {
   const router = useRouter();
   const { isAuthenticated, isInitializing, refresh } = useAuth();
   const { locale } = useLanguage();
