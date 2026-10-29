@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "test:reader": "node --experimental-strip-types --test tests/ebook-pdf-transport.test.mjs",
+    "test:reader": "node --experimental-strip-types --test tests/ebook-pdf-transport.test.mjs tests/ebook-reader-navigation.test.mjs",
     "prebuild": "node scripts/sync-pdf-worker.mjs",
     "dev": "next dev",
     "build": "next build",
